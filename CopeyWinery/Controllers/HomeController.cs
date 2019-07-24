@@ -8,7 +8,7 @@ using System.Web.Mvc;
 namespace CopeyWinery.Controllers
 {
     public class HomeController : Controller
-    { 
+    {
 
         public ActionResult Login()
         {
@@ -17,33 +17,34 @@ namespace CopeyWinery.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(User objUser)
+        public ActionResult Login(User userLogin)
         {
-
-                using (DB_Entities db = new DB_Entities())
+            LoginHandler loginHandler = new LoginHandler(userLogin);
+            var user = loginHandler.GetUser();
+            if ( user !=null)
+            {
+                if (user.Is_Admin == true)
                 {
-                    var obj = db.User.Where(a => a.Name.Equals(objUser.Name) && a.Password.Equals(objUser.Password)).FirstOrDefault();
-                    if (obj != null)
-                    {
-                        Session["ID"] = obj.ID.ToString();
-                        Session["Name"] = obj.Name.ToString();
-                        return RedirectToAction("UserDashBoard");
-                    }
+                    return RedirectToAction("AdminDashBoard");
                 }
-            
-            return View(objUser);
+                else {
+                    return RedirectToAction("UserDashBoard");
+                }
+                
+            }
+            return View(user);
         }
 
         public ActionResult UserDashBoard()
         {
-            if (Session["ID"] != null)
-            {
+            //if (Session["ID"] != null)
+            //{
                 return View();
-            }
-            else
-            {
-                return RedirectToAction("Login");
-            }
+            //}
+            //else
+            //{
+              //  return RedirectToAction("Login");
+            //}
         }
     
 
@@ -60,5 +61,39 @@ namespace CopeyWinery.Controllers
 
             return View();
         }
+
+        public ActionResult AdminDashBoard()
+        {
+             var obj = new List<User>();
+
+            using (DB_Entities db = new DB_Entities())
+            {
+                obj = db.User.ToList();
+                //if (obj != null)
+                //{
+                    
+                //    //return RedirectToAction("AdminDashboard");
+                //}
+            }
+
+            return View(obj);
+        }
+        [HttpPost]
+        public ActionResult DeleteUser(int userID)
+        {
+            using (DB_Entities entities = new DB_Entities())
+            {
+                User user = (from c in entities.User
+                                     where c.ID == userID
+                             select c).FirstOrDefault();
+                entities.User.Remove(user);
+                entities.SaveChanges();
+            }
+            return new EmptyResult();
+        }
+
     }
+
+    
+
 }
