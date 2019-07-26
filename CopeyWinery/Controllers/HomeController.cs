@@ -89,7 +89,14 @@ namespace CopeyWinery.Controllers
                 entities.User.Remove(user);
                 entities.SaveChanges();
             }
-            return new EmptyResult();
+            return RedirectToAction("AdminDashBoard");
+        }
+
+        [HttpPost]
+        public ActionResult EditUser(int userID)
+        {
+            
+            return View();
         }
 
     }
