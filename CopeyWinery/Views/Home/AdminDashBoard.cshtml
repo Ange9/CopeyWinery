@@ -112,21 +112,12 @@
             var userID = row.find(".label").html();
             console.log("hola");
                 $.ajax({
-                    type: "POST",
+                    type: "GET",
                     url: "/Home/EditUser",
                     data: '{userID: ' + userID + '}',
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
-                    success: function (response) {
-                        if ($("#WebGrid TBODY tr").length == 1) {
-                            row.find(".label").html("");
-                            row.find(".text").val("");
-                            row.find(".link").hide();
-                        } else {
-                            row.remove();
-                        }
-                        console.log("hola");
-                    }
+                
                 });
             
            

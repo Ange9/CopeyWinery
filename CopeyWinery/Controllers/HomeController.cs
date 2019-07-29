@@ -9,6 +9,21 @@ namespace CopeyWinery.Controllers
 {
     public class HomeController : Controller
     {
+        public ActionResult Index()
+        {
+            ViewBag.Message = "Your application home page.";
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index(User userLogin)
+        {
+            LoginHandler loginHandler = new LoginHandler(userLogin);
+            var user = loginHandler.GetUser();
+            return View(user);
+        }
 
         public ActionResult Login()
         {
@@ -21,34 +36,34 @@ namespace CopeyWinery.Controllers
         {
             LoginHandler loginHandler = new LoginHandler(userLogin);
             var user = loginHandler.GetUser();
-            if ( user !=null)
-            {
-                if (user.Is_Admin == true)
-                {
-                    return RedirectToAction("AdminDashBoard");
-                }
-                else {
-                    return RedirectToAction("UserDashBoard");
-                }
-                
-            }
-            return View(user);
+            //if (user != null)
+            //{
+            //    if (user.Is_Admin == true)
+            //    {
+                    return RedirectToAction("Index");
+            //    }
+            //    else {
+            //        return RedirectToAction("UserDashBoard");
+            //    }
+
+            //}
+            //return View(user);
         }
 
         public ActionResult UserDashBoard()
         {
             //if (Session["ID"] != null)
             //{
-                return View();
+            return View();
             //}
             //else
             //{
-              //  return RedirectToAction("Login");
+            //  return RedirectToAction("Login");
             //}
         }
-    
 
-    public ActionResult About()
+
+        public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
 
@@ -64,40 +79,21 @@ namespace CopeyWinery.Controllers
 
         public ActionResult AdminDashBoard()
         {
-             var obj = new List<User>();
+            var obj = new List<User>();
 
             using (DB_Entities db = new DB_Entities())
             {
                 obj = db.User.ToList();
                 //if (obj != null)
                 //{
-                    
+
                 //    //return RedirectToAction("AdminDashboard");
                 //}
             }
 
             return View(obj);
         }
-        [HttpPost]
-        public ActionResult DeleteUser(int userID)
-        {
-            using (DB_Entities entities = new DB_Entities())
-            {
-                User user = (from c in entities.User
-                                     where c.ID == userID
-                             select c).FirstOrDefault();
-                entities.User.Remove(user);
-                entities.SaveChanges();
-            }
-            return RedirectToAction("AdminDashBoard");
-        }
-
-        [HttpPost]
-        public ActionResult EditUser(int userID)
-        {
-            
-            return View();
-        }
+        
 
     }
 
