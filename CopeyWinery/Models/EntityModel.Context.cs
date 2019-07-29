@@ -25,6 +25,7 @@ namespace CopeyWinery.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<Activity> Activities { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

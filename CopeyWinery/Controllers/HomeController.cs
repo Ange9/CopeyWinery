@@ -83,7 +83,7 @@ namespace CopeyWinery.Controllers
 
             using (DB_Entities db = new DB_Entities())
             {
-                obj = db.User.ToList();
+                obj = db.Users.ToList();
                 //if (obj != null)
                 //{
 

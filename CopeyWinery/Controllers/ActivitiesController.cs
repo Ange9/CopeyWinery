@@ -10,107 +10,107 @@ using CopeyWinery.Models;
 
 namespace CopeyWinery.Controllers
 {
-    public class UserController : Controller
+    public class ActivitiesController : Controller
     {
         private DB_Entities db = new DB_Entities();
 
-        // GET: User
+        // GET: Activities
         public ActionResult Index()
         {
-            return View(db.Users.ToList());
+            return View(db.Activities.ToList());
         }
 
-        // GET: User/Details/5
+        // GET: Activities/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Find(id);
-            if (user == null)
+            Activity activity = db.Activities.Find(id);
+            if (activity == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(activity);
         }
 
-        // GET: User/Create
+        // GET: Activities/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: User/Create
+        // POST: Activities/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name,LastName,Is_Admin,Password")] User user)
+        public ActionResult Create([Bind(Include = "Activity_Id,Activity_name")] Activity activity)
         {
             if (ModelState.IsValid)
             {
-                db.Users.Add(user);
+                db.Activities.Add(activity);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(user);
+            return View(activity);
         }
 
-        // GET: User/Edit/5
+        // GET: Activities/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Find(id);
-            if (user == null)
+            Activity activity = db.Activities.Find(id);
+            if (activity == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(activity);
         }
 
-        // POST: User/Edit/5
+        // POST: Activities/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,LastName,Is_Admin,Password")] User user)
+        public ActionResult Edit([Bind(Include = "Activity_Id,Activity_name")] Activity activity)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(user).State = EntityState.Modified;
+                db.Entry(activity).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(user);
+            return View(activity);
         }
 
-        // GET: User/Delete/5
+        // GET: Activities/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Find(id);
-            if (user == null)
+            Activity activity = db.Activities.Find(id);
+            if (activity == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(activity);
         }
 
-        // POST: User/Delete/5
+        // POST: Activities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            User user = db.Users.Find(id);
-            db.Users.Remove(user);
+            Activity activity = db.Activities.Find(id);
+            db.Activities.Remove(activity);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

@@ -1,0 +1,26 @@
+﻿@model CopeyWinery.Models.Activity
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Activity</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Activity_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Activity_name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Activity_Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
