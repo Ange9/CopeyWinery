@@ -14,7 +14,7 @@ namespace CopeyWinery.Models
     
     public partial class Activity
     {
-        //public int Activity_Id { get; set; }
+        public int Activity_Id { get; set; }
         public string Activity_name { get; set; }
     }
 }

@@ -5,8 +5,20 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="ffe8fb6893e44f7dab3f4e33e800f8a4" Name="Diagram1">
-        <EntityTypeShape EntityType="Model.Activity" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Activity" Width="1.5" PointX="0.625" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="5.125" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Labor" Width="1.5" PointX="1.125" PointY="12.125" />
+        <EntityTypeShape EntityType="Model.Lane" Width="1.5" PointX="0.75" PointY="6.5" />
+        <EntityTypeShape EntityType="Model.Location" Width="1.5" PointX="1.125" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Location_lane_Xref" Width="1.5" PointX="3" PointY="8.5" />
+        <EntityTypeShape EntityType="Model.Task" Width="1.5" PointX="3.375" PointY="3.625" />
+        <AssociationConnector Association="Model.FK__Task__Activity__797309D9" />
+        <AssociationConnector Association="Model.FK__Task__Labor__7A672E12" />
+        <AssociationConnector Association="Model.FK__Location___Id_la__02084FDA" />
+        <AssociationConnector Association="Model.FK__Task__Lane__7C4F7684" />
+        <AssociationConnector Association="Model.FK__Location___Id_lo__01142BA1" />
+        <AssociationConnector Association="Model.FK__Task__Location__7B5B524B" />
+        <AssociationConnector Association="Model.FK__Task__User__07C12930" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
