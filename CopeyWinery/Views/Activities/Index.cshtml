@@ -3,8 +3,10 @@
 @{
     ViewBag.Title = "Index";
 }
+<link rel="stylesheet" href="\fonts\tableStyle.css">
 
 <h2>Index</h2>
+
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -17,17 +19,18 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Activity_name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Activity_Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Activity_Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Activity_Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Activity_name)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Activity_Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Activity_Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Activity_Id })
+            </td>
+        </tr>
+    }
 
 </table>

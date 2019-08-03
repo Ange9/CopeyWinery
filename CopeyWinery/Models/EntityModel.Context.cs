@@ -27,5 +27,10 @@ namespace CopeyWinery.Models
     
         public virtual DbSet<Activity> Activities { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Labor> Labors { get; set; }
+        public virtual DbSet<Lane> Lanes { get; set; }
+        public virtual DbSet<Location> Locations { get; set; }
+        public virtual DbSet<Location_lane_Xref> Location_lane_Xref { get; set; }
+        public virtual DbSet<Task> Tasks { get; set; }
     }
 }

@@ -1,0 +1,106 @@
+﻿@model CopeyWinery.Models.Task
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Task</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Number_hours)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Number_hours)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Hour_type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Hour_type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Unit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Unit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Activity1.Activity_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Activity1.Activity_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Labor1.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Labor1.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Lane1.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Lane1.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Location1.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Location1.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User1.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User1.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Task_Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

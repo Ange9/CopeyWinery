@@ -12,20 +12,21 @@ namespace CopeyWinery.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class User
+    public partial class Lane
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public User()
+        public Lane()
         {
+            this.Location_lane_Xref = new HashSet<Location_lane_Xref>();
             this.Tasks = new HashSet<Task>();
         }
     
-        public int ID { get; set; }
+        public int Id_lane { get; set; }
         public string Name { get; set; }
-        public string LastName { get; set; }
-        public Nullable<bool> Is_Admin { get; set; }
-        public string Password { get; set; }
+        public Nullable<int> plant_quantity { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Location_lane_Xref> Location_lane_Xref { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Task> Tasks { get; set; }
     }
