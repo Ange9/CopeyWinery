@@ -1,5 +1,44 @@
 ﻿USE [model]
 GO
+
+USE [model]
+GO
+
+/******User ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[User](
+	[ID] [int] NOT NULL,
+	[Name] [varchar](255) NOT NULL,
+	[LastName] [varchar](255) NULL,
+	[Is_Admin] [bit] NULL,
+	[Password] [varchar](12) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+INSERT INTO [dbo].[User]
+           ([ID]
+           ,[Name]
+           ,[LastName]
+           ,[Is_Admin]
+           ,[Password])
+     VALUES
+           (1234
+          ,'admin'
+           ,'adminApellido'
+           ,1
+           ,1234)
+GO
+
+
 --************LANE**********************
 SET ANSI_NULLS ON
 GO
@@ -118,6 +157,7 @@ CREATE TABLE [dbo].[Task](
 	[Hour_type] [varchar] (2),
 	[Quantity] [int],
 	[Unit] [varchar](10),
+	[User] [int] FOREIGN KEY REFERENCES [User](ID),
 	[Activity] [int] FOREIGN KEY REFERENCES [Activity](Activity_Id),
 	[Labor] [int] FOREIGN KEY REFERENCES [Labor](Id_Labor),
 	[Location] [int] FOREIGN KEY REFERENCES [Location](Id_Location),

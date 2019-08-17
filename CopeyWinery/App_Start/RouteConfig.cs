@@ -18,7 +18,7 @@ namespace CopeyWinery
                 url: "{controller}/{action}/{id}",
                 defaults: new
                     { controller = "Home",
-                    action = "Login",
+                    action = "Index",
                     id = UrlParameter.Optional }
             );
         }

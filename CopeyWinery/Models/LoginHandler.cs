@@ -18,8 +18,8 @@ namespace CopeyWinery.Models
 
         public User GetUser()
         {
-                var user = dB_Entity.Users
-                                    .Where(a => a.Name.Equals(objUser.Name) 
+                var user = dB_Entity.User
+                                    .Where(a => a.Username.Equals(objUser.Username) 
                                     && a.Password.Equals(objUser.Password))
                                     .FirstOrDefault();
                 return user;

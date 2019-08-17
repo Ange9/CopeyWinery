@@ -14,19 +14,15 @@ namespace CopeyWinery.Models
     
     public partial class User
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public User()
-        {
-            this.Tasks = new HashSet<Task>();
-        }
-    
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public string LastName { get; set; }
-        public Nullable<bool> Is_Admin { get; set; }
+        public int UserId { get; set; }
+        public string Username { get; set; }
         public string Password { get; set; }
+        public string Email { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+        public Nullable<System.DateTime> LastLoginDate { get; set; }
+        public Nullable<int> RoleId { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Task> Tasks { get; set; }
+        public virtual Role Role { get; set; }
+        public bool RememberMe { get; internal set; }
     }
 }

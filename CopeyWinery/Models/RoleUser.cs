@@ -10,11 +10,10 @@
 namespace CopeyWinery.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Activity
+    public partial class RoleUser
     {
-        public int Activity_Id { get; set; }
-        public string Activity_name { get; set; }
+        public Nullable<int> UserId { get; set; }
+        public string Roles { get; set; }
     }
 }

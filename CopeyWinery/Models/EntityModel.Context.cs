@@ -12,6 +12,8 @@ namespace CopeyWinery.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class DB_Entities : DbContext
     {
@@ -26,11 +28,68 @@ namespace CopeyWinery.Models
         }
     
         public virtual DbSet<Activity> Activities { get; set; }
-        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Labor> Labors { get; set; }
         public virtual DbSet<Lane> Lanes { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Location_lane_Xref> Location_lane_Xref { get; set; }
-        public virtual DbSet<Task> Tasks { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<UserActivation> UserActivations { get; set; }
+        public virtual DbSet<User> User { get; set; }
+    
+        public virtual ObjectResult<Nullable<int>> Insert_User(string username, string password, string email)
+        {
+            var usernameParameter = username != null ?
+                new ObjectParameter("Username", username) :
+                new ObjectParameter("Username", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("Password", password) :
+                new ObjectParameter("Password", typeof(string));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("Insert_User", usernameParameter, passwordParameter, emailParameter);
+        }
+    
+        public virtual int LoginByUsernamePassword(string username, string password)
+        {
+            var usernameParameter = username != null ?
+                new ObjectParameter("username", username) :
+                new ObjectParameter("username", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("password", password) :
+                new ObjectParameter("password", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("LoginByUsernamePassword", usernameParameter, passwordParameter);
+        }
+    
+        public virtual ObjectResult<Validate_User_Result> Validate_User(string username, string password)
+        {
+            var usernameParameter = username != null ?
+                new ObjectParameter("Username", username) :
+                new ObjectParameter("Username", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("Password", password) :
+                new ObjectParameter("Password", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Validate_User_Result>("Validate_User", usernameParameter, passwordParameter);
+        }
+    
+        public virtual ObjectResult<RoleUser> ValidateUser(string username, string password)
+        {
+            var usernameParameter = username != null ?
+                new ObjectParameter("Username", username) :
+                new ObjectParameter("Username", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("Password", password) :
+                new ObjectParameter("Password", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RoleUser>("ValidateUser", usernameParameter, passwordParameter);
+        }
     }
 }

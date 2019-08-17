@@ -4,63 +4,65 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace CopeyWinery.Controllers
 {
     public class HomeController : Controller
     {
+        private DB_Entities db = new DB_Entities();
+        [AllowAnonymous]
         public ActionResult Index()
         {
-            ViewBag.Message = "Your application home page.";
+            return View();
+        }
 
+        [Authorize]
+        public ActionResult Profile()
+        {
             return View();
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Index(User userLogin)
+        [AllowAnonymous]
+        public ActionResult Index(User user)
         {
-            LoginHandler loginHandler = new LoginHandler(userLogin);
-            var user = loginHandler.GetUser();
+            RoleUser roleUser = db.ValidateUser(user.Username, user.Password).FirstOrDefault();
+
+            string message = string.Empty;
+            switch (roleUser.UserId.Value)
+            {
+                case -1:
+                    message = "Username and/or password is incorrect.";
+                    break;
+                case -2:
+                    message = "Account has not been activated.";
+                    break;
+                default:
+                    FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, user.Username, DateTime.Now, DateTime.Now.AddMinutes(2880), user.RememberMe, roleUser.Roles, FormsAuthentication.FormsCookiePath);
+                    string hash = FormsAuthentication.Encrypt(ticket);
+                    HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, hash);
+
+                    if (ticket.IsPersistent)
+                    {
+                        cookie.Expires = ticket.Expiration;
+                    }
+                    Response.Cookies.Add(cookie);
+                    if (!string.IsNullOrEmpty(Request.Form["ReturnUrl"]))
+                    {
+                        return RedirectToAction(Request.Form["ReturnUrl"].Split('/')[2]);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Profile");
+                    }
+            }
+
+            ViewBag.Message = message;
             return View(user);
         }
 
-        public ActionResult Login()
-        {
-            return View();
-        }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Login(User userLogin)
-        {
-            LoginHandler loginHandler = new LoginHandler(userLogin);
-            var user = loginHandler.GetUser();
-            //if (user != null)
-            //{
-            //    if (user.Is_Admin == true)
-            //    {
-                    return RedirectToAction("Index");
-            //    }
-            //    else {
-            //        return RedirectToAction("UserDashBoard");
-            //    }
-
-            //}
-            //return View(user);
-        }
-
-        public ActionResult UserDashBoard()
-        {
-            //if (Session["ID"] != null)
-            //{
-            return View();
-            //}
-            //else
-            //{
-            //  return RedirectToAction("Login");
-            //}
-        }
 
 
         public ActionResult About()
@@ -77,23 +79,15 @@ namespace CopeyWinery.Controllers
             return View();
         }
 
-        public ActionResult AdminDashBoard()
+        [HttpPost]
+        [Authorize]
+        public ActionResult Logout()
         {
-            var obj = new List<User>();
-
-            using (DB_Entities db = new DB_Entities())
-            {
-                obj = db.Users.ToList();
-                //if (obj != null)
-                //{
-
-                //    //return RedirectToAction("AdminDashboard");
-                //}
-            }
-
-            return View(obj);
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Index");
         }
-        
+
+
 
     }
 

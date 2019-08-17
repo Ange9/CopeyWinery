@@ -12,9 +12,9 @@ namespace CopeyWinery.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Activity
+    public partial class UserActivation
     {
-        public int Activity_Id { get; set; }
-        public string Activity_name { get; set; }
+        public int UserId { get; set; }
+        public System.Guid ActivationCode { get; set; }
     }
 }

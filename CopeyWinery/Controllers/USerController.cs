@@ -17,7 +17,7 @@ namespace CopeyWinery.Controllers
         // GET: User
         public ActionResult Index()
         {
-            return View(db.Users.ToList());
+            return View(db.User.ToList());
         }
 
         // GET: User/Details/5
@@ -27,7 +27,7 @@ namespace CopeyWinery.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Find(id);
+            User user = db.User.Find(id);
             if (user == null)
             {
                 return HttpNotFound();
@@ -50,7 +50,7 @@ namespace CopeyWinery.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Users.Add(user);
+                db.User.Add(user);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -65,7 +65,7 @@ namespace CopeyWinery.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Find(id);
+            User user = db.User.Find(id);
             if (user == null)
             {
                 return HttpNotFound();
@@ -96,7 +96,7 @@ namespace CopeyWinery.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Find(id);
+            User user = db.User.Find(id);
             if (user == null)
             {
                 return HttpNotFound();
@@ -109,8 +109,8 @@ namespace CopeyWinery.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            User user = db.Users.Find(id);
-            db.Users.Remove(user);
+            User user = db.User.Find(id);
+            db.User.Remove(user);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

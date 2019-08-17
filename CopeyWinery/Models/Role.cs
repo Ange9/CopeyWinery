@@ -12,9 +12,18 @@ namespace CopeyWinery.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Activity
+    public partial class Role
     {
-        public int Activity_Id { get; set; }
-        public string Activity_name { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Role()
+        {
+            this.Users = new HashSet<User>();
+        }
+    
+        public int RoleId { get; set; }
+        public string RoleName { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<User> Users { get; set; }
     }
 }
