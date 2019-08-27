@@ -35,6 +35,7 @@ namespace CopeyWinery.Models
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<UserActivation> UserActivations { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<Task> Tasks { get; set; }
     
         public virtual ObjectResult<Nullable<int>> Insert_User(string username, string password, string email)
         {

@@ -17,7 +17,7 @@ namespace CopeyWinery.Controllers
         // GET: Tasks
         public ActionResult Index()
         {
-            var tasks = db.Tasks.Include(t => t.Activity1).Include(t => t.Labor1).Include(t => t.Lane1).Include(t => t.Location1).Include(t => t.User1);
+            var tasks = db.Tasks.Include(t => t.Activity1).Include(t => t.Labor1).Include(t => t.Lane1).Include(t => t.Location1).Include(t => t.User);
             return View(tasks.ToList());
         }
 
@@ -43,7 +43,7 @@ namespace CopeyWinery.Controllers
             ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name");
             ViewBag.Lane = new SelectList(db.Lanes, "Id_lane", "Name");
             ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name");
-            ViewBag.User = new SelectList(db.Users, "ID", "Name");
+            ViewBag.Users = new SelectList(db.User, "UserId", "Username");
             return View();
         }
 
@@ -52,7 +52,7 @@ namespace CopeyWinery.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Task_Id,Name,Date,Number_hours,Hour_type,Quantity,Unit,Activity,Labor,Location,Lane,User")] Task task)
+        public ActionResult Create([Bind(Include = "Task_Id,Name,Date,Number_hours,Hour_type,Quantity,Unit,Users,Activity,Labor,Location,Lane")] Task task)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace CopeyWinery.Controllers
             ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Labor);
             ViewBag.Lane = new SelectList(db.Lanes, "Id_lane", "Name", task.Lane);
             ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Location);
-            ViewBag.User = new SelectList(db.Users, "ID", "Name", task.User);
+            ViewBag.Users = new SelectList(db.User, "UserId", "Username", task.Users);
             return View(task);
         }
 
@@ -85,7 +85,7 @@ namespace CopeyWinery.Controllers
             ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Labor);
             ViewBag.Lane = new SelectList(db.Lanes, "Id_lane", "Name", task.Lane);
             ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Location);
-            ViewBag.User = new SelectList(db.Users, "ID", "Name", task.User);
+            ViewBag.Users = new SelectList(db.User, "UserId", "Username", task.Users);
             return View(task);
         }
 
@@ -94,7 +94,7 @@ namespace CopeyWinery.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Task_Id,Name,Date,Number_hours,Hour_type,Quantity,Unit,Activity,Labor,Location,Lane,User")] Task task)
+        public ActionResult Edit([Bind(Include = "Task_Id,Name,Date,Number_hours,Hour_type,Quantity,Unit,Users,Activity,Labor,Location,Lane")] Task task)
         {
             if (ModelState.IsValid)
             {
@@ -106,7 +106,7 @@ namespace CopeyWinery.Controllers
             ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Labor);
             ViewBag.Lane = new SelectList(db.Lanes, "Id_lane", "Name", task.Lane);
             ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Location);
-            ViewBag.User = new SelectList(db.Users, "ID", "Name", task.User);
+            ViewBag.Users = new SelectList(db.User, "UserId", "Username", task.Users);
             return View(task);
         }
 

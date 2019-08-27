@@ -14,6 +14,12 @@ namespace CopeyWinery.Models
     
     public partial class User
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public User()
+        {
+            this.Tasks = new HashSet<Task>();
+        }
+    
         public int UserId { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
@@ -23,6 +29,7 @@ namespace CopeyWinery.Models
         public Nullable<int> RoleId { get; set; }
     
         public virtual Role Role { get; set; }
-        public bool RememberMe { get; internal set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Task> Tasks { get; set; }
     }
 }

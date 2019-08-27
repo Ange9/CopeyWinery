@@ -18,6 +18,7 @@ namespace CopeyWinery.Models
         public Location()
         {
             this.Location_lane_Xref = new HashSet<Location_lane_Xref>();
+            this.Tasks = new HashSet<Task>();
         }
     
         public int Id_location { get; set; }
@@ -25,5 +26,7 @@ namespace CopeyWinery.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Location_lane_Xref> Location_lane_Xref { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Task> Tasks { get; set; }
     }
 }
