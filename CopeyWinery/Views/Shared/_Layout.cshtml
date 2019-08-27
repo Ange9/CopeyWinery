@@ -20,19 +20,39 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Actividades", "Index", "Activities")</li>
-                    <li>@Html.ActionLink("Labores", "Index", "Labors")</li>
-                    <li>@Html.ActionLink("Ubicaciones", "Index", "Locations")</li>
-                    <li>@Html.ActionLink("Calles", "Index", "Lanes")</li>
-                    <li>@Html.ActionLink("Tarea", "Index", "Tasks")</li>
+                    @if (User.IsInRole("Administrator") && User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Actividades", "Index", "Activities")</li>
+                        <li>@Html.ActionLink("Labores", "Index", "Labors")</li>
+                        <li>@Html.ActionLink("Ubicaciones", "Index", "Locations")</li>
+                        <li>@Html.ActionLink("Calles", "Index", "Lanes")</li>
+                        <li>@Html.ActionLink("Tarea", "Index", "Tasks")</li>
+                        <li><a href="#" onclick="document.forms[0].submit();">Logout</a></li>
 
+                    }
+                    @if (User.IsInRole("User") && User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Tarea", "Index", "Tasks")</li>
+                        <li><a href="#" onclick="document.forms[0].submit();">Logout</a></li>
 
-
-
+                    }
+                    @*<li>@Html.ActionLink("Tarea", "Index", "Tasks")</li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>*@
 
                 </ul>
             </div>
         </div>
+    </div>
+    <div style="margin-left:10pt">
+        Welcome
+        <b>@HttpContext.Current.User.Identity.Name</b>
+        <br />
+        <br />
+        @using (Html.BeginForm("Logout", "Home", FormMethod.Post))
+        {
+
+        }
     </div>
     <div class="container body-content">
         @RenderBody()

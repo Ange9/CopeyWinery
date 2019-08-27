@@ -14,9 +14,20 @@ namespace CopeyWinery.Controllers
     {
         private DB_Entities db = new DB_Entities();
 
+        private Task newTask;
+        private DateTime ? date;
+        private int ? numberHours;
+         
+
         // GET: Tasks
+        [Authorize]
         public ActionResult Index()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+
+            }
             var tasks = db.Tasks.Include(t => t.Activity1).Include(t => t.Labor1).Include(t => t.Lane1).Include(t => t.Location1).Include(t => t.User);
             return View(tasks.ToList());
         }
@@ -39,12 +50,79 @@ namespace CopeyWinery.Controllers
         // GET: Tasks/Create
         public ActionResult Create()
         {
-            ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name");
-            ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name");
-            ViewBag.Lane = new SelectList(db.Lanes, "Id_lane", "Name");
-            ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name");
-            ViewBag.Users = new SelectList(db.User, "UserId", "Username");
+            newTask = new Task();
+            return RedirectToAction("CreateDate");
+            //ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name");
+            //ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name");
+            //ViewBag.Lane = new SelectList(db.Lanes, "Id_lane", "Name");
+            //ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name");
+            //ViewBag.Users = new SelectList(db.User, "UserId", "Username");
+        }
+
+        // GET: Tasks/Create
+        public ActionResult CreateDate()
+        {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateDate([Bind(
+            //Include = "Task_Id,Name,Date,Number_hours,Hour_type,Quantity,Unit,Users,Activity,Labor,Location,Lane")] Task task)
+            Include = "Date")] Task task)
+        {
+           
+            if (ModelState.IsValid)
+            {
+                date = task.Date;
+                newTask.Date = task.Date;
+                return RedirectToAction("CreateNumber_hours");
+            }
+            return View(task);
+        }
+
+        // GET: Tasks/CreateNumber_hours
+        public ActionResult CreateNumber_hours()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateNumber_hours([Bind(
+            //Include = "Task_Id,Name,Date,Number_hours,Hour_type,Quantity,Unit,Users,Activity,Labor,Location,Lane")] Task task)
+            Include = "Number_hours")] Task task)
+        {
+
+            if (ModelState.IsValid)
+            {
+                numberHours = task.Number_hours;
+                newTask.Number_hours = task.Number_hours;
+                return RedirectToAction("CreateHour_type");
+            }
+            return View(task);
+        }
+
+        // GET: Tasks/CreateNumber_hours
+        public ActionResult CreateHour_type()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateHour_type([Bind(
+            //Include = "Task_Id,Name,Date,Number_hours,Hour_type,Quantity,Unit,Users,Activity,Labor,Location,Lane")] Task task)
+            Include = "Hour_type")] Task task)
+        {
+
+            if (ModelState.IsValid)
+            {
+                numberHours = task.Number_hours;
+                newTask.Number_hours = task.Number_hours;
+                return RedirectToAction("Index");
+            }
+            return View(task);
         }
 
         // POST: Tasks/Create
@@ -52,7 +130,9 @@ namespace CopeyWinery.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Task_Id,Name,Date,Number_hours,Hour_type,Quantity,Unit,Users,Activity,Labor,Location,Lane")] Task task)
+        public ActionResult Create([Bind(
+            //Include = "Task_Id,Name,Date,Number_hours,Hour_type,Quantity,Unit,Users,Activity,Labor,Location,Lane")] Task task)
+            Include = "Hour_type")] Task task)
         {
             if (ModelState.IsValid)
             {
