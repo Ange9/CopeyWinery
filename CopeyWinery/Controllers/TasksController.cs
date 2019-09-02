@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -10,14 +11,24 @@ using CopeyWinery.Models;
 
 namespace CopeyWinery.Controllers
 {
+    public class TaskObject
+    {
+        public DateTime? Date { get; set; }
+        public int? Number_hours { get; set; }
+        public string Hour_type { get; set; }
+        public int? Activity { get; set; }
+        public int? Labor { get; set; }
+
+
+    }
     public class TasksController : Controller
     {
         private DB_Entities db = new DB_Entities();
 
         private Task newTask;
-        private DateTime ? date;
-        private int ? numberHours;
-         
+        private DateTime? date;
+        private int? numberHours;
+
 
         // GET: Tasks
         [Authorize]
@@ -47,107 +58,196 @@ namespace CopeyWinery.Controllers
             return View(task);
         }
 
-        // GET: Tasks/Create
         public ActionResult Create()
         {
-            newTask = new Task();
-            return RedirectToAction("CreateDate");
-            //ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name");
-            //ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name");
-            //ViewBag.Lane = new SelectList(db.Lanes, "Id_lane", "Name");
-            //ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name");
-            //ViewBag.Users = new SelectList(db.User, "UserId", "Username");
-        }
-
-        // GET: Tasks/Create
-        public ActionResult CreateDate()
-        {
-            return View();
+            return View(new Task());
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateDate([Bind(
-            //Include = "Task_Id,Name,Date,Number_hours,Hour_type,Quantity,Unit,Users,Activity,Labor,Location,Lane")] Task task)
-            Include = "Date")] Task task)
+        [ValidateAntiForgeryToken()]
+        public ActionResult Create(Task model)
         {
-           
+            //validation example
+            if (model.Date == null)
+            {
+                ModelState.AddModelError("", "Debe ingresar un valor para la fecha!!!");
+            }
             if (ModelState.IsValid)
             {
-                date = task.Date;
-                newTask.Date = task.Date;
-                return RedirectToAction("CreateNumber_hours");
+                TaskObject taskObject = new TaskObject();
+                taskObject.Date = model.Date;
+                return RedirectToAction("Add_Num_Hours", taskObject);
             }
+            return View(model);
+        }
+
+        public ActionResult Add_Num_Hours(TaskObject taskObj)
+        {
+            Task task = new Task();
+            task.Date = taskObj.Date;
             return View(task);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken()]
+        public ActionResult Add_Num_Hours(Task model)
+        {
+            //validation example
+            if (model.Number_hours == null)
+            {
+                ModelState.AddModelError("", "Debe ingresar el numero de horas!!!");
+            }
+            if (ModelState.IsValid)
+            {
+                TaskObject taskObject = new TaskObject();
+                taskObject.Date = model.Date;
+                taskObject.Number_hours = model.Number_hours;
+                return RedirectToAction("Add_Hour_type", taskObject);
+            }
+            return View(model);
         }
 
         // GET: Tasks/CreateNumber_hours
-        public ActionResult CreateNumber_hours()
+        public ActionResult Add_Hour_type(TaskObject taskObj)
         {
-            return View();
+            Task task = new Task();
+            task.Date = taskObj.Date;
+            task.Number_hours = taskObj.Number_hours;
+            List<string> hourTypeOption = new List<string>();
+            hourTypeOption.Add("Ordinaria");
+            hourTypeOption.Add("Extraordinaria");
+            ViewBag.Hour_type = new SelectList(hourTypeOption);
+            return View(task);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateNumber_hours([Bind(
-            //Include = "Task_Id,Name,Date,Number_hours,Hour_type,Quantity,Unit,Users,Activity,Labor,Location,Lane")] Task task)
-            Include = "Number_hours")] Task task)
+        public ActionResult Add_Hour_type(Task model)
         {
 
+            if (model.Hour_type == null)
+            {
+                ModelState.AddModelError("", "Debe ingresar el tipo de hora!!!");
+            }
             if (ModelState.IsValid)
             {
-                numberHours = task.Number_hours;
-                newTask.Number_hours = task.Number_hours;
-                return RedirectToAction("CreateHour_type");
+                TaskObject taskObject = new TaskObject();
+                taskObject.Date = model.Date;
+                taskObject.Number_hours = model.Number_hours;
+                taskObject.Hour_type= model.Hour_type;
+                return RedirectToAction("Add_Activity", taskObject);
             }
+            return View(model);
+        }
+
+        public ActionResult Add_Activity(TaskObject taskObj)
+        {
+            Task task = new Task();
+            task.Date = taskObj.Date;
+            task.Number_hours = taskObj.Number_hours;
+            task.Hour_type = taskObj.Hour_type;
+            ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name");
             return View(task);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Add_Activity(Task model)
+        {
+
+            if (model.Hour_type == null)
+            {
+                ModelState.AddModelError("", "Debe seleccionar una actividad!!!");
+            }
+            if (ModelState.IsValid)
+            {
+              
+                TaskObject taskObject = new TaskObject();
+                taskObject.Date = model.Date;
+                taskObject.Number_hours = model.Number_hours;
+                taskObject.Hour_type = model.Hour_type;
+                taskObject.Activity = model.Activity;
+                //ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name", model.Activity);
+                return RedirectToAction("Add_Labor", taskObject);                
+            }
+            return View(model);
+        }
+
+        public ActionResult Add_Labor(TaskObject taskObj)
+        {
+            Task task = new Task();
+            task.Date = taskObj.Date;
+            task.Number_hours = taskObj.Number_hours;
+            task.Hour_type = taskObj.Hour_type;
+            task.Activity = taskObj.Activity;
+            ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name");
+            return View(task);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Add_Labor(Task model)
+        {
+
+            if (model.Hour_type == null)
+            {
+                ModelState.AddModelError("", "Debe seleccionar una labor!!!");
+            }
+            if (ModelState.IsValid)
+            {
+
+                TaskObject taskObject = new TaskObject();
+                taskObject.Date = model.Date;
+                taskObject.Number_hours = model.Number_hours;
+                taskObject.Hour_type = model.Hour_type;
+                taskObject.Activity = model.Activity;
+                taskObject.Labor = model.Labor;
+                return RedirectToAction("CreateTask", taskObject);
+            }
+            return View(model);
+        }
+
+
 
         // GET: Tasks/CreateNumber_hours
-        public ActionResult CreateHour_type()
+        public ActionResult CreateTask(TaskObject taskObj)
         {
-            return View();
+            Task task = new Task();
+            task.Date = taskObj.Date;
+            task.Number_hours = taskObj.Number_hours;
+            task.Hour_type = taskObj.Hour_type;
+            task.Activity = taskObj.Activity;
+            task.Labor = taskObj.Labor;
+            task.Name = task.Task_Id.ToString();
+            db.Tasks.Add(task);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateHour_type([Bind(
-            //Include = "Task_Id,Name,Date,Number_hours,Hour_type,Quantity,Unit,Users,Activity,Labor,Location,Lane")] Task task)
-            Include = "Hour_type")] Task task)
-        {
 
-            if (ModelState.IsValid)
-            {
-                numberHours = task.Number_hours;
-                newTask.Number_hours = task.Number_hours;
-                return RedirectToAction("Index");
-            }
-            return View(task);
-        }
+        //// POST: Tasks/Create
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Createbck([Bind(
+        //    //Include = "Task_Id,Name,Date,Number_hours,Hour_type,Quantity,Unit,Users,Activity,Labor,Location,Lane")] Task task)
+        //    Include = "Hour_type")] Task task)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Tasks.Add(task);
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
 
-        // POST: Tasks/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(
-            //Include = "Task_Id,Name,Date,Number_hours,Hour_type,Quantity,Unit,Users,Activity,Labor,Location,Lane")] Task task)
-            Include = "Hour_type")] Task task)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Tasks.Add(task);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name", task.Activity);
-            ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Labor);
-            ViewBag.Lane = new SelectList(db.Lanes, "Id_lane", "Name", task.Lane);
-            ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Location);
-            ViewBag.Users = new SelectList(db.User, "UserId", "Username", task.Users);
-            return View(task);
-        }
+        //    ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name", task.Activity);
+        //    ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Labor);
+        //    ViewBag.Lane = new SelectList(db.Lanes, "Id_lane", "Name", task.Lane);
+        //    ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Location);
+        //    ViewBag.Users = new SelectList(db.User, "UserId", "Username", task.Users);
+        //    return View(task);
+        //}
 
         // GET: Tasks/Edit/5
         public ActionResult Edit(int? id)
@@ -224,5 +324,7 @@ namespace CopeyWinery.Controllers
             }
             base.Dispose(disposing);
         }
+
+
     }
 }

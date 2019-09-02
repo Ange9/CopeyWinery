@@ -146,6 +146,7 @@
     <Compile Include="Controllers\LaborsController.cs" />
     <Compile Include="Controllers\LanesController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
+    <Compile Include="Controllers\Tasks1Controller.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -236,6 +237,7 @@
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\DBScripts\CreateTableActivity.sql" />
     <Content Include="Scripts\DBScripts\CreateTableUser.sql" />
+    <Content Include="Scripts\DBScripts\DBScripts.sql" />
     <Content Include="Scripts\DBScripts\LoginDB_Roles.sql" />
     <Content Include="Scripts\gridmvc.js" />
     <Content Include="Scripts\gridmvc.lang.ru.js" />
@@ -292,14 +294,23 @@
     <Content Include="Views\Lanes\Details.cshtml" />
     <Content Include="Views\Lanes\Edit.cshtml" />
     <Content Include="Views\Lanes\Index.cshtml" />
-    <Content Include="Views\Tasks\Create.cshtml" />
+    <Content Include="Views\Tasks\Add_Activity.cshtml" />
+    <Content Include="Views\Tasks1\Create.cshtml" />
+    <Content Include="Views\Tasks1\Delete.cshtml" />
+    <Content Include="Views\Tasks1\Details.cshtml" />
+    <Content Include="Views\Tasks1\Edit.cshtml" />
+    <Content Include="Views\Tasks1\Index.cshtml" />
+    <Content Include="Views\Tasks\Add_Labor.cshtml" />
+    <None Include="Views\Tasks\CreateBCK.cshtml" />
     <Content Include="Views\Tasks\Delete.cshtml" />
     <Content Include="Views\Tasks\Details.cshtml" />
     <Content Include="Views\Tasks\Edit.cshtml" />
     <Content Include="Views\Tasks\Index.cshtml" />
     <Content Include="Views\Tasks\CreateDate.cshtml" />
     <Content Include="Views\Tasks\CreateNumber_hours.cshtml" />
-    <Content Include="Views\Tasks\CreateHour_type.cshtml" />
+    <Content Include="Views\Tasks\Add_Hour_type.cshtml" />
+    <Content Include="Views\Tasks\Create.cshtml" />
+    <Content Include="Views\Tasks\Add_Num_Hours.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

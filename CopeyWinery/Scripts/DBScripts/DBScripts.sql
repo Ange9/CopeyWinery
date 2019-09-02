@@ -1,4 +1,4 @@
-﻿USE [CopeyWinery]
+﻿use [master]
 GO
 
 
@@ -115,16 +115,16 @@ CREATE TABLE [dbo].[Users](
 	[Password] [nvarchar](20) NOT NULL,
 	[Email] [nvarchar](30) NOT NULL,
 	[CreatedDate] [datetime] NOT NULL,
-	[LastLoginDate] [datetime] NULL,
+	[LastLoginDate] [datetime] NULL
  CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
 (
 	[UserId] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
 GO
 
-USE [CopeyWinery]
+USE [master]
 GO
 
 /****** Object:  StoredProcedure [dbo].[Insert_User]    Script Date: 01/03/2014 16:36:23 ******/
@@ -217,7 +217,7 @@ BEGIN
 	END
 END
 GO
-USE [CopeyWinery]
+USE [master]
 GO
 
 /****** Object:  Table [dbo].[Roles]    Script Date: 01/18/2014 13:48:12 ******/
@@ -321,7 +321,7 @@ CREATE TABLE [dbo].[Task](
 	[Hour_type] [varchar] (15),
 	[Quantity] [int],
 	[Unit] [varchar](10),
-	[User] [int] FOREIGN KEY REFERENCES [User](ID),
+	[User] [int] FOREIGN KEY REFERENCES [Users](UserId),
 	[Activity] [int] FOREIGN KEY REFERENCES [Activity](Activity_Id),
 	[Labor] [int] FOREIGN KEY REFERENCES [Labor](Id_Labor),
 	[Location] [int] FOREIGN KEY REFERENCES [Location](Id_Location),
