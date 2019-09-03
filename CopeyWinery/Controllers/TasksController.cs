@@ -18,17 +18,14 @@ namespace CopeyWinery.Controllers
         public string Hour_type { get; set; }
         public int? Activity { get; set; }
         public int? Labor { get; set; }
+        public int? Location { get; set; }
+        public int? User { get; set; }
 
 
     }
     public class TasksController : Controller
     {
         private DB_Entities db = new DB_Entities();
-
-        private Task newTask;
-        private DateTime? date;
-        private int? numberHours;
-
 
         // GET: Tasks
         [Authorize]
@@ -67,7 +64,6 @@ namespace CopeyWinery.Controllers
         [ValidateAntiForgeryToken()]
         public ActionResult Create(Task model)
         {
-            //validation example
             if (model.Date == null)
             {
                 ModelState.AddModelError("", "Debe ingresar un valor para la fecha!!!");
@@ -92,7 +88,6 @@ namespace CopeyWinery.Controllers
         [ValidateAntiForgeryToken()]
         public ActionResult Add_Num_Hours(Task model)
         {
-            //validation example
             if (model.Number_hours == null)
             {
                 ModelState.AddModelError("", "Debe ingresar el numero de horas!!!");
@@ -107,7 +102,6 @@ namespace CopeyWinery.Controllers
             return View(model);
         }
 
-        // GET: Tasks/CreateNumber_hours
         public ActionResult Add_Hour_type(TaskObject taskObj)
         {
             Task task = new Task();
@@ -124,7 +118,6 @@ namespace CopeyWinery.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Add_Hour_type(Task model)
         {
-
             if (model.Hour_type == null)
             {
                 ModelState.AddModelError("", "Debe ingresar el tipo de hora!!!");
@@ -139,6 +132,7 @@ namespace CopeyWinery.Controllers
             }
             return View(model);
         }
+
 
         public ActionResult Add_Activity(TaskObject taskObj)
         {
@@ -155,7 +149,7 @@ namespace CopeyWinery.Controllers
         public ActionResult Add_Activity(Task model)
         {
 
-            if (model.Hour_type == null)
+            if (model.Activity == null)
             {
                 ModelState.AddModelError("", "Debe seleccionar una actividad!!!");
             }
@@ -167,7 +161,6 @@ namespace CopeyWinery.Controllers
                 taskObject.Number_hours = model.Number_hours;
                 taskObject.Hour_type = model.Hour_type;
                 taskObject.Activity = model.Activity;
-                //ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name", model.Activity);
                 return RedirectToAction("Add_Labor", taskObject);                
             }
             return View(model);
@@ -189,7 +182,7 @@ namespace CopeyWinery.Controllers
         public ActionResult Add_Labor(Task model)
         {
 
-            if (model.Hour_type == null)
+            if (model.Labor == null)
             {
                 ModelState.AddModelError("", "Debe seleccionar una labor!!!");
             }
@@ -202,6 +195,81 @@ namespace CopeyWinery.Controllers
                 taskObject.Hour_type = model.Hour_type;
                 taskObject.Activity = model.Activity;
                 taskObject.Labor = model.Labor;
+                return RedirectToAction("Add_Location", taskObject);
+            }
+            return View(model);
+        }
+
+        public ActionResult Add_Location(TaskObject taskObj)
+        {
+            Task task = new Task();
+            task.Date = taskObj.Date;
+            task.Number_hours = taskObj.Number_hours;
+            task.Hour_type = taskObj.Hour_type;
+            task.Activity = taskObj.Activity;
+            task.Labor = taskObj.Labor;
+            ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name");
+            return View(task);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Add_Location(Task model)
+        {
+
+            if (model.Location == null)
+            {
+                ModelState.AddModelError("", "Debe seleccionar una ubicacion");
+            }
+            if (ModelState.IsValid)
+            {
+
+                TaskObject taskObject = new TaskObject();
+                taskObject.Date = model.Date;
+                taskObject.Number_hours = model.Number_hours;
+                taskObject.Hour_type = model.Hour_type;
+                taskObject.Activity = model.Activity;
+                taskObject.Labor = model.Labor;
+                taskObject.Location = model.Location;
+                return RedirectToAction("Add_User", taskObject);
+            }
+            return View(model);
+        }
+
+
+        public ActionResult Add_User(TaskObject taskObj)
+        {
+            Task task = new Task();
+            task.Date = taskObj.Date;
+            task.Number_hours = taskObj.Number_hours;
+            task.Hour_type = taskObj.Hour_type;
+            task.Activity = taskObj.Activity;
+            task.Labor = taskObj.Labor;
+            task.Location = taskObj.Location;
+            ViewBag.User = new SelectList(db.User, "UserId", "Username");
+            return View(task);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Add_User(Task model)
+        {
+
+            if (model.User == null)
+            {
+                ModelState.AddModelError("", "Debe seleccionar una ubicacion");
+            }
+            if (ModelState.IsValid)
+            {
+
+                TaskObject taskObject = new TaskObject();
+                taskObject.Date = model.Date;
+                taskObject.Number_hours = model.Number_hours;
+                taskObject.Hour_type = model.Hour_type;
+                taskObject.Activity = model.Activity;
+                taskObject.Labor = model.Labor;
+                taskObject.Location = model.Location;
+                taskObject.User = model.User;
                 return RedirectToAction("CreateTask", taskObject);
             }
             return View(model);
@@ -218,6 +286,9 @@ namespace CopeyWinery.Controllers
             task.Hour_type = taskObj.Hour_type;
             task.Activity = taskObj.Activity;
             task.Labor = taskObj.Labor;
+            task.Location = taskObj.Location;
+            task.User = taskObj.User;
+
             task.Name = task.Task_Id.ToString();
             db.Tasks.Add(task);
             db.SaveChanges();

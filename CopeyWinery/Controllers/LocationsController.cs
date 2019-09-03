@@ -46,7 +46,7 @@ namespace CopeyWinery.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id_location,Name")] Location location)
+        public ActionResult Create([Bind(Include = "Name")] Location location)
         {
             if (ModelState.IsValid)
             {

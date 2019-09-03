@@ -46,7 +46,7 @@ namespace CopeyWinery.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id_lane,Name,plant_quantity")] Lane lane)
+        public ActionResult Create([Bind(Include = "Name,plant_quantity")] Lane lane)
         {
             if (ModelState.IsValid)
             {

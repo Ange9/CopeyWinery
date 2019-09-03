@@ -46,7 +46,7 @@ namespace CopeyWinery.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Activity_Id,Activity_name")] Activity activity)
+        public ActionResult Create([Bind(Include = "Activity_name")] Activity activity)
         {
             if (ModelState.IsValid)
             {

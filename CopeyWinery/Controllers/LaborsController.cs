@@ -46,7 +46,7 @@ namespace CopeyWinery.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id_labor,Name")] Labor labor)
+        public ActionResult Create([Bind(Include = "Name")] Labor labor)
         {
             if (ModelState.IsValid)
             {

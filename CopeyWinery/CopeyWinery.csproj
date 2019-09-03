@@ -294,12 +294,9 @@
     <Content Include="Views\Lanes\Edit.cshtml" />
     <Content Include="Views\Lanes\Index.cshtml" />
     <Content Include="Views\Tasks\Add_Activity.cshtml" />
-    <Content Include="Views\Tasks1\Create.cshtml" />
-    <Content Include="Views\Tasks1\Delete.cshtml" />
-    <Content Include="Views\Tasks1\Details.cshtml" />
-    <Content Include="Views\Tasks1\Edit.cshtml" />
-    <Content Include="Views\Tasks1\Index.cshtml" />
     <Content Include="Views\Tasks\Add_Labor.cshtml" />
+    <Content Include="Views\Tasks\Add_Location.cshtml" />
+    <Content Include="Views\Tasks\Add_User.cshtml" />
     <None Include="Views\Tasks\CreateBCK.cshtml" />
     <Content Include="Views\Tasks\Delete.cshtml" />
     <Content Include="Views\Tasks\Details.cshtml" />
