@@ -1,7 +1,6 @@
-﻿use [master]
-GO
-
-
+﻿
+use model
+go
 --************LANE**********************
 SET ANSI_NULLS ON
 GO
@@ -10,7 +9,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [dbo].[Lane](
-	[Id_lane] [int] NOT NULL,
+	[Id_lane] [int]  IDENTITY(1,1) NOT NULL,
 	[Name] [varchar](255) NOT NULL,
 	[plant_quantity] [int]
 PRIMARY KEY CLUSTERED 
@@ -42,7 +41,6 @@ PRIMARY KEY CLUSTERED
 GO
 
 --************************[Location_lane_Xref]****************************
-
 
 SET ANSI_NULLS ON
 GO
@@ -122,9 +120,6 @@ CREATE TABLE [dbo].[Users](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
-GO
-
-USE [master]
 GO
 
 /****** Object:  StoredProcedure [dbo].[Insert_User]    Script Date: 01/03/2014 16:36:23 ******/
@@ -217,8 +212,7 @@ BEGIN
 	END
 END
 GO
-USE [master]
-GO
+
 
 /****** Object:  Table [dbo].[Roles]    Script Date: 01/18/2014 13:48:12 ******/
 SET ANSI_NULLS ON
@@ -301,7 +295,7 @@ BEGIN
 		SELECT -1 [UserId], '' [Roles] -- User invalid.
 	END
 END
-
+GO
 
 
 

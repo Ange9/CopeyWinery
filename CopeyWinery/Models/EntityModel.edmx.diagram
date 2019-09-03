@@ -17,12 +17,12 @@
         <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="0.625" PointY="0.5" IsExpanded="true" />
         <AssociationConnector Association="Model.FK_Users_Roles" />
         <EntityTypeShape EntityType="Model.Task" Width="1.5" PointX="6.625" PointY="3.5" />
-        <AssociationConnector Association="Model.FK__Task__Activity__503BEA1C" />
-        <AssociationConnector Association="Model.FK__Task__Labor__51300E55" />
-        <AssociationConnector Association="Model.FK__Task__Lane__531856C7" />
-        <AssociationConnector Association="Model.FK__Task__Location__5224328E" />
-        <AssociationConnector Association="Model.FK__Task__Users__4F47C5E3" />
-      </Diagram>
+        <AssociationConnector Association="Model.FK__Task__Activity__1C873BEC" />
+        <AssociationConnector Association="Model.FK__Task__Labor__1D7B6025" />
+        <AssociationConnector Association="Model.FK__Task__Lane__1F63A897" />
+        <AssociationConnector Association="Model.FK__Task__Location__1E6F845E" />
+        <AssociationConnector Association="Model.FK__Task__User__1B9317B3" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

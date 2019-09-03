@@ -21,7 +21,7 @@ namespace CopeyWinery.Models
         public string Hour_type { get; set; }
         public Nullable<int> Quantity { get; set; }
         public string Unit { get; set; }
-        public Nullable<int> Users { get; set; }
+        public Nullable<int> User { get; set; }
         public Nullable<int> Activity { get; set; }
         public Nullable<int> Labor { get; set; }
         public Nullable<int> Location { get; set; }
@@ -31,6 +31,6 @@ namespace CopeyWinery.Models
         public virtual Labor Labor1 { get; set; }
         public virtual Lane Lane1 { get; set; }
         public virtual Location Location1 { get; set; }
-        public virtual User User { get; set; }
+        public virtual User User1 { get; set; }
     }
 }

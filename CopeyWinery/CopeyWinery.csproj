@@ -146,7 +146,6 @@
     <Compile Include="Controllers\LaborsController.cs" />
     <Compile Include="Controllers\LanesController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
-    <Compile Include="Controllers\Tasks1Controller.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">

@@ -39,7 +39,7 @@ namespace CopeyWinery.Controllers
                 return RedirectToAction("Index", "Home");
 
             }
-            var tasks = db.Tasks.Include(t => t.Activity1).Include(t => t.Labor1).Include(t => t.Lane1).Include(t => t.Location1).Include(t => t.User);
+            var tasks = db.Tasks.Include(t => t.Activity1).Include(t => t.Labor1).Include(t => t.Lane1).Include(t => t.Location1).Include(t => t.User1);
             return View(tasks.ToList());
         }
 
@@ -265,7 +265,7 @@ namespace CopeyWinery.Controllers
             ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Labor);
             ViewBag.Lane = new SelectList(db.Lanes, "Id_lane", "Name", task.Lane);
             ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Location);
-            ViewBag.Users = new SelectList(db.User, "UserId", "Username", task.Users);
+            ViewBag.Users = new SelectList(db.User, "UserId", "Username", task.User);
             return View(task);
         }
 
@@ -286,7 +286,7 @@ namespace CopeyWinery.Controllers
             ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Labor);
             ViewBag.Lane = new SelectList(db.Lanes, "Id_lane", "Name", task.Lane);
             ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Location);
-            ViewBag.Users = new SelectList(db.User, "UserId", "Username", task.Users);
+            ViewBag.Users = new SelectList(db.User, "UserId", "Username", task.User);
             return View(task);
         }
 

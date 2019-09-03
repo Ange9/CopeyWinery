@@ -68,7 +68,7 @@
                     @Html.ValidationMessageFor(m => m.Password, "", new { @class = "error" })
                 </td>
             </tr>
-            <tr>
+            @*<tr>
                 <td>
                     Remember Me
                 </td>
@@ -76,7 +76,7 @@
                     @Html.CheckBoxFor(m => m.RememberMe)
                 </td>
                 <td></td>
-            </tr>
+            </tr>*@
             <tr>
                 <td><input type="hidden" name="ReturnUrl" value="@Request.QueryString["ReturnUrl"]" /></td>
                 <td>
