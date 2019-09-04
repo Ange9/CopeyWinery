@@ -231,51 +231,10 @@ namespace CopeyWinery.Controllers
                 taskObject.Activity = model.Activity;
                 taskObject.Labor = model.Labor;
                 taskObject.Location = model.Location;
-                return RedirectToAction("Add_User", taskObject);
-            }
-            return View(model);
-        }
-
-
-        public ActionResult Add_User(TaskObject taskObj)
-        {
-            Task task = new Task();
-            task.Date = taskObj.Date;
-            task.Number_hours = taskObj.Number_hours;
-            task.Hour_type = taskObj.Hour_type;
-            task.Activity = taskObj.Activity;
-            task.Labor = taskObj.Labor;
-            task.Location = taskObj.Location;
-            ViewBag.User = new SelectList(db.User, "UserId", "Username");
-            return View(task);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Add_User(Task model)
-        {
-
-            if (model.User == null)
-            {
-                ModelState.AddModelError("", "Debe seleccionar una ubicacion");
-            }
-            if (ModelState.IsValid)
-            {
-
-                TaskObject taskObject = new TaskObject();
-                taskObject.Date = model.Date;
-                taskObject.Number_hours = model.Number_hours;
-                taskObject.Hour_type = model.Hour_type;
-                taskObject.Activity = model.Activity;
-                taskObject.Labor = model.Labor;
-                taskObject.Location = model.Location;
-                taskObject.User = model.User;
                 return RedirectToAction("CreateTask", taskObject);
             }
             return View(model);
         }
-
-
 
         // GET: Tasks/CreateNumber_hours
         public ActionResult CreateTask(TaskObject taskObj)
@@ -287,12 +246,18 @@ namespace CopeyWinery.Controllers
             task.Activity = taskObj.Activity;
             task.Labor = taskObj.Labor;
             task.Location = taskObj.Location;
-            task.User = taskObj.User;
-
+            task.User = db.User.Where(x => x.Username == User.Identity.Name).Select(x => x.UserId).FirstOrDefault();
             task.Name = task.Task_Id.ToString();
             db.Tasks.Add(task);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult ExportView()
+        {
+            Response.AddHeader("content-disposition", "attachment;filename=Report1.xls");
+            Response.AddHeader("Content-Type", "application/vnd.ms-excel");
+            return View(db.Tasks.AsEnumerable());
         }
 
 

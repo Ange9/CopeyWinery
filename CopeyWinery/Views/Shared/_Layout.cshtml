@@ -8,6 +8,8 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+    <link rel="stylesheet" href="\fonts\tableStyle.css">
+
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -27,6 +29,8 @@
                         <li>@Html.ActionLink("Ubicaciones", "Index", "Locations")</li>
                         <li>@Html.ActionLink("Calles", "Index", "Lanes")</li>
                         <li>@Html.ActionLink("Tareas", "Index", "Tasks")</li>
+                        <li>@Html.ActionLink("Usuarios", "Index", "Users")</li>
+
                         <li><a href="#" onclick="document.forms[0].submit();">Logout</a></li>
 
                     }
@@ -37,8 +41,8 @@
 
                     }
                     @*<li>@Html.ActionLink("Tarea", "Index", "Tasks")</li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>*@
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>*@
 
                 </ul>
             </div>
