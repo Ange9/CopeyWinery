@@ -13,34 +13,34 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Date)
+            Fecha
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Number_hours)
+            Cant. Horas
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Hour_type)
+            Tipo de Hora
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Quantity)
+            Cantidad
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Unit)
+            Unidad
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Activity1.Activity_name)
+            Actividad
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Labor1.Name)
+           Labor
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Lane1.Name)
+            Calles
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Location1.Name)
+            Ubicacion
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.User1.Username)
+            Colaborador
         </th>
         <th></th>
     </tr>
@@ -78,9 +78,9 @@
             @Html.DisplayFor(modelItem => item.User1.Username)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Task_Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Task_Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Task_Id })
+            @Html.ActionLink("Editar", "Edit", new { id=item.Task_Id }) |
+            @Html.ActionLink("Detalles", "Details", new { id=item.Task_Id }) |
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.Task_Id })
         </td>
     </tr>
 }
