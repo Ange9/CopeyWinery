@@ -23,16 +23,24 @@
     @Html.ValidationSummary(true)
     @Html.AntiForgeryToken()
 
+
     <div class="form-group">
         @*@Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })*@
-        <h1>Fecha</h1>
+        <h3>Fecha</h3>
 
         <div class="col-md-10">
             @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })
             @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
         </div>
     </div>
+    <link href="~/fonts/styles.css" rel="stylesheet" type="text/css">
 
-    <button type="submit">Continue</button>
+    <div class="form-group">
+        <div class="col-md-offset--9 col-md-10">
+            <input type="submit" value="Continuar" class="submitBottom" />
+        </div>
+    </div>
+
+    <br>
 }
 

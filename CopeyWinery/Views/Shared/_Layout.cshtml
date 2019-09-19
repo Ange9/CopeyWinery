@@ -22,8 +22,11 @@
                     <span class="icon-bar"></span>
                 </button>
                 @Html.ActionLink("Copey Winery", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+              
             </div>
+
             <div class="navbar-collapse collapse">
+             
                 <ul class="nav navbar-nav">
                     @if (User.IsInRole("Administrator") && User.Identity.IsAuthenticated)
                     {
@@ -32,39 +35,57 @@
                         <li>@Html.ActionLink("Ubicaciones", "Index", "Locations")</li>
                         <li>@Html.ActionLink("Calles", "Index", "Lanes")</li>
                         <li>@Html.ActionLink("Tareas", "Index", "Tasks")</li>
-                        <li>@Html.ActionLink("Usuarios", "Index", "Users")</li>
 
-                        <li><a href="#" onclick="document.forms[0].submit();">Salir</a></li>
+
+                        @*<li>@Html.ActionLink(@HttpContext.Current.User.Identity.Name, "Index", "Users")</li>
+
+            <li><a href="#" onclick="document.forms[0].submit();">Salir</a></li>*@
+
+                        <li>
+                            <p class="navbar-text">
+                                <span class="welcome">Bienvenido</span> <a href="Users" class="navbar-link">@HttpContext.Current.User.Identity.Name</a> | <a href="#" class="navbar-link" onclick="document.forms[0].submit();">Salir</a>
+
+                                @*<span class="welcome">Bienvenido</span> <a href="#" class="navbar-link">@HttpContext.Current.User.Identity.Name</a> | <a href="#" class="navbar-link" onclick="document.forms[0].submit();">Salir</a>*@
+                        </li>
+
+
 
                     }
                     @if (User.IsInRole("User") && User.Identity.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Tarea", "Index", "Tasks")</li>
-                        <li><a href="#" onclick="document.forms[0].submit();">Logout</a></li>
+                        <li>
+                            <p class="navbar-text">
+                                <span class="welcome">Bienvenido</span> <a href="#" class="navbar-link">@HttpContext.Current.User.Identity.Name</a> | <a href="#" class="navbar-link" onclick="document.forms[0].submit();">Salir</a>
 
+                                @*<span class="welcome">Bienvenido</span> <a href="#" class="navbar-link">@HttpContext.Current.User.Identity.Name</a> | <a href="#" class="navbar-link" onclick="document.forms[0].submit();">Salir</a>*@
+                        </li>
                     }
                     @*<li>@Html.ActionLink("Tarea", "Index", "Tasks")</li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Contact</a></li>*@
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>*@
+
 
                 </ul>
+
             </div>
+
         </div>
     </div>
-    <div style=" align-self: flex-start">
-        Bienvenido
-        <b>@HttpContext.Current.User.Identity.Name</b>
-        <br />
+    <div>
+        @*Bienvenido
+        <b >@HttpContext.Current.User.Identity.Name</b>
+        <br/>*@
         @using (Html.BeginForm("Logout", "Home", FormMethod.Post))
         {
 
         }
     </div>
+ 
     <div class="container body-content">
         @RenderBody()
-        <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            @*<p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>*@
         </footer>
     </div>
 

@@ -8,13 +8,19 @@
 
     <div class="form-group">
         @*@Html.LabelFor("Cantidad de horas", htmlAttributes: new { @class = "control-label col-md-2" })*@
-        <h1>Cantidad de horas</h1>
+        <h3>Cantidad de horas</h3>
         <div class="col-md-10">
             @Html.EditorFor(model => model.Number_hours, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.Number_hours, "", new { @class = "text-danger" })
         </div>
     </div>
 
-    <button type="submit">Continue</button>
+    <link href="~/fonts/styles.css" rel="stylesheet" type="text/css">
+
+    <div class="form-group">
+        <div class="col-md-offset--9 col-md-10">
+            <input type="submit" value="Continuar" class="submitBottom" />
+        </div>
+    </div>
 }
 

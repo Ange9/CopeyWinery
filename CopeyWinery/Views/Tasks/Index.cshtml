@@ -14,80 +14,87 @@
 }
 
    
-<table class="table">
-    <tr>
-        <th>
-            Fecha
-        </th>
-        <th>
-            Cant. Horas
-        </th>
-        <th>
-            Tipo de Hora
-        </th>
-        @*<th>
-            Cantidad
-        </th>
-        <th>
-            Unidad
-        </th>*@
-        <th>
-            Actividad
-        </th>
-        <th>
-            Labor
-        </th>
-        @*<th>
-            Calles
-        </th>*@
-        <th>
-            Ubicacion
-        </th>
-        <th>
-            Colaborador
-        </th>
-        <th></th>
-    </tr>
+ <table class="table">
+     <thead>
+         <tr>
+             <th>
+                 Fecha
+             </th>
+             <th>
+                 Cant. Horas
+             </th>
+             <th>
+                 Tipo de Hora
+             </th>
+             @*<th>
+                    Cantidad
+                </th>
+                <th>
+                    Unidad
+                </th>*@
+             <th>
+                 Actividad
+             </th>
+             <th>
+                 Labor
+             </th>
+             @*<th>
+                    Calles
+                </th>*@
+             <th>
+                 Ubicacion
+             </th>
+             <th>
+                 Colaborador
+             </th>
+             <th></th>
+         </tr>
+     </thead>
+     <tbody>
+         @foreach (var item in Model)
+         {
+             <tr>
+                 <td>
+                     @Html.DisplayFor(modelItem => item.Date)
+                 </td>
+                 <td>
+                     @Html.DisplayFor(modelItem => item.Number_hours)
+                 </td>
+                 <td>
+                     @Html.DisplayFor(modelItem => item.Hour_type)
+                 </td>
+                 @*<td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Unit)
+                </td>*@
+                 <td>
+                     @Html.DisplayFor(modelItem => item.Activity1.Activity_name)
+                 </td>
+                 <td>
+                     @Html.DisplayFor(modelItem => item.Labor1.Name)
+                 </td>
+                 @*<td>
+                    @Html.DisplayFor(modelItem => item.Lane1.Name)
+                </td>*@
+                 <td>
+                     @Html.DisplayFor(modelItem => item.Location1.Name)
+                 </td>
+                 <td>
+                     @Html.DisplayFor(modelItem => item.User1.Username)
+                 </td>
+                 <td>
+                     @Html.ActionLink("Editar", "Edit", new { id = item.Task_Id }) |
+                     @Html.ActionLink("Detalles", "Details", new { id = item.Task_Id }) |
+                     @Html.ActionLink("Eliminar", "Delete", new { id = item.Task_Id })
+                 </td>
+             </tr>
+         }
+     </tbody>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Number_hours)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Hour_type)
-            </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Unit)
-            </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.Activity1.Activity_name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Labor1.Name)
-            </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.Lane1.Name)
-            </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.Location1.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User1.Username)
-            </td>
-            <td>
-                @Html.ActionLink("Editar", "Edit", new { id = item.Task_Id }) |
-                @Html.ActionLink("Detalles", "Details", new { id = item.Task_Id }) |
-                @Html.ActionLink("Eliminar", "Delete", new { id = item.Task_Id })
-            </td>
-        </tr>
-    }
 
-</table>
+
+        
+
+ </table>
