@@ -36,8 +36,17 @@ namespace CopeyWinery.Controllers
                 return RedirectToAction("Index", "Home");
 
             }
-            var tasks = db.Tasks.Include(t => t.Activity1).Include(t => t.Labor1).Include(t => t.Lane1).Include(t => t.Location1).Include(t => t.User1);
-            return View(tasks.ToList());
+            if (!User.IsInRole("Administrator"))
+            {
+                 var tasks = db.Tasks.Include(t => t.Activity1).Include(t => t.Labor1).Include(t => t.Lane1).Include(t => t.Location1).Include(t => t.User1).Where(x=> x.User1.Username== User.Identity.Name);
+                return View(tasks.ToList());
+
+            }
+            else {
+                 var tasks = db.Tasks.Include(t => t.Activity1).Include(t => t.Labor1).Include(t => t.Lane1).Include(t => t.Location1).Include(t => t.User1);
+                return View(tasks.ToList());
+
+            }
         }
 
         // GET: Tasks/Details/5
@@ -246,7 +255,7 @@ namespace CopeyWinery.Controllers
             task.Activity = taskObj.Activity;
             task.Labor = taskObj.Labor;
             task.Location = taskObj.Location;
-            task.User = db.User.Where(x => x.Username == User.Identity.Name).Select(x => x.UserId).FirstOrDefault();
+            task.User = db.Users.Where(x => x.Username == User.Identity.Name).Select(x => x.UserId).FirstOrDefault();
             task.Name = task.Task_Id.ToString();
             db.Tasks.Add(task);
             db.SaveChanges();
@@ -297,11 +306,24 @@ namespace CopeyWinery.Controllers
             {
                 return HttpNotFound();
             }
+            List<string> hourTypeOption = new List<string>();
+            if (task.Hour_type == "Ordinaria")
+            {
+                hourTypeOption.Add("Ordinaria");
+                hourTypeOption.Add("Extraordinaria");
+            }
+            else {
+                hourTypeOption.Add("Extraordinaria");
+                hourTypeOption.Add("Ordinaria");
+            }
+
+            
+            ViewBag.Hour_type = new SelectList(hourTypeOption);
             ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name", task.Activity);
             ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Labor);
             ViewBag.Lane = new SelectList(db.Lanes, "Id_lane", "Name", task.Lane);
             ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Location);
-            ViewBag.Users = new SelectList(db.User, "UserId", "Username", task.User);
+            ViewBag.User = new SelectList(db.Users, "UserId", "Username", task.User);
             return View(task);
         }
 
@@ -310,7 +332,7 @@ namespace CopeyWinery.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Task_Id,Name,Date,Number_hours,Hour_type,Quantity,Unit,Users,Activity,Labor,Location,Lane")] Task task)
+        public ActionResult Edit([Bind(Include = "Task_Id,Name,Date,Number_hours,Hour_type,User,Activity,Labor,Location")] Task task)
         {
             if (ModelState.IsValid)
             {
@@ -322,7 +344,7 @@ namespace CopeyWinery.Controllers
             ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Labor);
             ViewBag.Lane = new SelectList(db.Lanes, "Id_lane", "Name", task.Lane);
             ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Location);
-            ViewBag.Users = new SelectList(db.User, "UserId", "Username", task.User);
+            ViewBag.Users = new SelectList(db.Users, "UserId", "Username", task.User);
             return View(task);
         }
 

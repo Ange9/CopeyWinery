@@ -34,7 +34,7 @@ namespace CopeyWinery.Models
         public virtual DbSet<Location_lane_Xref> Location_lane_Xref { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<UserActivation> UserActivations { get; set; }
-        public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
     
         public virtual ObjectResult<Nullable<int>> Insert_User(string username, string password, string email)

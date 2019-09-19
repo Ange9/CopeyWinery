@@ -111,6 +111,7 @@ CREATE TABLE [dbo].[Users](
 	[UserId] [int] IDENTITY(1,1) NOT NULL,
 	[Username] [nvarchar](20) NOT NULL,
 	[Password] [nvarchar](20) NOT NULL,
+	[EmployeeName] [nvarchar](20) NOT NULL,
 	[Email] [nvarchar](30) NOT NULL,
 	[CreatedDate] [datetime] NOT NULL,
 	[LastLoginDate] [datetime] NULL

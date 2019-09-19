@@ -19,14 +19,14 @@ namespace CopeyWinery.Controllers
         // GET: api/Users
         public IQueryable<User> GetUser()
         {
-            return db.User;
+            return db.Users;
         }
 
         // GET: api/Users/5
         [ResponseType(typeof(User))]
         public IHttpActionResult GetUser(int id)
         {
-            User user = db.User.Find(id);
+            User user = db.Users.Find(id);
             if (user == null)
             {
                 return NotFound();
@@ -79,7 +79,7 @@ namespace CopeyWinery.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.User.Add(user);
+            db.Users.Add(user);
             db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = user.UserId }, user);
@@ -89,13 +89,13 @@ namespace CopeyWinery.Controllers
         [ResponseType(typeof(User))]
         public IHttpActionResult DeleteUser(int id)
         {
-            User user = db.User.Find(id);
+            User user = db.Users.Find(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            db.User.Remove(user);
+            db.Users.Remove(user);
             db.SaveChanges();
 
             return Ok(user);
@@ -112,7 +112,7 @@ namespace CopeyWinery.Controllers
 
         private bool UserExists(int id)
         {
-            return db.User.Count(e => e.UserId == id) > 0;
+            return db.Users.Count(e => e.UserId == id) > 0;
         }
     }
 }

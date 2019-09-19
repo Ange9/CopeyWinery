@@ -4,19 +4,19 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Detalles</h2>
 
 <div>
-    <h4>Task</h4>
+    <h4>Tarea</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
+        @*<dt>
             @Html.DisplayNameFor(model => model.Name)
-        </dt>
+        </dt>*@
 
-        <dd>
+        @*<dd>
             @Html.DisplayFor(model => model.Name)
-        </dd>
+        </dd>*@
 
         <dt>
             @Html.DisplayNameFor(model => model.Date)
@@ -42,24 +42,24 @@
             @Html.DisplayFor(model => model.Hour_type)
         </dd>
 
-        <dt>
+        @*<dt>
             @Html.DisplayNameFor(model => model.Quantity)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Quantity)
-        </dd>
+        </dd>*@
 
-        <dt>
+        @*<dt>
             @Html.DisplayNameFor(model => model.Unit)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Unit)
-        </dd>
+        </dd>*@
 
         <dt>
-            @Html.DisplayNameFor(model => model.Activity1.Activity_name)
+            @Html.DisplayNameFor(model => model.Activity)
         </dt>
 
         <dd>
@@ -67,23 +67,23 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Labor1.Name)
+            @Html.DisplayNameFor(model => model.Labor)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Labor1.Name)
         </dd>
 
-        <dt>
+        @*<dt>
             @Html.DisplayNameFor(model => model.Lane1.Name)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Lane1.Name)
-        </dd>
+        </dd>*@
 
         <dt>
-            @Html.DisplayNameFor(model => model.Location1.Name)
+            @Html.DisplayNameFor(model => model.Location)
         </dt>
 
         <dd>
@@ -91,7 +91,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.User1.Username)
+            @Html.DisplayNameFor(model => model.User)
         </dt>
 
         <dd>
@@ -101,6 +101,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Task_Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Task_Id }) |
+    @Html.ActionLink("Volver a la lista", "Index")
 </p>

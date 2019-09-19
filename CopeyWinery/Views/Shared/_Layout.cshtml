@@ -6,6 +6,9 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("Styles", required: false)
+
+
 </head>
 <body>
     <link rel="stylesheet" href="\fonts\tableStyle.css">
@@ -31,7 +34,7 @@
                         <li>@Html.ActionLink("Tareas", "Index", "Tasks")</li>
                         <li>@Html.ActionLink("Usuarios", "Index", "Users")</li>
 
-                        <li><a href="#" onclick="document.forms[0].submit();">Logout</a></li>
+                        <li><a href="#" onclick="document.forms[0].submit();">Salir</a></li>
 
                     }
                     @if (User.IsInRole("User") && User.Identity.IsAuthenticated)
@@ -48,11 +51,10 @@
             </div>
         </div>
     </div>
-    <div style="margin-left:10pt">
-        Welcome
+    <div style=" align-self: flex-start">
+        Bienvenido
         <b>@HttpContext.Current.User.Identity.Name</b>
         <br />
-        <br 
         @using (Html.BeginForm("Logout", "Home", FormMethod.Post))
         {
 

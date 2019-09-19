@@ -7,9 +7,13 @@
 <p>
     @Html.ActionLink("Crear Tarea", "Create")
 </p>
-<p>
-    @Html.ActionLink("Exportar a Excel", "ExportView")
-</p>
+@if (User.IsInRole("Administrator")) {
+ <p>
+        @Html.ActionLink("Exportar a Excel", "ExportView")
+    </p>
+}
+
+   
 <table class="table">
     <tr>
         <th>
@@ -21,21 +25,21 @@
         <th>
             Tipo de Hora
         </th>
-        <th>
+        @*<th>
             Cantidad
         </th>
         <th>
             Unidad
-        </th>
+        </th>*@
         <th>
             Actividad
         </th>
         <th>
-           Labor
+            Labor
         </th>
-        <th>
+        @*<th>
             Calles
-        </th>
+        </th>*@
         <th>
             Ubicacion
         </th>
@@ -45,44 +49,45 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Number_hours)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Hour_type)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Quantity)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Unit)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Activity1.Activity_name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Labor1.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Lane1.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Location1.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.User1.Username)
-        </td>
-        <td>
-            @Html.ActionLink("Editar", "Edit", new { id=item.Task_Id }) |
-            @Html.ActionLink("Detalles", "Details", new { id=item.Task_Id }) |
-            @Html.ActionLink("Eliminar", "Delete", new { id=item.Task_Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Number_hours)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hour_type)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Unit)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Activity1.Activity_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Labor1.Name)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Lane1.Name)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Location1.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User1.Username)
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "Edit", new { id = item.Task_Id }) |
+                @Html.ActionLink("Detalles", "Details", new { id = item.Task_Id }) |
+                @Html.ActionLink("Eliminar", "Delete", new { id = item.Task_Id })
+            </td>
+        </tr>
+    }
 
 </table>
