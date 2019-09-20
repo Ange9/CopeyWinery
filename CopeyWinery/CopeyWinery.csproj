@@ -282,10 +282,8 @@
       <DependentUpon>EntityModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
-    <Content Include="Scripts\DBScripts\CreateTableActivity.sql" />
-    <Content Include="Scripts\DBScripts\CreateTableUser.sql" />
+    <Content Include="Scripts\DBScripts\scripts.sql" />
     <Content Include="Scripts\DBScripts\DBScripts.sql" />
-    <Content Include="Scripts\DBScripts\LoginDB_Roles.sql" />
     <Content Include="Scripts\gridmvc.js" />
     <Content Include="Scripts\gridmvc.lang.ru.js" />
     <Content Include="Scripts\gridmvc.min.js" />
