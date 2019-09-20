@@ -12,20 +12,21 @@
           <Property Name="Activity_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Activity_name" Type="varchar" MaxLength="255" Nullable="false" />
         </EntityType>
+        <EntityType Name="ExtendedAttribute">
+          <Key>
+            <PropertyRef Name="Id_ExtAttr" />
+          </Key>
+          <Property Name="Id_ExtAttr" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Value" Type="varchar" MaxLength="1" />
+        </EntityType>
         <EntityType Name="Labor">
           <Key>
             <PropertyRef Name="Id_labor" />
           </Key>
           <Property Name="Id_labor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Lane">
-          <Key>
-            <PropertyRef Name="Id_lane" />
-          </Key>
-          <Property Name="Id_lane" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="plant_quantity" Type="int" />
+          <Property Name="Id_ExtAttr" Type="int" />
         </EntityType>
         <EntityType Name="Location">
           <Key>
@@ -33,14 +34,6 @@
           </Key>
           <Property Name="Id_location" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Location_lane_Xref">
-          <Key>
-            <PropertyRef Name="Id_location_lane" />
-          </Key>
-          <Property Name="Id_location_lane" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Id_location" Type="int" />
-          <Property Name="Id_lane" Type="int" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -58,13 +51,10 @@
           <Property Name="Date" Type="datetime" />
           <Property Name="Number_hours" Type="int" />
           <Property Name="Hour_type" Type="varchar" MaxLength="15" />
-          <Property Name="Quantity" Type="int" />
-          <Property Name="Unit" Type="varchar" MaxLength="10" />
-          <Property Name="User" Type="int" />
-          <Property Name="Activity" Type="int" />
-          <Property Name="Labor" Type="int" />
-          <Property Name="Location" Type="int" />
-          <Property Name="Lane" Type="int" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Activity_Id" Type="int" Nullable="false" />
+          <Property Name="Id_labor" Type="int" Nullable="false" />
+          <Property Name="Id_location" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="UserActivation">
           <Key>
@@ -80,92 +70,70 @@
           <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Username" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="Password" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="Email" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="30" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="LastLoginDate" Type="datetime" />
           <Property Name="RoleId" Type="int" />
         </EntityType>
-        <Association Name="FK__Location___Id_la__0C50D423">
-          <End Role="Lane" Type="Self.Lane" Multiplicity="0..1" />
-          <End Role="Location_lane_Xref" Type="Self.Location_lane_Xref" Multiplicity="*" />
+        <Association Name="FK_Labor_ExtAttr">
+          <End Role="ExtendedAttribute" Type="Self.ExtendedAttribute" Multiplicity="0..1" />
+          <End Role="Labor" Type="Self.Labor" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Lane">
-              <PropertyRef Name="Id_lane" />
+            <Principal Role="ExtendedAttribute">
+              <PropertyRef Name="Id_ExtAttr" />
             </Principal>
-            <Dependent Role="Location_lane_Xref">
-              <PropertyRef Name="Id_lane" />
+            <Dependent Role="Labor">
+              <PropertyRef Name="Id_ExtAttr" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Location___Id_lo__0B5CAFEA">
-          <End Role="Location" Type="Self.Location" Multiplicity="0..1" />
-          <End Role="Location_lane_Xref" Type="Self.Location_lane_Xref" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Location">
-              <PropertyRef Name="Id_location" />
-            </Principal>
-            <Dependent Role="Location_lane_Xref">
-              <PropertyRef Name="Id_location" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Task__Activity__1C873BEC">
-          <End Role="Activity" Type="Self.Activity" Multiplicity="0..1" />
+        <Association Name="FK_Task_Activity">
+          <End Role="Activity" Type="Self.Activity" Multiplicity="1" />
           <End Role="Task" Type="Self.Task" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Activity">
               <PropertyRef Name="Activity_Id" />
             </Principal>
             <Dependent Role="Task">
-              <PropertyRef Name="Activity" />
+              <PropertyRef Name="Activity_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Task__Labor__1D7B6025">
-          <End Role="Labor" Type="Self.Labor" Multiplicity="0..1" />
+        <Association Name="FK_Task_Labor">
+          <End Role="Labor" Type="Self.Labor" Multiplicity="1" />
           <End Role="Task" Type="Self.Task" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Labor">
               <PropertyRef Name="Id_labor" />
             </Principal>
             <Dependent Role="Task">
-              <PropertyRef Name="Labor" />
+              <PropertyRef Name="Id_labor" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Task__Lane__1F63A897">
-          <End Role="Lane" Type="Self.Lane" Multiplicity="0..1" />
-          <End Role="Task" Type="Self.Task" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Lane">
-              <PropertyRef Name="Id_lane" />
-            </Principal>
-            <Dependent Role="Task">
-              <PropertyRef Name="Lane" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Task__Location__1E6F845E">
-          <End Role="Location" Type="Self.Location" Multiplicity="0..1" />
+        <Association Name="FK_Task_Location">
+          <End Role="Location" Type="Self.Location" Multiplicity="1" />
           <End Role="Task" Type="Self.Task" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Location">
               <PropertyRef Name="Id_location" />
             </Principal>
             <Dependent Role="Task">
-              <PropertyRef Name="Location" />
+              <PropertyRef Name="Id_location" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Task__User__1B9317B3">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+        <Association Name="FK_Task_User">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Task" Type="Self.Task" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
               <PropertyRef Name="UserId" />
             </Principal>
             <Dependent Role="Task">
-              <PropertyRef Name="User" />
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -192,39 +160,30 @@
         </Function>
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="Activity" EntityType="Self.Activity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExtendedAttribute" EntityType="Self.ExtendedAttribute" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Labor" EntityType="Self.Labor" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Lane" EntityType="Self.Lane" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Location_lane_Xref" EntityType="Self.Location_lane_Xref" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Task" EntityType="Self.Task" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserActivation" EntityType="Self.UserActivation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Location___Id_la__0C50D423" Association="Self.FK__Location___Id_la__0C50D423">
-            <End Role="Lane" EntitySet="Lane" />
-            <End Role="Location_lane_Xref" EntitySet="Location_lane_Xref" />
+          <AssociationSet Name="FK_Labor_ExtAttr" Association="Self.FK_Labor_ExtAttr">
+            <End Role="ExtendedAttribute" EntitySet="ExtendedAttribute" />
+            <End Role="Labor" EntitySet="Labor" />
           </AssociationSet>
-          <AssociationSet Name="FK__Location___Id_lo__0B5CAFEA" Association="Self.FK__Location___Id_lo__0B5CAFEA">
-            <End Role="Location" EntitySet="Location" />
-            <End Role="Location_lane_Xref" EntitySet="Location_lane_Xref" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Task__Activity__1C873BEC" Association="Self.FK__Task__Activity__1C873BEC">
+          <AssociationSet Name="FK_Task_Activity" Association="Self.FK_Task_Activity">
             <End Role="Activity" EntitySet="Activity" />
             <End Role="Task" EntitySet="Task" />
           </AssociationSet>
-          <AssociationSet Name="FK__Task__Labor__1D7B6025" Association="Self.FK__Task__Labor__1D7B6025">
+          <AssociationSet Name="FK_Task_Labor" Association="Self.FK_Task_Labor">
             <End Role="Labor" EntitySet="Labor" />
             <End Role="Task" EntitySet="Task" />
           </AssociationSet>
-          <AssociationSet Name="FK__Task__Lane__1F63A897" Association="Self.FK__Task__Lane__1F63A897">
-            <End Role="Lane" EntitySet="Lane" />
-            <End Role="Task" EntitySet="Task" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Task__Location__1E6F845E" Association="Self.FK__Task__Location__1E6F845E">
+          <AssociationSet Name="FK_Task_Location" Association="Self.FK_Task_Location">
             <End Role="Location" EntitySet="Location" />
             <End Role="Task" EntitySet="Task" />
           </AssociationSet>
-          <AssociationSet Name="FK__Task__User__1B9317B3" Association="Self.FK__Task__User__1B9317B3">
+          <AssociationSet Name="FK_Task_User" Association="Self.FK_Task_User">
             <End Role="Users" EntitySet="Users" />
             <End Role="Task" EntitySet="Task" />
           </AssociationSet>
@@ -243,22 +202,12 @@
           </Key>
           <Property Name="Activity_Id" Type="Int32" Nullable="false" />
           <Property Name="Activity_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Tasks" Relationship="Model.FK__Task__Activity__1C873BEC" FromRole="Activity" ToRole="Task" />
-        </EntityType>
+          <NavigationProperty Name="Tasks" Relationship="Model.FK_Task_Activity" FromRole="Activity" ToRole="Task" />
+          </EntityType>
         <EntityContainer Name="DB_Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Activities" EntityType="Self.Activity" />
           <EntitySet Name="Labors" EntityType="Model.Labor" />
-          <EntitySet Name="Lanes" EntityType="Model.Lane" />
           <EntitySet Name="Locations" EntityType="Model.Location" />
-          <EntitySet Name="Location_lane_Xref" EntityType="Model.Location_lane_Xref" />
-          <AssociationSet Name="FK__Location___Id_la__02084FDA" Association="Model.FK__Location___Id_la__02084FDA">
-            <End Role="Lane" EntitySet="Lanes" />
-            <End Role="Location_lane_Xref" EntitySet="Location_lane_Xref" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Location___Id_lo__01142BA1" Association="Model.FK__Location___Id_lo__01142BA1">
-            <End Role="Location" EntitySet="Locations" />
-            <End Role="Location_lane_Xref" EntitySet="Location_lane_Xref" />
-          </AssociationSet>
           <EntitySet Name="Roles" EntityType="Model.Role" />
           <EntitySet Name="UserActivations" EntityType="Model.UserActivation" />
           <EntitySet Name="User" EntityType="Model.User" />
@@ -284,25 +233,26 @@
             <Parameter Name="Password" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="Tasks" EntityType="Model.Task" />
-          <AssociationSet Name="FK__Task__Activity__1C873BEC" Association="Model.FK__Task__Activity__1C873BEC">
+          <AssociationSet Name="FK_Task_Activity" Association="Model.FK_Task_Activity">
             <End Role="Activity" EntitySet="Activities" />
             <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
-          <AssociationSet Name="FK__Task__Labor__1D7B6025" Association="Model.FK__Task__Labor__1D7B6025">
+          <AssociationSet Name="FK_Task_Labor" Association="Model.FK_Task_Labor">
             <End Role="Labor" EntitySet="Labors" />
             <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
-          <AssociationSet Name="FK__Task__Lane__1F63A897" Association="Model.FK__Task__Lane__1F63A897">
-            <End Role="Lane" EntitySet="Lanes" />
-            <End Role="Task" EntitySet="Tasks" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Task__Location__1E6F845E" Association="Model.FK__Task__Location__1E6F845E">
+          <AssociationSet Name="FK_Task_Location" Association="Model.FK_Task_Location">
             <End Role="Location" EntitySet="Locations" />
             <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
-          <AssociationSet Name="FK__Task__User__1B9317B3" Association="Model.FK__Task__User__1B9317B3">
+          <AssociationSet Name="FK_Task_User" Association="Model.FK_Task_User">
             <End Role="User" EntitySet="User" />
             <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
+          <EntitySet Name="ExtendedAttributes" EntityType="Model.ExtendedAttribute" />
+          <AssociationSet Name="FK_Labor_ExtAttr" Association="Model.FK_Labor_ExtAttr">
+            <End Role="ExtendedAttribute" EntitySet="ExtendedAttributes" />
+            <End Role="Labor" EntitySet="Labors" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="Labor">
@@ -311,17 +261,9 @@
           </Key>
           <Property Name="Id_labor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Tasks" Relationship="Model.FK__Task__Labor__1D7B6025" FromRole="Labor" ToRole="Task" />
-        </EntityType>
-        <EntityType Name="Lane">
-          <Key>
-            <PropertyRef Name="Id_lane" />
-          </Key>
-          <Property Name="Id_lane" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="plant_quantity" Type="Int32" />
-          <NavigationProperty Name="Location_lane_Xref" Relationship="Model.FK__Location___Id_la__02084FDA" FromRole="Lane" ToRole="Location_lane_Xref" />
-          <NavigationProperty Name="Tasks" Relationship="Model.FK__Task__Lane__1F63A897" FromRole="Lane" ToRole="Task" />
+          <Property Name="Id_ExtAttr" Type="Int32" />
+          <NavigationProperty Name="Tasks" Relationship="Model.FK_Task_Labor" FromRole="Labor" ToRole="Task" />
+          <NavigationProperty Name="ExtendedAttribute" Relationship="Model.FK_Labor_ExtAttr" FromRole="Labor" ToRole="ExtendedAttribute" />
         </EntityType>
         <EntityType Name="Location">
           <Key>
@@ -329,43 +271,8 @@
           </Key>
           <Property Name="Id_location" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Location_lane_Xref" Relationship="Model.FK__Location___Id_lo__01142BA1" FromRole="Location" ToRole="Location_lane_Xref" />
-          <NavigationProperty Name="Tasks" Relationship="Model.FK__Task__Location__1E6F845E" FromRole="Location" ToRole="Task" />
+          <NavigationProperty Name="Tasks" Relationship="Model.FK_Task_Location" FromRole="Location" ToRole="Task" />
         </EntityType>
-        <EntityType Name="Location_lane_Xref">
-          <Key>
-            <PropertyRef Name="Id_location_lane" />
-          </Key>
-          <Property Name="Id_location_lane" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Id_location" Type="Int32" />
-          <Property Name="Id_lane" Type="Int32" />
-          <NavigationProperty Name="Lane" Relationship="Model.FK__Location___Id_la__02084FDA" FromRole="Location_lane_Xref" ToRole="Lane" />
-          <NavigationProperty Name="Location" Relationship="Model.FK__Location___Id_lo__01142BA1" FromRole="Location_lane_Xref" ToRole="Location" />
-        </EntityType>
-        <Association Name="FK__Location___Id_la__02084FDA">
-          <End Type="Model.Lane" Role="Lane" Multiplicity="0..1" />
-          <End Type="Model.Location_lane_Xref" Role="Location_lane_Xref" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Lane">
-              <PropertyRef Name="Id_lane" />
-            </Principal>
-            <Dependent Role="Location_lane_Xref">
-              <PropertyRef Name="Id_lane" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Location___Id_lo__01142BA1">
-          <End Type="Model.Location" Role="Location" Multiplicity="0..1" />
-          <End Type="Model.Location_lane_Xref" Role="Location_lane_Xref" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Location">
-              <PropertyRef Name="Id_location" />
-            </Principal>
-            <Dependent Role="Location_lane_Xref">
-              <PropertyRef Name="Id_location" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="RoleId" />
@@ -388,12 +295,14 @@
           <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Username" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LastLoginDate" Type="DateTime" Precision="3" />
           <Property Name="RoleId" Type="Int32" />
           <NavigationProperty Name="Role" Relationship="Model.FK_Users_Roles" FromRole="User1" ToRole="Role" />
-          <NavigationProperty Name="Tasks" Relationship="Model.FK__Task__User__1B9317B3" FromRole="User" ToRole="Task" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Tasks" Relationship="Model.FK_Task_User" FromRole="User" ToRole="Task" />
           </EntityType>
         <Association Name="FK_Users_Roles">
           <End Type="Model.Role" Role="Role" Multiplicity="0..1" />
@@ -424,76 +333,81 @@
           <Property Name="Date" Type="DateTime" Precision="3" />
           <Property Name="Number_hours" Type="Int32" />
           <Property Name="Hour_type" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="Quantity" Type="Int32" />
-          <Property Name="Unit" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="User" Type="Int32" />
-          <Property Name="Activity" Type="Int32" />
-          <Property Name="Labor" Type="Int32" />
-          <Property Name="Location" Type="Int32" />
-          <Property Name="Lane" Type="Int32" />
-          <NavigationProperty Name="Activity1" Relationship="Model.FK__Task__Activity__1C873BEC" FromRole="Task" ToRole="Activity" />
-          <NavigationProperty Name="Labor1" Relationship="Model.FK__Task__Labor__1D7B6025" FromRole="Task" ToRole="Labor" />
-          <NavigationProperty Name="Lane1" Relationship="Model.FK__Task__Lane__1F63A897" FromRole="Task" ToRole="Lane" />
-          <NavigationProperty Name="Location1" Relationship="Model.FK__Task__Location__1E6F845E" FromRole="Task" ToRole="Location" />
-          <NavigationProperty Name="User1" Relationship="Model.FK__Task__User__1B9317B3" FromRole="Task" ToRole="User" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Activity_Id" Type="Int32" Nullable="false" />
+          <Property Name="Id_labor" Type="Int32" Nullable="false" />
+          <Property Name="Id_location" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Activity" Relationship="Model.FK_Task_Activity" FromRole="Task" ToRole="Activity" />
+          <NavigationProperty Name="Labor" Relationship="Model.FK_Task_Labor" FromRole="Task" ToRole="Labor" />
+          <NavigationProperty Name="Location" Relationship="Model.FK_Task_Location" FromRole="Task" ToRole="Location" />
+          <NavigationProperty Name="User" Relationship="Model.FK_Task_User" FromRole="Task" ToRole="User" />
         </EntityType>
-        <Association Name="FK__Task__Activity__1C873BEC">
-          <End Type="Model.Activity" Role="Activity" Multiplicity="0..1" />
+        <Association Name="FK_Task_Activity">
+          <End Type="Model.Activity" Role="Activity" Multiplicity="1" />
           <End Type="Model.Task" Role="Task" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Activity">
               <PropertyRef Name="Activity_Id" />
             </Principal>
             <Dependent Role="Task">
-              <PropertyRef Name="Activity" />
+              <PropertyRef Name="Activity_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Task__Labor__1D7B6025">
-          <End Type="Model.Labor" Role="Labor" Multiplicity="0..1" />
+        <Association Name="FK_Task_Labor">
+          <End Type="Model.Labor" Role="Labor" Multiplicity="1" />
           <End Type="Model.Task" Role="Task" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Labor">
               <PropertyRef Name="Id_labor" />
             </Principal>
             <Dependent Role="Task">
-              <PropertyRef Name="Labor" />
+              <PropertyRef Name="Id_labor" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Task__Lane__1F63A897">
-          <End Type="Model.Lane" Role="Lane" Multiplicity="0..1" />
-          <End Type="Model.Task" Role="Task" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Lane">
-              <PropertyRef Name="Id_lane" />
-            </Principal>
-            <Dependent Role="Task">
-              <PropertyRef Name="Lane" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Task__Location__1E6F845E">
-          <End Type="Model.Location" Role="Location" Multiplicity="0..1" />
+        <Association Name="FK_Task_Location">
+          <End Type="Model.Location" Role="Location" Multiplicity="1" />
           <End Type="Model.Task" Role="Task" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Location">
               <PropertyRef Name="Id_location" />
             </Principal>
             <Dependent Role="Task">
-              <PropertyRef Name="Location" />
+              <PropertyRef Name="Id_location" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Task__User__1B9317B3">
-          <End Type="Model.User" Role="User" Multiplicity="0..1" />
+        <Association Name="FK_Task_User">
+          <End Type="Model.User" Role="User" Multiplicity="1" />
           <End Type="Model.Task" Role="Task" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="UserId" />
             </Principal>
             <Dependent Role="Task">
-              <PropertyRef Name="User" />
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ExtendedAttribute">
+          <Key>
+            <PropertyRef Name="Id_ExtAttr" />
+          </Key>
+          <Property Name="Id_ExtAttr" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Value" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Labors" Relationship="Model.FK_Labor_ExtAttr" FromRole="ExtendedAttribute" ToRole="Labor" />
+        </EntityType>
+        <Association Name="FK_Labor_ExtAttr">
+          <End Type="Model.ExtendedAttribute" Role="ExtendedAttribute" Multiplicity="0..1" />
+          <End Type="Model.Labor" Role="Labor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExtendedAttribute">
+              <PropertyRef Name="Id_ExtAttr" />
+            </Principal>
+            <Dependent Role="Labor">
+              <PropertyRef Name="Id_ExtAttr" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -514,17 +428,9 @@
           <EntitySetMapping Name="Labors">
             <EntityTypeMapping TypeName="Model.Labor">
               <MappingFragment StoreEntitySet="Labor">
+                <ScalarProperty Name="Id_ExtAttr" ColumnName="Id_ExtAttr" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id_labor" ColumnName="Id_labor" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Lanes">
-            <EntityTypeMapping TypeName="Model.Lane">
-              <MappingFragment StoreEntitySet="Lane">
-                <ScalarProperty Name="plant_quantity" ColumnName="plant_quantity" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id_lane" ColumnName="Id_lane" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -533,15 +439,6 @@
               <MappingFragment StoreEntitySet="Location">
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id_location" ColumnName="Id_location" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Location_lane_Xref">
-            <EntityTypeMapping TypeName="Model.Location_lane_Xref">
-              <MappingFragment StoreEntitySet="Location_lane_Xref">
-                <ScalarProperty Name="Id_lane" ColumnName="Id_lane" />
-                <ScalarProperty Name="Id_location" ColumnName="Id_location" />
-                <ScalarProperty Name="Id_location_lane" ColumnName="Id_location_lane" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -564,6 +461,8 @@
           <EntitySetMapping Name="User">
             <EntityTypeMapping TypeName="Model.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />
                 <ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
@@ -594,18 +493,24 @@
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="Model.Task">
               <MappingFragment StoreEntitySet="Task">
-                <ScalarProperty Name="Lane" ColumnName="Lane" />
-                <ScalarProperty Name="Location" ColumnName="Location" />
-                <ScalarProperty Name="Labor" ColumnName="Labor" />
-                <ScalarProperty Name="Activity" ColumnName="Activity" />
-                <ScalarProperty Name="User" ColumnName="User" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Id_location" ColumnName="Id_location" />
+                <ScalarProperty Name="Id_labor" ColumnName="Id_labor" />
+                <ScalarProperty Name="Activity_Id" ColumnName="Activity_Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Hour_type" ColumnName="Hour_type" />
                 <ScalarProperty Name="Number_hours" ColumnName="Number_hours" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Task_Id" ColumnName="Task_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExtendedAttributes">
+            <EntityTypeMapping TypeName="Model.ExtendedAttribute">
+              <MappingFragment StoreEntitySet="ExtendedAttribute">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id_ExtAttr" ColumnName="Id_ExtAttr" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

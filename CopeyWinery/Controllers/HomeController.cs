@@ -22,12 +22,6 @@ namespace CopeyWinery.Controllers
             return View();
         }
 
-        [Authorize]
-        public ActionResult Profile()
-        {
-            return View();
-        }
-
         [HttpPost]
         [AllowAnonymous]
         public ActionResult Index(User user)

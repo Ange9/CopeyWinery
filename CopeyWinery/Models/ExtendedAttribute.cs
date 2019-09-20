@@ -12,22 +12,19 @@ namespace CopeyWinery.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Lane
+    public partial class ExtendedAttribute
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Lane()
+        public ExtendedAttribute()
         {
-            this.Location_lane_Xref = new HashSet<Location_lane_Xref>();
-            this.Tasks = new HashSet<Task>();
+            this.Labors = new HashSet<Labor>();
         }
     
-        public int Id_lane { get; set; }
+        public int Id_ExtAttr { get; set; }
         public string Name { get; set; }
-        public Nullable<int> plant_quantity { get; set; }
+        public string Value { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Location_lane_Xref> Location_lane_Xref { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Task> Tasks { get; set; }
+        public virtual ICollection<Labor> Labors { get; set; }
     }
 }

@@ -144,11 +144,10 @@
     <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LaborsController.cs" />
-    <Compile Include="Controllers\LanesController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
+    <Compile Include="Controllers\Tasks1Controller.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="Controllers\UsersControllerBCK.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -170,16 +169,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\ExtendedAttribute.cs">
+      <DependentUpon>EntityModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Labor.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Lane.cs">
-      <DependentUpon>EntityModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Location.cs">
-      <DependentUpon>EntityModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Location_lane_Xref.cs">
       <DependentUpon>EntityModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LoginHandler.cs" />
@@ -343,15 +339,15 @@
     <Content Include="Views\Locations\Details.cshtml" />
     <Content Include="Views\Locations\Edit.cshtml" />
     <Content Include="Views\Locations\Index.cshtml" />
-    <Content Include="Views\Lanes\Create.cshtml" />
-    <Content Include="Views\Lanes\Delete.cshtml" />
-    <Content Include="Views\Lanes\Details.cshtml" />
-    <Content Include="Views\Lanes\Edit.cshtml" />
-    <Content Include="Views\Lanes\Index.cshtml" />
     <Content Include="Views\Tasks\Add_Activity.cshtml" />
     <Content Include="Views\Tasks\Add_Labor.cshtml" />
     <Content Include="Views\Tasks\Add_Location.cshtml" />
     <Content Include="Views\Tasks\Add_User.cshtml" />
+    <Content Include="Views\Tasks1\Create.cshtml" />
+    <Content Include="Views\Tasks1\Delete.cshtml" />
+    <Content Include="Views\Tasks1\Details.cshtml" />
+    <Content Include="Views\Tasks1\Edit.cshtml" />
+    <Content Include="Views\Tasks1\Index.cshtml" />
     <None Include="Views\Tasks\CreateBCK.cshtml" />
     <Content Include="Views\Tasks\Delete.cshtml" />
     <Content Include="Views\Tasks\Details.cshtml" />

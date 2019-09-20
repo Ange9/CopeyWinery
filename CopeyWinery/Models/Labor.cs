@@ -22,8 +22,10 @@ namespace CopeyWinery.Models
     
         public int Id_labor { get; set; }
         public string Name { get; set; }
+        public Nullable<int> Id_ExtAttr { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Task> Tasks { get; set; }
+        public virtual ExtendedAttribute ExtendedAttribute { get; set; }
     }
 }

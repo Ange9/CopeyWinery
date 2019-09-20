@@ -11,44 +11,22 @@ namespace CopeyWinery.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Task
     {
         public int Task_Id { get; set; }
         public string Name { get; set; }
-
-        [Display(Name = "Fecha")]
         public Nullable<System.DateTime> Date { get; set; }
-
-        [Display(Name = "Cantidad de horas")]
         public Nullable<int> Number_hours { get; set; }
-
-        [Display(Name = "Tipo de hora")]
         public string Hour_type { get; set; }
-        public Nullable<int> Quantity { get; set; }
-        public string Unit { get; set; }
-        [Display(Name = "Colaborador")]
-        public Nullable<int> User { get; set; }
-
-        [Display(Name = "Actividad")]
-        public Nullable<int> Activity { get; set; }
-
-        [Display(Name = "Labor")]
-        public Nullable<int> Labor { get; set; }
-
-        [Display(Name = "Ubicacion")]
-        public Nullable<int> Location { get; set; }
-
-        public Nullable<int> Lane { get; set; }
-        [Display(Name = "Actividad")]
-        public virtual Activity Activity1 { get; set; }
-        [Display(Name = "Labor")]
-        public virtual Labor Labor1 { get; set; }
-        public virtual Lane Lane1 { get; set; }
-        [Display(Name = "Ubicacion")]
-        public virtual Location Location1 { get; set; }
-        [Display(Name = "Colaborador")]
-        public virtual User User1 { get; set; }
+        public int UserId { get; set; }
+        public int Activity_Id { get; set; }
+        public int Id_labor { get; set; }
+        public int Id_location { get; set; }
+    
+        public virtual Activity Activity { get; set; }
+        public virtual Labor Labor { get; set; }
+        public virtual Location Location { get; set; }
+        public virtual User User { get; set; }
     }
 }

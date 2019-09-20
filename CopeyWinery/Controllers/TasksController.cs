@@ -16,10 +16,10 @@ namespace CopeyWinery.Controllers
         public DateTime? Date { get; set; }
         public int? Number_hours { get; set; }
         public string Hour_type { get; set; }
-        public int? Activity { get; set; }
-        public int? Labor { get; set; }
-        public int? Location { get; set; }
-        public int? User { get; set; }
+        public int Activity { get; set; }
+        public int Labor { get; set; }
+        public int Location { get; set; }
+        public int User { get; set; }
 
 
     }
@@ -38,12 +38,12 @@ namespace CopeyWinery.Controllers
             }
             if (!User.IsInRole("Administrator"))
             {
-                 var tasks = db.Tasks.Include(t => t.Activity1).Include(t => t.Labor1).Include(t => t.Lane1).Include(t => t.Location1).Include(t => t.User1).Where(x=> x.User1.Username== User.Identity.Name);
+                 var tasks = db.Tasks.Include(t => t.Activity).Include(t => t.Labor).Include(t => t.Location).Include(t => t.User).Where(x=> x.User.Username== User.Identity.Name);
                 return View(tasks.ToList());
 
             }
             else {
-                 var tasks = db.Tasks.Include(t => t.Activity1).Include(t => t.Labor1).Include(t => t.Lane1).Include(t => t.Location1).Include(t => t.User1);
+                 var tasks = db.Tasks.Include(t => t.Activity).Include(t => t.Labor).Include(t => t.Location).Include(t => t.User);
                 return View(tasks.ToList());
 
             }
@@ -148,8 +148,8 @@ namespace CopeyWinery.Controllers
             Task task = new Task();
             task.Date = taskObj.Date;
             task.Number_hours = taskObj.Number_hours;
-            task.Hour_type = taskObj.Hour_type;
-            ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name");
+            task.Hour_type = taskObj.Hour_type;          
+            ViewBag.Activity_Id = new SelectList(db.Activities, "Activity_Id", "Activity_name");
             return View(task);
         }
 
@@ -158,7 +158,7 @@ namespace CopeyWinery.Controllers
         public ActionResult Add_Activity(Task model)
         {
 
-            if (model.Activity == null)
+            if (model.Activity_Id == 0)
             {
                 ModelState.AddModelError("", "Debe seleccionar una actividad!!!");
             }
@@ -169,7 +169,7 @@ namespace CopeyWinery.Controllers
                 taskObject.Date = model.Date;
                 taskObject.Number_hours = model.Number_hours;
                 taskObject.Hour_type = model.Hour_type;
-                taskObject.Activity = model.Activity;
+                taskObject.Activity = model.Activity_Id;
                 return RedirectToAction("Add_Labor", taskObject);                
             }
             return View(model);
@@ -181,8 +181,8 @@ namespace CopeyWinery.Controllers
             task.Date = taskObj.Date;
             task.Number_hours = taskObj.Number_hours;
             task.Hour_type = taskObj.Hour_type;
-            task.Activity = taskObj.Activity;
-            ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name");
+            task.Activity_Id = taskObj.Activity;
+            ViewBag.Labor_Id = new SelectList(db.Labors, "Id_labor", "Name");
             return View(task);
         }
 
@@ -191,7 +191,7 @@ namespace CopeyWinery.Controllers
         public ActionResult Add_Labor(Task model)
         {
 
-            if (model.Labor == null)
+            if (model.Id_labor ==0 )
             {
                 ModelState.AddModelError("", "Debe seleccionar una labor!!!");
             }
@@ -202,8 +202,8 @@ namespace CopeyWinery.Controllers
                 taskObject.Date = model.Date;
                 taskObject.Number_hours = model.Number_hours;
                 taskObject.Hour_type = model.Hour_type;
-                taskObject.Activity = model.Activity;
-                taskObject.Labor = model.Labor;
+                taskObject.Activity = model.Activity_Id;
+                taskObject.Labor = model.Id_labor;
                 return RedirectToAction("Add_Location", taskObject);
             }
             return View(model);
@@ -215,8 +215,8 @@ namespace CopeyWinery.Controllers
             task.Date = taskObj.Date;
             task.Number_hours = taskObj.Number_hours;
             task.Hour_type = taskObj.Hour_type;
-            task.Activity = taskObj.Activity;
-            task.Labor = taskObj.Labor;
+            task.Activity_Id = taskObj.Activity;
+            task.Id_labor = taskObj.Labor;
             ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name");
             return View(task);
         }
@@ -237,9 +237,9 @@ namespace CopeyWinery.Controllers
                 taskObject.Date = model.Date;
                 taskObject.Number_hours = model.Number_hours;
                 taskObject.Hour_type = model.Hour_type;
-                taskObject.Activity = model.Activity;
-                taskObject.Labor = model.Labor;
-                taskObject.Location = model.Location;
+                taskObject.Activity = model.Activity_Id;
+                taskObject.Labor = model.Id_labor;
+                taskObject.Location = model.Id_location;
                 return RedirectToAction("CreateTask", taskObject);
             }
             return View(model);
@@ -252,10 +252,10 @@ namespace CopeyWinery.Controllers
             task.Date = taskObj.Date;
             task.Number_hours = taskObj.Number_hours;
             task.Hour_type = taskObj.Hour_type;
-            task.Activity = taskObj.Activity;
-            task.Labor = taskObj.Labor;
-            task.Location = taskObj.Location;
-            task.User = db.Users.Where(x => x.Username == User.Identity.Name).Select(x => x.UserId).FirstOrDefault();
+            task.Activity_Id = taskObj.Activity;
+            task.Id_labor = taskObj.Labor;
+            task.Id_location = taskObj.Location;
+            task.UserId = db.User.Where(x => x.Username == User.Identity.Name).Select(x => x.UserId).FirstOrDefault();
             task.Name = task.Task_Id.ToString();
             db.Tasks.Add(task);
             db.SaveChanges();
@@ -321,9 +321,8 @@ namespace CopeyWinery.Controllers
             ViewBag.Hour_type = new SelectList(hourTypeOption);
             ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name", task.Activity);
             ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Labor);
-            ViewBag.Lane = new SelectList(db.Lanes, "Id_lane", "Name", task.Lane);
             ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Location);
-            ViewBag.User = new SelectList(db.Users, "UserId", "Username", task.User);
+            ViewBag.User = new SelectList(db.User, "UserId", "FirstName", task.User);
             return View(task);
         }
 
@@ -342,9 +341,8 @@ namespace CopeyWinery.Controllers
             }
             ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name", task.Activity);
             ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Labor);
-            ViewBag.Lane = new SelectList(db.Lanes, "Id_lane", "Name", task.Lane);
             ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Location);
-            ViewBag.Users = new SelectList(db.Users, "UserId", "Username", task.User);
+            ViewBag.Users = new SelectList(db.User, "UserId", "Username", task.User);
             return View(task);
         }
 
