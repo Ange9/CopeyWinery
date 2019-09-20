@@ -10,16 +10,10 @@
     <h4>Tarea</h4>
     <hr />
     <dl class="dl-horizontal">
-        @*<dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>*@
 
-        @*<dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>*@
 
         <dt>
-            @Html.DisplayNameFor(model => model.Date)
+            @Html.DisplayName("Fecha")
         </dt>
 
         <dd>
@@ -27,7 +21,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Number_hours)
+            @Html.DisplayName("Cantidad de horas")
         </dt>
 
         <dd>
@@ -35,67 +29,46 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Hour_type)
+            @Html.DisplayName("Tipo de hora")
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Hour_type)
         </dd>
 
-        @*<dt>
-            @Html.DisplayNameFor(model => model.Quantity)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Quantity)
-        </dd>*@
-
-        @*<dt>
-            @Html.DisplayNameFor(model => model.Unit)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Unit)
-        </dd>*@
+ 
 
         <dt>
-            @Html.DisplayNameFor(model => model.Activity)
+            @Html.DisplayName("Actividad")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Activity1.Activity_name)
+            @Html.DisplayFor(model => model.Activity.Activity_name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Labor)
+            @Html.DisplayName("Labor")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Labor1.Name)
+            @Html.DisplayFor(model => model.Labor.Name)
         </dd>
 
-        @*<dt>
-            @Html.DisplayNameFor(model => model.Lane1.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Lane1.Name)
-        </dd>*@
 
         <dt>
-            @Html.DisplayNameFor(model => model.Location)
+            @Html.DisplayName("Ubicacion")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Location1.Name)
+            @Html.DisplayFor(model => model.Location.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.User)
+            @Html.DisplayName("Colaborador")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.User1.Username)
+            @Html.DisplayFor(model => model.User.FirstName)
         </dd>
 
     </dl>

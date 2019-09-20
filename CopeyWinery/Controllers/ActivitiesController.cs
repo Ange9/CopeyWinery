@@ -48,6 +48,9 @@ namespace CopeyWinery.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Activity_name")] Activity activity)
         {
+            if (activity.Activity_name== null) {
+                ModelState.AddModelError("", "Debe seleccionar un nombre para la actividad");
+            }
             if (ModelState.IsValid)
             {
                 db.Activities.Add(activity);
@@ -109,10 +112,17 @@ namespace CopeyWinery.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Activity activity = db.Activities.Find(id);
-            db.Activities.Remove(activity);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try{
+                Activity activity = db.Activities.Find(id);
+                db.Activities.Remove(activity);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("Index");
+            }
+            
         }
 
         protected override void Dispose(bool disposing)

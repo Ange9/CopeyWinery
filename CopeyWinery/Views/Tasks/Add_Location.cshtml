@@ -8,17 +8,27 @@
     @Html.HiddenFor(_ => _.Date)
     @Html.HiddenFor(_ => _.Number_hours)
     @Html.HiddenFor(_ => _.Hour_type)
-    @Html.HiddenFor(_ => _.Activity)
-    @Html.HiddenFor(_ => _.Labor)
+    @Html.HiddenFor(_ => _.Activity_Id)
+    @Html.HiddenFor(_ => _.Id_labor)
 
-    <div class="form-group">
-        @*@Html.LabelFor(model => model.Location, "Location", htmlAttributes: new { @class = "control-label col-md-2" })*@
+    @*<div class="form-group">
+        @Html.LabelFor(model => model.Location, "Location", htmlAttributes: new { @class = "control-label col-md-2" })
         <h3>Ubicacion</h3>
         <div class="col-md-10">
             @Html.DropDownList("Location", null, htmlAttributes: new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
         </div>
+    </div>*@
+
+<div class="form-group">
+    @*@Html.LabelFor(model => model.Id_location, "Id_location", htmlAttributes: new { @class = "control-label col-md-2" })*@
+    <h3>Ubicacion</h3>
+
+    <div class="col-md-10">
+        @Html.DropDownList("Id_location", null, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Id_location, "", new { @class = "text-danger" })
     </div>
+</div>
 
     <link href="~/fonts/styles.css" rel="stylesheet" type="text/css">
 

@@ -3,15 +3,16 @@
 @{
     ViewBag.Title = "Details";
 }
+<link href="~/fonts/styles.css" rel="stylesheet" type="text/css">
 
-<h2>Details</h2>
+<h2>Detalles</h2>
 
 <div>
-    <h4>Activity</h4>
+    <h4>Actividad</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Activity_name)
+            @Html.DisplayName("Nombre")
         </dt>
 
         <dd>
@@ -21,6 +22,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Activity_Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Activity_Id }) |
+    @Html.ActionLink("Volver", "Index")
 </p>

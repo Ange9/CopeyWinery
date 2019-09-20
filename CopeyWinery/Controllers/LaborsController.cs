@@ -48,6 +48,11 @@ namespace CopeyWinery.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Name")] Labor labor)
         {
+            if (labor.Name == null)
+            {
+                ModelState.AddModelError("", "Debe seleccionar un nombre para la labor");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Labors.Add(labor);

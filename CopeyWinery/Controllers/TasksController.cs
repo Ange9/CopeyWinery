@@ -182,7 +182,7 @@ namespace CopeyWinery.Controllers
             task.Number_hours = taskObj.Number_hours;
             task.Hour_type = taskObj.Hour_type;
             task.Activity_Id = taskObj.Activity;
-            ViewBag.Labor_Id = new SelectList(db.Labors, "Id_labor", "Name");
+            ViewBag.Id_labor = new SelectList(db.Labors, "Id_labor", "Name");
             return View(task);
         }
 
@@ -191,7 +191,7 @@ namespace CopeyWinery.Controllers
         public ActionResult Add_Labor(Task model)
         {
 
-            if (model.Id_labor ==0 )
+            if (model.Id_labor == 0 )
             {
                 ModelState.AddModelError("", "Debe seleccionar una labor!!!");
             }
@@ -217,7 +217,7 @@ namespace CopeyWinery.Controllers
             task.Hour_type = taskObj.Hour_type;
             task.Activity_Id = taskObj.Activity;
             task.Id_labor = taskObj.Labor;
-            ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name");
+            ViewBag.Id_location = new SelectList(db.Locations, "Id_location", "Name");
             return View(task);
         }
 
@@ -226,7 +226,7 @@ namespace CopeyWinery.Controllers
         public ActionResult Add_Location(Task model)
         {
 
-            if (model.Location == null)
+            if (model.Id_location == 0)
             {
                 ModelState.AddModelError("", "Debe seleccionar una ubicacion");
             }
@@ -268,33 +268,7 @@ namespace CopeyWinery.Controllers
             Response.AddHeader("Content-Type", "application/vnd.ms-excel");
             return View(db.Tasks.AsEnumerable());
         }
-
-
-        //// POST: Tasks/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Createbck([Bind(
-        //    //Include = "Task_Id,Name,Date,Number_hours,Hour_type,Quantity,Unit,Users,Activity,Labor,Location,Lane")] Task task)
-        //    Include = "Hour_type")] Task task)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Tasks.Add(task);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name", task.Activity);
-        //    ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Labor);
-        //    ViewBag.Lane = new SelectList(db.Lanes, "Id_lane", "Name", task.Lane);
-        //    ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Location);
-        //    ViewBag.Users = new SelectList(db.User, "UserId", "Username", task.Users);
-        //    return View(task);
-        //}
-
-        // GET: Tasks/Edit/5
+        // GET: Tasks1/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -312,26 +286,27 @@ namespace CopeyWinery.Controllers
                 hourTypeOption.Add("Ordinaria");
                 hourTypeOption.Add("Extraordinaria");
             }
-            else {
+            else
+            {
                 hourTypeOption.Add("Extraordinaria");
                 hourTypeOption.Add("Ordinaria");
             }
 
-            
+
             ViewBag.Hour_type = new SelectList(hourTypeOption);
-            ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name", task.Activity);
-            ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Labor);
-            ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Location);
-            ViewBag.User = new SelectList(db.User, "UserId", "FirstName", task.User);
+            ViewBag.Activity_Id = new SelectList(db.Activities, "Activity_Id", "Activity_name", task.Activity_Id);
+            ViewBag.Id_labor = new SelectList(db.Labors, "Id_labor", "Name", task.Id_labor);
+            ViewBag.Id_location = new SelectList(db.Locations, "Id_location", "Name", task.Id_location);
+            ViewBag.UserId = new SelectList(db.User, "UserId", "FirstName", task.UserId);
             return View(task);
         }
 
-        // POST: Tasks/Edit/5
+        // POST: Tasks1/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Task_Id,Name,Date,Number_hours,Hour_type,User,Activity,Labor,Location")] Task task)
+        public ActionResult Edit([Bind(Include = "Task_Id,Name,Date,Number_hours,Hour_type,UserId,Activity_Id,Id_labor,Id_location")] Task task)
         {
             if (ModelState.IsValid)
             {
@@ -339,12 +314,71 @@ namespace CopeyWinery.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name", task.Activity);
-            ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Labor);
-            ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Location);
-            ViewBag.Users = new SelectList(db.User, "UserId", "Username", task.User);
+            ViewBag.Activity_Id = new SelectList(db.Activities, "Activity_Id", "Activity_name", task.Activity_Id);
+            ViewBag.Id_labor = new SelectList(db.Labors, "Id_labor", "Name", task.Id_labor);
+            ViewBag.Id_location = new SelectList(db.Locations, "Id_location", "Name", task.Id_location);
+            ViewBag.UserId = new SelectList(db.User, "UserId", "Username", task.UserId);
             return View(task);
         }
+
+        //// GET: Tasks/Edit/5
+        //public ActionResult Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Task task = db.Tasks.Find(id);
+        //    if (task == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    List<string> hourTypeOption = new List<string>();
+        //    if (task.Hour_type == "Ordinaria")
+        //    {
+        //        hourTypeOption.Add("Ordinaria");
+        //        hourTypeOption.Add("Extraordinaria");
+        //    }
+        //    else {
+        //        hourTypeOption.Add("Extraordinaria");
+        //        hourTypeOption.Add("Ordinaria");
+        //    }
+
+
+        //    ViewBag.Hour_type = new SelectList(hourTypeOption);
+        //    //ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name", task.Activity);
+        //    //ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Labor);
+        //    //ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Location);
+        //    //ViewBag.Users = new SelectList(db.User, "UserId", "FirstName", task.User);
+
+        //    ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name", task.Activity_Id);
+        //    ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Id_labor);
+        //    ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Id_location);
+        //    ViewBag.UserId = new SelectList(db.User, "UserId", "Username", task.UserId);
+
+        //    return View(task);
+        //}
+
+        //// POST: Tasks/Edit/5
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit([Bind(Include = "Task_Id,Name,Date,Number_hours,Hour_type,User_Id,Activity_Id,Id_labor,Id_location")] Task task)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Entry(task).State = EntityState.Modified;
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+        //    ViewBag.Hour_type = new SelectList(task.Hour_type);
+        //    ViewBag.Activity = new SelectList(db.Activities, "Activity_Id", "Activity_name", task.Activity_Id);
+        //    ViewBag.Labor = new SelectList(db.Labors, "Id_labor", "Name", task.Id_labor);
+        //    ViewBag.Location = new SelectList(db.Locations, "Id_location", "Name", task.Id_location);
+        //    ViewBag.UserId = new SelectList(db.User, "UserId", "Username", task.UserId);
+        //    return View(task);
+        //}
 
         // GET: Tasks/Delete/5
         public ActionResult Delete(int? id)
