@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -118,11 +119,26 @@ namespace CopeyWinery.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch (Exception e)
+            catch (SqlException ex)
             {
+                if (ex.Errors.Count > 0) // Assume the interesting stuff is in the first error
+                {
+                    switch (ex.Errors[0].Number)
+                    {
+                        case 547: // Foreign Key violation
+
+                            throw new InvalidOperationException("Some helpful description", ex);
+
+                        default:
+                            return RedirectToAction("Index");
+                    }
+
+                }
                 return RedirectToAction("Index");
+
+
             }
-            
+
         }
 
         protected override void Dispose(bool disposing)
