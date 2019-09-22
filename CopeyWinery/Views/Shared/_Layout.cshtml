@@ -33,6 +33,8 @@
                         <li>@Html.ActionLink("Actividades", "Index", "Activities")</li>
                         <li>@Html.ActionLink("Labores", "Index", "Labors")</li>
                         <li>@Html.ActionLink("Ubicaciones", "Index", "Locations")</li>
+                        <li>@Html.ActionLink("Usuarios", "Index", "Users")</li>
+
 
 
                         @*<li>@Html.ActionLink(@HttpContext.Current.User.Identity.Name, "Index", "Users")</li>
@@ -41,7 +43,7 @@
 
                         <li>
                             <p class="navbar-text">
-                                <span class="welcome">Bienvenido</span> <a href="Users" class="navbar-link">@HttpContext.Current.User.Identity.Name</a> | <a href="#" class="navbar-link" onclick="document.forms[0].submit();">Salir</a>
+                                <span class="welcome">Bienvenido: </span> <span>@HttpContext.Current.User.Identity.Name</span> | <a href="#" class="navbar-link" onclick="document.forms[0].submit();">Salir</a>
 
                                 @*<span class="welcome">Bienvenido</span> <a href="#" class="navbar-link">@HttpContext.Current.User.Identity.Name</a> | <a href="#" class="navbar-link" onclick="document.forms[0].submit();">Salir</a>*@
                         </li>

@@ -10,10 +10,12 @@
 <p>
     @Html.ActionLink("Agregar", "Create")
 </p>
+@Html.ValidationSummary(true, "", new { @class = "text-success" })
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayName("Nombre")
         </th>
         <th></th>
     </tr>
@@ -26,7 +28,7 @@
             </td>
             <td>
                 @Html.ActionLink("Editar", "Edit", new { id = item.Id_location }) |
-                @Html.ActionLink("Detalles", "Details", new { id = item.Id_location }) |
+                @*@Html.ActionLink("Detalles", "Details", new { id = item.Id_location }) |*@
                 @Html.ActionLink("Eliminar", "Delete", new { id = item.Id_location })
             </td>
         </tr>

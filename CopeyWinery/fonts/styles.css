@@ -10,7 +10,18 @@
 }
 
 .cancelBottom {
-    background-color: #cf9d9d;
+    background-color: #808080;
+    border: none;
+    color: white;
+    padding: 10px 18px;
+    text-decoration: none;
+    margin: 2px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+.deleteBottom {
+    background-color: #f15b5b;
     border: none;
     color: white;
     padding: 10px 18px;
@@ -22,11 +33,11 @@
 
 
 /*DL, DT, DD TAGS LIST DATA*/
-dl {
+customTable dl {
     margin-bottom: 50px;
 }
 
-    dl dt {
+    customTable dl dt {
         background: #4CAF50;
         color: #fff;
         float: left;
@@ -36,7 +47,7 @@ dl {
         width: 200px;
     }
 
-    dl dd {
+    customTable dl dd {
         margin: 2px 0;
         padding: 5px 0;
     }

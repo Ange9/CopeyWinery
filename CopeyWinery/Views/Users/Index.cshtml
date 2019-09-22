@@ -10,26 +10,32 @@
 <p>
     @Html.ActionLink("Agregar", "Create")
 </p>
+@Html.ValidationSummary(true, "", new { @class = "text-success" })
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Username)
+            @Html.DisplayName("Nombre")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Password)
+            @Html.DisplayName("Nombre de usuario")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Email)
+            @Html.DisplayName("Rol")
         </th>
+        @*<th>
+                @Html.DisplayName("contrasena")
+            </th>*@
+        @*<th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>*@
         <th>
-            @Html.DisplayNameFor(model => model.CreatedDate)
+            @Html.DisplayName("Fecha de creacion")
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastLoginDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Role.RoleName)
-        </th>
+        @*<th>
+                @Html.DisplayName("Ultima conexion")
+            </th>*@
+
         <th></th>
     </tr>
 
@@ -37,26 +43,31 @@
     {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Username)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastLoginDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Role.RoleName)
             </td>
+
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>*@
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.LastLoginDate)
+                </td>*@
+
             <td>
                 @Html.ActionLink("Editar", "Edit", new { id = item.UserId }) |
-                @Html.ActionLink("Detalles", "Details", new { id = item.UserId }) |
+                @*@Html.ActionLink("Detalles", "Details", new { id = item.UserId }) |*@
                 @Html.ActionLink("Eliminar", "Delete", new { id = item.UserId })
             </td>
         </tr>

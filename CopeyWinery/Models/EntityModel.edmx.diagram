@@ -8,11 +8,11 @@
         <EntityTypeShape EntityType="Model.Activity" Width="1.5" PointX="0.625" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.Labor" Width="1.5" PointX="4.375" PointY="4.125" />
         <EntityTypeShape EntityType="Model.Location" Width="1.5" PointX="2.375" PointY="4" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Role" Width="1.5" PointX="2.375" PointY="0.5" />
-        <EntityTypeShape EntityType="Model.UserActivation" Width="1.5" PointX="4.125" PointY="0.5" />
+        <EntityTypeShape EntityType="Model.Role" Width="1.5" PointX="4" PointY="0.5" />
+        <EntityTypeShape EntityType="Model.UserActivation" Width="1.5" PointX="7" PointY="0.5" />
         <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="0.625" PointY="0.5" IsExpanded="true" />
         <AssociationConnector Association="Model.FK_Users_Roles" />
-        <EntityTypeShape EntityType="Model.Task" Width="1.5" PointX="6.625" PointY="3.5" />
+        <EntityTypeShape EntityType="Model.Task" Width="1.5" PointX="9.375" PointY="3.5" />
         <AssociationConnector Association="Model.FK_Task_Activity" />
         <AssociationConnector Association="Model.FK_Task_Labor" />
         <AssociationConnector Association="Model.FK_Task_Location" />

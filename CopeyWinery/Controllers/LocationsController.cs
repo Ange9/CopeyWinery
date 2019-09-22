@@ -15,9 +15,29 @@ namespace CopeyWinery.Controllers
         private DB_Entities db = new DB_Entities();
 
         // GET: Locations
-        public ActionResult Index()
+        public ActionResult Index(bool? deleted, bool? added, bool? updated)
         {
-            return View(db.Locations.ToList());
+            var model = db.Locations.ToList();
+            if (deleted != null || added != null || updated != null)
+                {
+                if (deleted == true)
+                {
+                    ModelState.AddModelError("", "Ubicacion eliminada satisfactoriamente");
+                }
+                else
+                {
+                    if (added == true)
+                    {
+                        ModelState.AddModelError("", "Ubicacion agregada satisfactoriamente");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Ubicacion editada satisfactoriamente");
+
+                    }
+                }
+            }
+            return View(model);
         }
 
         // GET: Locations/Details/5
@@ -48,13 +68,25 @@ namespace CopeyWinery.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Name")] Location location)
         {
+            if (location.Name == null)
+            {
+                ModelState.AddModelError("", "Debe indicar un nombre para la ubicacion");
+            }
             if (ModelState.IsValid)
             {
-                db.Locations.Add(location);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+                try
+                {
+                    db.Locations.Add(location);
+                    db.SaveChanges();
+                    return RedirectToAction("Index", new { added = true });
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
 
+                    return View(location);
+                }
+            }
             return View(location);
         }
 
@@ -80,13 +112,30 @@ namespace CopeyWinery.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id_location,Name")] Location location)
         {
+            if (location.Name == null)
+            {
+                ModelState.AddModelError("", "Debe indicar un nombre para la ubicacion");
+            }
             if (ModelState.IsValid)
             {
-                db.Entry(location).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Entry(location).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index", new { updated = true });
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
+
+                    return View(location);
+                }
             }
             return View(location);
+
+           
+
+
         }
 
         // GET: Locations/Delete/5
@@ -110,9 +159,19 @@ namespace CopeyWinery.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Location location = db.Locations.Find(id);
-            db.Locations.Remove(location);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            
+            try
+            {
+                db.Locations.Remove(location);
+                db.SaveChanges();
+                return RedirectToAction("Index", new { deleted = true });
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "No es posible eliminar esta ubicacion, compruebe que no este ligada a ninguna tarea registrada");
+
+                return View(location);
+            }
         }
 
         protected override void Dispose(bool disposing)

@@ -15,10 +15,31 @@ namespace CopeyWinery.Controllers
         private DB_Entities db = new DB_Entities();
 
         // GET: Users
-        public ActionResult Index()
+        public ActionResult Index(bool? deleted, bool? added, bool? updated)
         {
-            var user = db.User.Include(u => u.Role);
-            return View(user.ToList());
+            var model = db.User.Include(u => u.Role).ToList();
+
+
+            if (deleted != null || added != null || updated != null)
+            {
+                if (deleted == true)
+                {
+                    ModelState.AddModelError("", "Usuario eliminado satisfactoriamente");
+                }
+                else
+                {
+                    if (added == true)
+                    {
+                        ModelState.AddModelError("", "Usuario agregado satisfactoriamente");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Usuario editado satisfactoriamente");
+
+                    }
+                }
+            }
+            return View(model);
         }
 
         // GET: Users/Details/5
@@ -48,16 +69,31 @@ namespace CopeyWinery.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "UserId,Username,Password,Email,CreatedDate,LastLoginDate,RoleId")] User user)
+        public ActionResult Create([Bind(Include = "FirstName, Username,Password,RoleId")] User user)
         {
-            if (ModelState.IsValid)
-            {
-                db.User.Add(user);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
 
             ViewBag.RoleId = new SelectList(db.Roles, "RoleId", "RoleName", user.RoleId);
+
+            if (user.FirstName == null || user.Username== null || user.Password== null)
+            {
+                ModelState.AddModelError("", "Todos los campos son obligatorios ");
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    user.CreatedDate = DateTime.UtcNow;
+                    db.User.Add(user);
+                    db.SaveChanges();
+                    return RedirectToAction("Index", new { added = true });
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
+                    return View(user);
+                }
+            }
+
             return View(user);
         }
 
@@ -82,15 +118,28 @@ namespace CopeyWinery.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UserId,Username,Password,Email,CreatedDate,LastLoginDate,RoleId")] User user)
+        public ActionResult Edit([Bind(Include = "UserId,FirstName,Username,Password,RoleId,CreatedDate")] User user)
         {
+            ViewBag.RoleId = new SelectList(db.Roles, "RoleId", "RoleName", user.RoleId);
+            if (user.FirstName == null || user.Username == null || user.Password == null)
+            {
+                ModelState.AddModelError("", "Debe indicar un nombre para la actividad");
+            }
             if (ModelState.IsValid)
             {
-                db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Entry(user).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index", new { updated = true });
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
+
+                    return View(user);
+                }
             }
-            ViewBag.RoleId = new SelectList(db.Roles, "RoleId", "RoleName", user.RoleId);
             return View(user);
         }
 
@@ -115,9 +164,19 @@ namespace CopeyWinery.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             User user = db.User.Find(id);
-            db.User.Remove(user);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+
+            try
+            {
+                db.User.Remove(user);
+                db.SaveChanges();
+                return RedirectToAction("Index", new { deleted = true });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "No es posible eliminar esta usuario, compruebe que no este ligado a ninguna tarea registrada");
+
+                return View(user);
+            }          
         }
 
         protected override void Dispose(bool disposing)

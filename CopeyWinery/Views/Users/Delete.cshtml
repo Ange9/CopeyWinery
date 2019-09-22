@@ -4,55 +4,36 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+<h2>Eliminar</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Confirma que desea eliminar este usuario?</h3>
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
 <div>
-    <h4>User</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Username)
+            @Html.DisplayName("Nombre de usuario")
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Username)
         </dd>
 
+
+
         <dt>
-            @Html.DisplayNameFor(model => model.Password)
+            @Html.DisplayName("Nombre")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Password)
+            @Html.DisplayFor(model => model.FirstName)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.LastLoginDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.LastLoginDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Role.RoleName)
+            @Html.DisplayName("Rol")
         </dt>
 
         <dd>
@@ -61,12 +42,16 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
+        <link href="~/fonts/styles.css" rel="stylesheet" type="text/css">
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Eliminar" class="deleteBottom" />
+                <input type="button" value="Cancelar" class="cancelBottom" onclick="window.location.href='@Url.Action("Index", "Users")'" />
+            </div>
         </div>
     }
 </div>

@@ -6,7 +6,7 @@
 
 <h2>Eliminar</h2>
 
-<h3>Confirma que desea elinar esta actividad?</h3>
+<h3>Confirma que desea eliminar esta actividad?</h3>
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 <div>
@@ -31,7 +31,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Eliminar" class="cancelBottom" />
+                <input type="submit" value="Eliminar" class="deleteBottom" />
                 <input type="button" value="Cancelar" class="cancelBottom" onclick="window.location.href='@Url.Action("Index", "Activities")'" />
             </div>
         </div>

@@ -16,18 +16,24 @@ namespace CopeyWinery.Controllers
         private DB_Entities db = new DB_Entities();
 
         // GET: Activities
-        public ActionResult Index(bool? deleted, bool? added)
+        public ActionResult Index(bool? deleted, bool? added, bool? updated)
         {
             var model = db.Activities.ToList();
-            if (deleted != null || added !=null) {
+            if (deleted != null || added !=null || updated != null) {
                 if (deleted == true)
                 {
                     ModelState.AddModelError("", "Actividad eliminada satisfactoriamente");
                 }
                 else {
-                    ModelState.AddModelError("", "Actividad agregada satisfactoriamente");
-                }
+                    if (added == true)
+                    {
+                        ModelState.AddModelError("", "Actividad agregada satisfactoriamente");
+                    }
+                    else {
+                        ModelState.AddModelError("", "Actividad editada satisfactoriamente");
 
+                    }
+                }             
             }
             return View(model);
         }
@@ -61,13 +67,22 @@ namespace CopeyWinery.Controllers
         public ActionResult Create([Bind(Include = "Activity_name")] Activity activity)
         {
             if (activity.Activity_name== null) {
-                ModelState.AddModelError("", "Debe seleccionar un nombre para la actividad");
+                ModelState.AddModelError("", "Debe indicar un nombre para la actividad");
             }
             if (ModelState.IsValid)
             {
-                db.Activities.Add(activity);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Activities.Add(activity);
+                    db.SaveChanges();
+                    return RedirectToAction("Index", new { added = true });
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
+
+                    return View(activity);
+                }
             }
 
             return View(activity);
@@ -95,11 +110,24 @@ namespace CopeyWinery.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Activity_Id,Activity_name")] Activity activity)
         {
+            if (activity.Activity_name == null)
+            {
+                ModelState.AddModelError("", "Debe indicar un nombre para la actividad");
+            }
             if (ModelState.IsValid)
             {
-                db.Entry(activity).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Entry(activity).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index", new { updated = true });
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
+
+                    return View(activity);
+                }
             }
             return View(activity);
         }
