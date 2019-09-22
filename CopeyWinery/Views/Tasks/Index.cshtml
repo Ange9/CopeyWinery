@@ -7,86 +7,89 @@
 <p>
     @Html.ActionLink("Crear Tarea", "Create")
 </p>
-@if (User.IsInRole("Administrator")) {
- <p>
+@Html.ValidationSummary(true, "", new { @class = "text-success" })
+
+@if (User.IsInRole("Administrator"))
+{
+    <p>
         @Html.ActionLink("Exportar a Excel", "ExportView")
     </p>
 }
 
-   
- <table class="table">
-     <thead>
-         <tr>
-             <th>
-                 Fecha
-             </th>
-             <th>
-                 Cant. Horas
-             </th>
-             <th>
-                 Tipo de Hora
-             </th>
-             @*<th>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Fecha
+            </th>
+            <th>
+                Cant. Horas
+            </th>
+            <th>
+                Tipo de Hora
+            </th>
+            @*<th>
                     Cantidad
                 </th>
                 <th>
                     Unidad
                 </th>*@
-             <th>
-                 Actividad
-             </th>
-             <th>
-                 Labor
-             </th>
-             @*<th>
+            <th>
+                Actividad
+            </th>
+            <th>
+                Labor
+            </th>
+            @*<th>
                     Calles
                 </th>*@
-             <th>
-                 Ubicacion
-             </th>
-             <th>
-                 Colaborador
-             </th>
-             <th></th>
-         </tr>
-     </thead>
-     <tbody>
-         @foreach (var item in Model)
-         {
-             <tr>
-                 <td>
-                     @Html.DisplayFor(modelItem => item.Date)
-                 </td>
-                 <td>
-                     @Html.DisplayFor(modelItem => item.Number_hours)
-                 </td>
-                 <td>
-                     @Html.DisplayFor(modelItem => item.Hour_type)
-                 </td>
+            <th>
+                Ubicacion
+            </th>
+            <th>
+                Colaborador
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Number_hours)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Hour_type)
+                </td>
 
-                 <td>
-                     @Html.DisplayFor(modelItem => item.Activity.Activity_name)
-                 </td>
-                 <td>
-                     @Html.DisplayFor(modelItem => item.Labor.Name)
-                 </td>
-                 <td>
-                     @Html.DisplayFor(modelItem => item.Location.Name)
-                 </td>
-                 <td>
-                     @Html.DisplayFor(modelItem => item.User.FirstName)
-                 </td>
-                 <td>
-                     @Html.ActionLink("Editar", "Edit", new { id = item.Task_Id }) |
-                     @Html.ActionLink("Detalles", "Details", new { id = item.Task_Id }) |
-                     @Html.ActionLink("Eliminar", "Delete", new { id = item.Task_Id })
-                 </td>
-             </tr>
-         }
-     </tbody>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Activity.Activity_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Labor.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.FirstName)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.Task_Id }) |
+                    @*@Html.ActionLink("Detalles", "Details", new { id = item.Task_Id }) |*@
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.Task_Id })
+                </td>
+            </tr>
+        }
+    </tbody>
 
 
 
-        
 
- </table>
+
+</table>

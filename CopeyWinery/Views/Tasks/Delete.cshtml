@@ -15,104 +15,77 @@
     @Html.AntiForgeryToken()
     <link href="~/fonts/styles.css" rel="stylesheet" type="text/css">
     <h3>Esta seguro que desea eliminar esta tarea?</h3>
-
-        <dl >
-            @*<dt>
-                    @Html.DisplayNameFor(model => model.Name)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Name)
-                </dd>*@
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Date)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Date)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Number_hours)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Number_hours)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Hour_type)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Hour_type)
-            </dd>
-
-            @*<dt>
-                    @Html.DisplayNameFor(model => model.Quantity)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Quantity)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Unit)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Unit)
-                </dd>*@
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Activity)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Activity.Activity_name)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Labor)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Labor.Name)
-            </dd>
-
-            @*<dt>
-                    @Html.DisplayNameFor(model => model.Lane1.Name)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Lane1.Name)
-                </dd>*@
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Location)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Location.Name)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.User)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.User.Username)
-            </dd>
-
-        </dl>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayName("Fecha")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Cantidad de horas")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Number_hours)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Tipo de hora")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Hour_type)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Actividad")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Activity.Activity_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Labor")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Labor.Name)
+        </dd>
 
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Eliminar" class="cancelBottom" /> |
-            @Html.ActionLink("Volver a la lista", "Index")
+        <dt>
+            @Html.DisplayName("Ubicacion")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Location.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Colaborador")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.FirstName)
+        </dd>
+
+    </dl>
+
+    <link href="~/fonts/styles.css" rel="stylesheet" type="text/css">
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Eliminar" class="deleteBottom" />
+            <input type="button" value="Cancelar" class="cancelBottom" onclick="window.location.href='@Url.Action("Index", "Tasks")'" />
         </div>
+    </div>
 
 }

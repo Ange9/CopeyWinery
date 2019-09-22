@@ -6,7 +6,6 @@
     <edmx:Diagrams>
       <Diagram DiagramId="ffe8fb6893e44f7dab3f4e33e800f8a4" Name="Diagram1" ZoomLevel="74">
         <EntityTypeShape EntityType="Model.Activity" Width="1.5" PointX="0.625" PointY="4.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Labor" Width="1.5" PointX="4.375" PointY="4.125" />
         <EntityTypeShape EntityType="Model.Location" Width="1.5" PointX="2.375" PointY="4" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.Role" Width="1.5" PointX="4" PointY="0.5" />
         <EntityTypeShape EntityType="Model.UserActivation" Width="1.5" PointX="7" PointY="0.5" />
@@ -14,11 +13,12 @@
         <AssociationConnector Association="Model.FK_Users_Roles" />
         <EntityTypeShape EntityType="Model.Task" Width="1.5" PointX="9.375" PointY="3.5" />
         <AssociationConnector Association="Model.FK_Task_Activity" />
-        <AssociationConnector Association="Model.FK_Task_Labor" />
         <AssociationConnector Association="Model.FK_Task_Location" />
         <AssociationConnector Association="Model.FK_Task_User" />
-        <EntityTypeShape EntityType="Model.ExtendedAttribute" Width="1.5" PointX="2.125" PointY="7.25" />
-        <AssociationConnector Association="Model.FK_Labor_ExtAttr" />
+        <EntityTypeShape EntityType="Model.ExtendedAttribute" Width="1.5" PointX="0.75" PointY="7.25" />
+        <EntityTypeShape EntityType="Model.Labor" Width="1.5" PointX="3" PointY="6.875" />
+        <AssociationConnector Association="Model.FK_Labor_Ext" />
+        <AssociationConnector Association="Model.FK_Task_Labor" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

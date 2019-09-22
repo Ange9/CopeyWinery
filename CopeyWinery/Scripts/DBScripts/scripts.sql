@@ -23,7 +23,6 @@ CREATE TABLE [dbo].[Labor](
 	[Id_labor] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [varchar](255) NOT NULL,
 	[Id_ExtAttr] [int] NULL,
-	[Value_Ex] [varchar] (50)
 PRIMARY KEY CLUSTERED 
 (
 	[Id_labor] ASC
@@ -88,6 +87,7 @@ CREATE TABLE [dbo].[Task](
 	[Activity_Id] [int] NOT NULL,
 	[Id_labor] [int] NOT NULL,
 	[Id_location] [int] NOT NULL,
+	[Ext_Attr_Labor_Value] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[Task_Id] ASC

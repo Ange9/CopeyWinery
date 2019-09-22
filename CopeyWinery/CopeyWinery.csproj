@@ -142,6 +142,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
+    <Compile Include="Controllers\ExtendedAttributesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LaborsController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
@@ -346,6 +347,12 @@
     <Content Include="Views\Tasks1\Details.cshtml" />
     <Content Include="Views\Tasks1\Edit.cshtml" />
     <Content Include="Views\Tasks1\Index.cshtml" />
+    <Content Include="Views\ExtendedAttributes\Create.cshtml" />
+    <Content Include="Views\ExtendedAttributes\Delete.cshtml" />
+    <Content Include="Views\ExtendedAttributes\Details.cshtml" />
+    <Content Include="Views\ExtendedAttributes\Edit.cshtml" />
+    <Content Include="Views\ExtendedAttributes\Index.cshtml" />
+    <Content Include="Views\Tasks\Add_Ext_Attr.cshtml" />
     <None Include="Views\Tasks\CreateBCK.cshtml" />
     <Content Include="Views\Tasks\Delete.cshtml" />
     <Content Include="Views\Tasks\Details.cshtml" />
@@ -362,6 +369,7 @@
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Tasks\EditTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

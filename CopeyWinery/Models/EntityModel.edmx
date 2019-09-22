@@ -18,7 +18,6 @@
           </Key>
           <Property Name="Id_ExtAttr" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Value" Type="varchar" MaxLength="1" />
         </EntityType>
         <EntityType Name="Labor">
           <Key>
@@ -55,6 +54,7 @@
           <Property Name="Activity_Id" Type="int" Nullable="false" />
           <Property Name="Id_labor" Type="int" Nullable="false" />
           <Property Name="Id_location" Type="int" Nullable="false" />
+          <Property Name="Ext_Attr_Labor_Value" Type="int" />
         </EntityType>
         <EntityType Name="UserActivation">
           <Key>
@@ -76,7 +76,7 @@
           <Property Name="LastLoginDate" Type="datetime" />
           <Property Name="RoleId" Type="int" />
         </EntityType>
-        <Association Name="FK_Labor_ExtAttr">
+        <Association Name="FK_Labor_Ext">
           <End Role="ExtendedAttribute" Type="Self.ExtendedAttribute" Multiplicity="0..1" />
           <End Role="Labor" Type="Self.Labor" Multiplicity="*" />
           <ReferentialConstraint>
@@ -136,6 +136,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Users_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="Insert_User" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Username" Type="nvarchar" Mode="In" />
           <Parameter Name="Password" Type="nvarchar" Mode="In" />
@@ -154,7 +166,7 @@
           <EntitySet Name="Task" EntityType="Self.Task" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserActivation" EntityType="Self.UserActivation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Labor_ExtAttr" Association="Self.FK_Labor_ExtAttr">
+          <AssociationSet Name="FK_Labor_Ext" Association="Self.FK_Labor_Ext">
             <End Role="ExtendedAttribute" EntitySet="ExtendedAttribute" />
             <End Role="Labor" EntitySet="Labor" />
           </AssociationSet>
@@ -174,6 +186,10 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Task" EntitySet="Task" />
           </AssociationSet>
+          <AssociationSet Name="FK_Users_Roles" Association="Self.FK_Users_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -189,7 +205,6 @@
           </EntityType>
         <EntityContainer Name="DB_Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Activities" EntityType="Self.Activity" />
-          <EntitySet Name="Labors" EntityType="Model.Labor" />
           <EntitySet Name="Locations" EntityType="Model.Location" />
           <EntitySet Name="Roles" EntityType="Model.Role" />
           <EntitySet Name="UserActivations" EntityType="Model.UserActivation" />
@@ -220,10 +235,6 @@
             <End Role="Activity" EntitySet="Activities" />
             <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
-          <AssociationSet Name="FK_Task_Labor" Association="Model.FK_Task_Labor">
-            <End Role="Labor" EntitySet="Labors" />
-            <End Role="Task" EntitySet="Tasks" />
-          </AssociationSet>
           <AssociationSet Name="FK_Task_Location" Association="Model.FK_Task_Location">
             <End Role="Location" EntitySet="Locations" />
             <End Role="Task" EntitySet="Tasks" />
@@ -233,21 +244,16 @@
             <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
           <EntitySet Name="ExtendedAttributes" EntityType="Model.ExtendedAttribute" />
-          <AssociationSet Name="FK_Labor_ExtAttr" Association="Model.FK_Labor_ExtAttr">
+          <EntitySet Name="Labors" EntityType="Model.Labor" />
+          <AssociationSet Name="FK_Labor_Ext" Association="Model.FK_Labor_Ext">
             <End Role="ExtendedAttribute" EntitySet="ExtendedAttributes" />
             <End Role="Labor" EntitySet="Labors" />
           </AssociationSet>
+          <AssociationSet Name="FK_Task_Labor" Association="Model.FK_Task_Labor">
+            <End Role="Labor" EntitySet="Labors" />
+            <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
           </EntityContainer>
-        <EntityType Name="Labor">
-          <Key>
-            <PropertyRef Name="Id_labor" />
-          </Key>
-          <Property Name="Id_labor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Id_ExtAttr" Type="Int32" />
-          <NavigationProperty Name="Tasks" Relationship="Model.FK_Task_Labor" FromRole="Labor" ToRole="Task" />
-          <NavigationProperty Name="ExtendedAttribute" Relationship="Model.FK_Labor_ExtAttr" FromRole="Labor" ToRole="ExtendedAttribute" />
-        </EntityType>
         <EntityType Name="Location">
           <Key>
             <PropertyRef Name="Id_location" />
@@ -320,9 +326,10 @@
           <Property Name="Id_labor" Type="Int32" Nullable="false" />
           <Property Name="Id_location" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Activity" Relationship="Model.FK_Task_Activity" FromRole="Task" ToRole="Activity" />
-          <NavigationProperty Name="Labor" Relationship="Model.FK_Task_Labor" FromRole="Task" ToRole="Labor" />
           <NavigationProperty Name="Location" Relationship="Model.FK_Task_Location" FromRole="Task" ToRole="Location" />
           <NavigationProperty Name="User" Relationship="Model.FK_Task_User" FromRole="Task" ToRole="User" />
+          <NavigationProperty Name="Labor" Relationship="Model.FK_Task_Labor" FromRole="Task" ToRole="Labor" />
+          <Property Name="Ext_Attr_Labor_Value" Type="Int32" />
         </EntityType>
         <Association Name="FK_Task_Activity">
           <End Type="Model.Activity" Role="Activity" Multiplicity="1" />
@@ -333,18 +340,6 @@
             </Principal>
             <Dependent Role="Task">
               <PropertyRef Name="Activity_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Task_Labor">
-          <End Type="Model.Labor" Role="Labor" Multiplicity="1" />
-          <End Type="Model.Task" Role="Task" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Labor">
-              <PropertyRef Name="Id_labor" />
-            </Principal>
-            <Dependent Role="Task">
-              <PropertyRef Name="Id_labor" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -378,10 +373,19 @@
           </Key>
           <Property Name="Id_ExtAttr" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Value" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Labors" Relationship="Model.FK_Labor_ExtAttr" FromRole="ExtendedAttribute" ToRole="Labor" />
+          <NavigationProperty Name="Labors" Relationship="Model.FK_Labor_Ext" FromRole="ExtendedAttribute" ToRole="Labor" />
         </EntityType>
-        <Association Name="FK_Labor_ExtAttr">
+        <EntityType Name="Labor">
+          <Key>
+            <PropertyRef Name="Id_labor" />
+          </Key>
+          <Property Name="Id_labor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Id_ExtAttr" Type="Int32" />
+          <NavigationProperty Name="ExtendedAttribute" Relationship="Model.FK_Labor_Ext" FromRole="Labor" ToRole="ExtendedAttribute" />
+          <NavigationProperty Name="Tasks" Relationship="Model.FK_Task_Labor" FromRole="Labor" ToRole="Task" />
+        </EntityType>
+        <Association Name="FK_Labor_Ext">
           <End Type="Model.ExtendedAttribute" Role="ExtendedAttribute" Multiplicity="0..1" />
           <End Type="Model.Labor" Role="Labor" Multiplicity="*" />
           <ReferentialConstraint>
@@ -390,6 +394,18 @@
             </Principal>
             <Dependent Role="Labor">
               <PropertyRef Name="Id_ExtAttr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_Labor">
+          <End Type="Model.Labor" Role="Labor" Multiplicity="1" />
+          <End Type="Model.Task" Role="Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Labor">
+              <PropertyRef Name="Id_labor" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="Id_labor" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -404,15 +420,6 @@
               <MappingFragment StoreEntitySet="Activity">
                 <ScalarProperty Name="Activity_Id" ColumnName="Activity_Id" />
                 <ScalarProperty Name="Activity_name" ColumnName="Activity_name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Labors">
-            <EntityTypeMapping TypeName="Model.Labor">
-              <MappingFragment StoreEntitySet="Labor">
-                <ScalarProperty Name="Id_ExtAttr" ColumnName="Id_ExtAttr" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id_labor" ColumnName="Id_labor" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -474,6 +481,7 @@
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="Model.Task">
               <MappingFragment StoreEntitySet="Task">
+                <ScalarProperty Name="Ext_Attr_Labor_Value" ColumnName="Ext_Attr_Labor_Value" />
                 <ScalarProperty Name="Id_location" ColumnName="Id_location" />
                 <ScalarProperty Name="Id_labor" ColumnName="Id_labor" />
                 <ScalarProperty Name="Activity_Id" ColumnName="Activity_Id" />
@@ -489,9 +497,17 @@
           <EntitySetMapping Name="ExtendedAttributes">
             <EntityTypeMapping TypeName="Model.ExtendedAttribute">
               <MappingFragment StoreEntitySet="ExtendedAttribute">
-                <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id_ExtAttr" ColumnName="Id_ExtAttr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Labors">
+            <EntityTypeMapping TypeName="Model.Labor">
+              <MappingFragment StoreEntitySet="Labor">
+                <ScalarProperty Name="Id_ExtAttr" ColumnName="Id_ExtAttr" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id_labor" ColumnName="Id_labor" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

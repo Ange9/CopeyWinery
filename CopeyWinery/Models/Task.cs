@@ -23,10 +23,11 @@ namespace CopeyWinery.Models
         public int Activity_Id { get; set; }
         public int Id_labor { get; set; }
         public int Id_location { get; set; }
+        public Nullable<int> Ext_Attr_Labor_Value { get; set; }
     
         public virtual Activity Activity { get; set; }
-        public virtual Labor Labor { get; set; }
         public virtual Location Location { get; set; }
         public virtual User User { get; set; }
+        public virtual Labor Labor { get; set; }
     }
 }

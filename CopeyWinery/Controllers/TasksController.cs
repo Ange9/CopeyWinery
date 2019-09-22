@@ -18,6 +18,7 @@ namespace CopeyWinery.Controllers
         public string Hour_type { get; set; }
         public int Activity { get; set; }
         public int Labor { get; set; }
+        public int? Ext_Attr { get; set; }
         public int Location { get; set; }
         public int User { get; set; }
 
@@ -29,8 +30,36 @@ namespace CopeyWinery.Controllers
 
         // GET: Tasks
         [Authorize]
-        public ActionResult Index()
+        public ActionResult Index(bool? deleted, bool? added, bool? updated, bool? addFailed)
         {
+         
+            if (deleted != null || added != null || updated != null)
+            {
+                if (deleted == true)
+                {
+                    ModelState.AddModelError("", "Tarea eliminada satisfactoriamente");
+                }
+                else
+                {
+                    if (updated == true)
+                    {
+                        ModelState.AddModelError("", "Tarea editada satisfactoriamente");
+                    }
+                    else
+                    {
+                        if (added != null)
+                        {
+                            ModelState.AddModelError("", "Tarea agregada satisfactoriamente");
+
+                        }
+                        else {
+                            ModelState.AddModelError("", "No se ha podido agregar la tarea");
+
+                        }
+
+                    }
+                }
+            }
             if (!User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Home");
@@ -39,14 +68,15 @@ namespace CopeyWinery.Controllers
             if (!User.IsInRole("Administrator"))
             {
                  var tasks = db.Tasks.Include(t => t.Activity).Include(t => t.Labor).Include(t => t.Location).Include(t => t.User).Where(x=> x.User.Username== User.Identity.Name);
-                return View(tasks.ToList());
+                return View(tasks);
 
             }
             else {
                  var tasks = db.Tasks.Include(t => t.Activity).Include(t => t.Labor).Include(t => t.Location).Include(t => t.User);
-                return View(tasks.ToList());
+                return View(tasks);
 
             }
+
         }
 
         // GET: Tasks/Details/5
@@ -204,10 +234,51 @@ namespace CopeyWinery.Controllers
                 taskObject.Hour_type = model.Hour_type;
                 taskObject.Activity = model.Activity_Id;
                 taskObject.Labor = model.Id_labor;
+                return RedirectToAction("Add_Ext_Attr", taskObject);
+            }
+            return View(model);
+        }
+        public ActionResult Add_Ext_Attr(TaskObject taskObj)
+        {
+            Task task = new Task();
+            task.Date = taskObj.Date;
+            task.Number_hours = taskObj.Number_hours;
+            task.Hour_type = taskObj.Hour_type;
+            task.Activity_Id = taskObj.Activity;
+            task.Id_labor = taskObj.Labor;
+            var ex = db.Labors.Include(e => e.ExtendedAttribute)
+                            .Where(x => x.Id_labor==task.Id_labor)
+                            .Select(x=> x.ExtendedAttribute.Name)                          
+                            .FirstOrDefault();
+            ViewBag.Ext_Attr = ex;
+            return View(task);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Add_Ext_Attr(Task model)
+        {
+
+            if (model.Ext_Attr_Labor_Value == null)
+            {
+                ModelState.AddModelError("", "Debe seleccionar un valor");
+            }
+            if (ModelState.IsValid)
+            {
+
+                TaskObject taskObject = new TaskObject();
+                taskObject.Date = model.Date;
+                taskObject.Number_hours = model.Number_hours;
+                taskObject.Hour_type = model.Hour_type;
+                taskObject.Activity = model.Activity_Id;
+                taskObject.Labor = model.Id_labor;
+                taskObject.Ext_Attr = model.Ext_Attr_Labor_Value;
                 return RedirectToAction("Add_Location", taskObject);
             }
             return View(model);
         }
+
+
 
         public ActionResult Add_Location(TaskObject taskObj)
         {
@@ -217,6 +288,7 @@ namespace CopeyWinery.Controllers
             task.Hour_type = taskObj.Hour_type;
             task.Activity_Id = taskObj.Activity;
             task.Id_labor = taskObj.Labor;
+            task.Ext_Attr_Labor_Value = taskObj.Ext_Attr;
             ViewBag.Id_location = new SelectList(db.Locations, "Id_location", "Name");
             return View(task);
         }
@@ -239,6 +311,7 @@ namespace CopeyWinery.Controllers
                 taskObject.Hour_type = model.Hour_type;
                 taskObject.Activity = model.Activity_Id;
                 taskObject.Labor = model.Id_labor;
+                taskObject.Ext_Attr = model.Ext_Attr_Labor_Value;
                 taskObject.Location = model.Id_location;
                 return RedirectToAction("CreateTask", taskObject);
             }
@@ -254,12 +327,59 @@ namespace CopeyWinery.Controllers
             task.Hour_type = taskObj.Hour_type;
             task.Activity_Id = taskObj.Activity;
             task.Id_labor = taskObj.Labor;
+            task.Ext_Attr_Labor_Value = taskObj.Ext_Attr;
             task.Id_location = taskObj.Location;
-            task.UserId = db.User.Where(x => x.Username == User.Identity.Name).Select(x => x.UserId).FirstOrDefault();
             task.Name = task.Task_Id.ToString();
-            db.Tasks.Add(task);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                task.UserId = db.User.Where(x => x.Username == User.Identity.Name).Select(x => x.UserId).FirstOrDefault();
+                db.Tasks.Add(task);
+                db.SaveChanges();
+                return RedirectToAction("Index", new { added = true });
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
+                return RedirectToAction("Index", new { addFailed = true });
+            }
+        }
+
+        public ActionResult EditTest(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Task task = db.Tasks.Find(id);
+            if (task == null)
+            {
+                return HttpNotFound();
+            }
+            List<string> hourTypeOption = new List<string>();
+            if (task.Hour_type == "Ordinaria")
+            {
+                hourTypeOption.Add("Ordinaria");
+                hourTypeOption.Add("Extraordinaria");
+            }
+            else
+            {
+                hourTypeOption.Add("Extraordinaria");
+                hourTypeOption.Add("Ordinaria");
+            }
+
+
+
+            ViewBag.Hour_type = new SelectList(hourTypeOption);
+            ViewBag.Activity_Id = new SelectList(db.Activities, "Activity_Id", "Activity_name", task.Activity_Id);
+            ViewBag.Id_labor = new SelectList(db.Labors, "Id_labor", "Name", task.Id_labor);
+            ViewBag.Id_location = new SelectList(db.Locations, "Id_location", "Name", task.Id_location);
+            ViewBag.UserId = new SelectList(db.User, "UserId", "FirstName", task.UserId);
+            var ex = db.Labors.Include(e => e.ExtendedAttribute)
+                .Where(x => x.Id_labor == task.Id_labor)
+                .Select(x => x.ExtendedAttribute.Name)
+                .FirstOrDefault();
+            ViewBag.Ext_Attr = ex;
+            return View(task);
         }
 
         public ActionResult ExportView()
@@ -298,6 +418,11 @@ namespace CopeyWinery.Controllers
             ViewBag.Id_labor = new SelectList(db.Labors, "Id_labor", "Name", task.Id_labor);
             ViewBag.Id_location = new SelectList(db.Locations, "Id_location", "Name", task.Id_location);
             ViewBag.UserId = new SelectList(db.User, "UserId", "FirstName", task.UserId);
+            var ex = db.Labors.Include(e => e.ExtendedAttribute)
+                .Where(x => x.Id_labor == task.Id_labor)
+                .Select(x => x.ExtendedAttribute.Name)
+                .FirstOrDefault();
+            ViewBag.Ext_Attr = ex;
             return View(task);
         }
 
@@ -306,13 +431,28 @@ namespace CopeyWinery.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Task_Id,Name,Date,Number_hours,Hour_type,UserId,Activity_Id,Id_labor,Id_location")] Task task)
+        public ActionResult Edit([Bind(Include = "Task_Id,Name,Date,Number_hours,Hour_type,UserId,Activity_Id,Id_labor,Id_location,Ext_Attr_Labor_Value")] Task task)
         {
+
+            if (task.Date== null || task.Number_hours==null || task.Hour_type==null || task.UserId==null || task.Activity_Id== null || task.Id_labor==null || task.Id_location==null)
+            {
+                ModelState.AddModelError("", "Todos los campos son requeridos");
+            }
             if (ModelState.IsValid)
             {
-                db.Entry(task).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Entry(task).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index", new { updated = true });
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
+
+                    return View(task);
+                }
+                
             }
             ViewBag.Activity_Id = new SelectList(db.Activities, "Activity_Id", "Activity_name", task.Activity_Id);
             ViewBag.Id_labor = new SelectList(db.Labors, "Id_labor", "Name", task.Id_labor);
@@ -401,9 +541,18 @@ namespace CopeyWinery.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Task task = db.Tasks.Find(id);
-            db.Tasks.Remove(task);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                db.Tasks.Remove(task);
+                db.SaveChanges();
+                return RedirectToAction("Index", new { deleted = true });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "EN este momento no es posible eliminar esta tarea");
+
+                return View(task);
+            }
         }
 
         protected override void Dispose(bool disposing)

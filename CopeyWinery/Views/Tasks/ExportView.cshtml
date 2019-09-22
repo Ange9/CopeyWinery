@@ -24,19 +24,16 @@
                     Tipo de Hora
                 </th>
                 <th>
-                    Cantidad
-                </th>
-                <th>
-                    Unidad
-                </th>
-                <th>
                     Actividad
                 </th>
                 <th>
                     Labor
                 </th>
                 <th>
-                    Calles
+                    Atributo Extendido
+                </th>
+                <th>
+                    Valor Atributo Extendido
                 </th>
                 <th>
                     Ubicacion
@@ -44,7 +41,7 @@
                 <th>
                     Colaborador
                 </th>
-               
+
             </tr>
 
             @foreach (var item in Model)
@@ -59,26 +56,25 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Hour_type)
                 </td>
+
                 <td>
-                    @Html.DisplayFor(modelItem => item.Quantity)
+                    @Html.DisplayFor(modelItem => item.Activity.Activity_name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Unit)
+                    @Html.DisplayFor(modelItem => item.Labor.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Activity1.Activity_name)
+                    @Html.DisplayFor(modelItem => item.Labor.ExtendedAttribute.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Labor1.Name)
+                    @Html.DisplayFor(modelItem => item.Ext_Attr_Labor_Value)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Lane1.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Location1.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User1.Username)
+                    @Html.DisplayFor(modelItem => item.User.FirstName)
                 </td>
             </tr>
             }

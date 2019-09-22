@@ -10,31 +10,29 @@ using CopeyWinery.Models;
 
 namespace CopeyWinery.Controllers
 {
-    public class LaborsController : Controller
+    public class ExtendedAttributesController : Controller
     {
         private DB_Entities db = new DB_Entities();
 
-        // GET: Labors
+        // GET: ExtendedAttributes
         public ActionResult Index(bool? deleted, bool? added, bool? updated)
         {
-            var model = db.Labors.Include(u => u.ExtendedAttribute).ToList();
-
-
+            var model = db.ExtendedAttributes.ToList();
             if (deleted != null || added != null || updated != null)
             {
                 if (deleted == true)
                 {
-                    ModelState.AddModelError("", "Labor eliminada satisfactoriamente");
+                    ModelState.AddModelError("", "Atributo eliminado satisfactoriamente");
                 }
                 else
                 {
                     if (added == true)
                     {
-                        ModelState.AddModelError("", "Labor agregada satisfactoriamente");
+                        ModelState.AddModelError("", "Atributo agregado satisfactoriamente");
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Labor editada satisfactoriamente");
+                        ModelState.AddModelError("", "Atributo editado satisfactoriamente");
 
                     }
                 }
@@ -42,98 +40,88 @@ namespace CopeyWinery.Controllers
             return View(model);
         }
 
-
-        // GET: Labors/Details/5
+        // GET: ExtendedAttributes/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Labor labor = db.Labors.Find(id);
-            if (labor == null)
+            ExtendedAttribute extendedAttribute = db.ExtendedAttributes.Find(id);
+            if (extendedAttribute == null)
             {
                 return HttpNotFound();
             }
-            return View(labor);
+            return View(extendedAttribute);
         }
 
-        // GET: Labors/Create
+        // GET: ExtendedAttributes/Create
         public ActionResult Create()
         {
-            ViewBag.Id_ExtAttr = new SelectList(db.ExtendedAttributes, "Id_ExtAttr", "Name");
-            
             return View();
         }
 
-        // POST: Labors/Create
+        // POST: ExtendedAttributes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name, Id_ExtAttr")] Labor labor)
+        public ActionResult Create([Bind(Include = "Id_ExtAttr,Name")] ExtendedAttribute extendedAttribute)
         {
-            ViewBag.Id_ExtAttr = new SelectList(db.ExtendedAttributes, "Id_ExtAttr", "Name", labor.Id_ExtAttr);
-
-
-            if (labor.Name == null)
+            if (extendedAttribute.Name == null)
             {
-                ModelState.AddModelError("", "Debe seleccionar un nombre para la labor ");
+                ModelState.AddModelError("", "Debe indicar un nombre para la atributo");
             }
             if (ModelState.IsValid)
             {
                 try
                 {
-                    db.Labors.Add(labor);
+                    db.ExtendedAttributes.Add(extendedAttribute);
                     db.SaveChanges();
                     return RedirectToAction("Index", new { added = true });
                 }
                 catch (Exception)
                 {
                     ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
-                    return View(labor);
+
+                    return View(extendedAttribute);
                 }
             }
-
-
-
-            
-
-            return View(labor);
+            return View(extendedAttribute);
         }
 
-        // GET: Labors/Edit/5
+        // GET: ExtendedAttributes/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Labor labor = db.Labors.Find(id);
-            if (labor == null)
+            ExtendedAttribute extendedAttribute = db.ExtendedAttributes.Find(id);
+            if (extendedAttribute == null)
             {
                 return HttpNotFound();
             }
-           
-            return View(labor);
+            return View(extendedAttribute);
         }
 
-        // POST: Labors/Edit/5
+        // POST: ExtendedAttributes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id_labor,Name, ExtendedAttribute")] Labor labor)
+        public ActionResult Edit([Bind(Include = "Id_ExtAttr,Name")] ExtendedAttribute extendedAttribute)
         {
-            if (labor.Name==null)
+
+            if (extendedAttribute.Name == null)
             {
-                ModelState.AddModelError("", "Debe indicar un nombre para la labor");
+                ModelState.AddModelError("", "Debe indicar un nombre para el atributo");
             }
             if (ModelState.IsValid)
             {
                 try
                 {
-                    db.Entry(labor).State = EntityState.Modified;
+                    db.Entry(extendedAttribute).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index", new { updated = true });
                 }
@@ -141,45 +129,44 @@ namespace CopeyWinery.Controllers
                 {
                     ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
 
-                    return View(labor);
+                    return View(extendedAttribute);
                 }
             }
-            return View(labor);
+            return View(extendedAttribute);
         }
 
-        // GET: Labors/Delete/5
+        // GET: ExtendedAttributes/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Labor labor = db.Labors.Find(id);
-            if (labor == null)
+            ExtendedAttribute extendedAttribute = db.ExtendedAttributes.Find(id);
+            if (extendedAttribute == null)
             {
                 return HttpNotFound();
             }
-            return View(labor);
+            return View(extendedAttribute);
         }
 
-        // POST: Labors/Delete/5
+        // POST: ExtendedAttributes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Labor labor = db.Labors.Find(id);
-
+            ExtendedAttribute extendedAttribute = db.ExtendedAttributes.Find(id);
             try
             {
-                db.Labors.Remove(labor);
+                db.ExtendedAttributes.Remove(extendedAttribute);
                 db.SaveChanges();
                 return RedirectToAction("Index", new { deleted = true });
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "No es posible eliminar esta labor, compruebe que no este ligado a ninguna tarea registrada");
+                ModelState.AddModelError("", "No es posible eliminar este atributo, compruebe que no este ligado a ninguna labor");
 
-                return View(labor);
+                return View(extendedAttribute);
             }
         }
 
