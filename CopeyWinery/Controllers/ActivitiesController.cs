@@ -16,9 +16,20 @@ namespace CopeyWinery.Controllers
         private DB_Entities db = new DB_Entities();
 
         // GET: Activities
-        public ActionResult Index()
+        public ActionResult Index(bool? deleted, bool? added)
         {
-            return View(db.Activities.ToList());
+            var model = db.Activities.ToList();
+            if (deleted != null || added !=null) {
+                if (deleted == true)
+                {
+                    ModelState.AddModelError("", "Actividad eliminada satisfactoriamente");
+                }
+                else {
+                    ModelState.AddModelError("", "Actividad agregada satisfactoriamente");
+                }
+
+            }
+            return View(model);
         }
 
         // GET: Activities/Details/5
@@ -113,30 +124,19 @@ namespace CopeyWinery.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            try{
-                Activity activity = db.Activities.Find(id);
+            Activity activity = db.Activities.Find(id);
+
+            try
+            {
                 db.Activities.Remove(activity);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { deleted = true });
             }
-            catch (SqlException ex)
+            catch (Exception ex)
             {
-                if (ex.Errors.Count > 0) // Assume the interesting stuff is in the first error
-                {
-                    switch (ex.Errors[0].Number)
-                    {
-                        case 547: // Foreign Key violation
+                ModelState.AddModelError("", "No es posible eliminar esta actividad, compruebe que no este ligada a ninguna tarea registrada");
 
-                            throw new InvalidOperationException("Some helpful description", ex);
-
-                        default:
-                            return RedirectToAction("Index");
-                    }
-
-                }
-                return RedirectToAction("Index");
-
-
+                return View(activity);
             }
 
         }

@@ -11,6 +11,8 @@
 <p>
     @Html.ActionLink("Agregar", "Create")
 </p>
+@Html.ValidationSummary(true, "", new { @class = "text-success" })
+
 <table class="table">
     <tr>
         <th>
