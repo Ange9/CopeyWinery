@@ -434,7 +434,7 @@ namespace CopeyWinery.Controllers
         public ActionResult Edit([Bind(Include = "Task_Id,Name,Date,Number_hours,Hour_type,UserId,Activity_Id,Id_labor,Id_location,Ext_Attr_Labor_Value")] Task task)
         {
 
-            if (task.Date== null || task.Number_hours==null || task.Hour_type==null || task.UserId==null || task.Activity_Id== null || task.Id_labor==null || task.Id_location==null)
+            if (task.Date== null || task.Number_hours==null || task.Hour_type==null )
             {
                 ModelState.AddModelError("", "Todos los campos son requeridos");
             }

@@ -114,7 +114,9 @@ namespace CopeyWinery.Controllers
             {
                 return HttpNotFound();
             }
-           
+            ViewBag.Id_ExtAttr = new SelectList(db.ExtendedAttributes, "Id_ExtAttr", "Name");
+
+
             return View(labor);
         }
 
@@ -123,8 +125,10 @@ namespace CopeyWinery.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id_labor,Name, ExtendedAttribute")] Labor labor)
+        public ActionResult Edit([Bind(Include = "Id_labor,Name, Id_ExtAttr")] Labor labor)
         {
+            ViewBag.Id_ExtAttr = new SelectList(db.ExtendedAttributes, "Id_ExtAttr", "Name", labor.Id_ExtAttr);
+
             if (labor.Name==null)
             {
                 ModelState.AddModelError("", "Debe indicar un nombre para la labor");
