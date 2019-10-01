@@ -1,95 +1,140 @@
 ﻿@model IEnumerable<CopeyWinery.Models.Task>
 
 @{
-    ViewBag.Title = "Index";
+	ViewBag.Title = "Index";
+}
+
+
+@section Scripts {
+
+	@Scripts.Render("~/bundles/jqueryui")
+	@Styles.Render("~/Content/cssjqryUi")
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('input[type=datetime]').datepicker({
+				dateFormat: "dd/M/yy",
+				changeMonth: true,
+				changeYear: true,
+				yearRange: "-60:+0"
+			});
+
+		});
+	</script>
 }
 
 <p>
-    @Html.ActionLink("Crear Tarea", "Create")
+	@Html.ActionLink("Crear Tarea", "Create")
 </p>
 @Html.ValidationSummary(true, "", new { @class = "text-success" })
 
 @if (User.IsInRole("Administrator"))
 {
-    <p>
-        @Html.ActionLink("Exportar a Excel", "ExportView")
-    </p>
+	<p>
+		@Html.ActionLink("Exportar a Excel", "ExportView")
+	</p>
 }
+	<div lang="fr">
+		<label for="startDate">Fecha inicio:</label>
+
+		<input type="date" id="startDate"
+			   name="startDate">
+
+		<label for="endDate-time">Fecha final:</label>
+
+		<input type="date" id="endDate"
+			   name="endDate">
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Fecha
-            </th>
-            <th>
-                Cant. Horas
-            </th>
-            <th>
-                Tipo de Hora
-            </th>
-            @*<th>
-                    Cantidad
-                </th>
-                <th>
-                    Unidad
-                </th>*@
-            <th>
-                Actividad
-            </th>
-            <th>
-                Labor
-            </th>
-            @*<th>
-                    Calles
-                </th>*@
-            <th>
-                Ubicacion
-            </th>
-            <th>
-                Colaborador
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Date)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Number_hours)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Hour_type)
-                </td>
+		<div class="form-group">
+			@Html.Label("Colaborador", htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
+			</div>
+		</div>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Activity.Activity_name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Labor.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Location.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User.FirstName)
-                </td>
-                <td>
-                    @Html.ActionLink("Editar", "Edit", new { id = item.Task_Id }) |
-                    @*@Html.ActionLink("Detalles", "Details", new { id = item.Task_Id }) |*@
-                    @Html.ActionLink("Eliminar", "Delete", new { id = item.Task_Id })
-                </td>
-            </tr>
-        }
-    </tbody>
+	</div>
 
 
 
 
 
-</table>
+
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					Fecha
+				</th>
+				<th>
+					Cant. Horas
+				</th>
+				<th>
+					Tipo de Hora
+				</th>
+				@*<th>
+						Cantidad
+					</th>
+					<th>
+						Unidad
+					</th>*@
+				<th>
+					Actividad
+				</th>
+				<th>
+					Labor
+				</th>
+				@*<th>
+						Calles
+					</th>*@
+				<th>
+					Ubicacion
+				</th>
+				<th>
+					Colaborador
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Date)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Number_hours)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Hour_type)
+					</td>
+
+					<td>
+						@Html.DisplayFor(modelItem => item.Activity.Activity_name)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Labor.Name)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Location.Name)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.User.FirstName)
+					</td>
+					<td>
+						@Html.ActionLink("Editar", "Edit", new { id = item.Task_Id }) |
+						@*@Html.ActionLink("Detalles", "Details", new { id = item.Task_Id }) |*@
+						@Html.ActionLink("Eliminar", "Delete", new { id = item.Task_Id })
+					</td>
+				</tr>
+			}
+		</tbody>
+
+
+
+
+
+	</table>

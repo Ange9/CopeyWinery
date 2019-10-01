@@ -282,6 +282,7 @@
     <Content Include="Models\EntityModel.edmx.diagram">
       <DependentUpon>EntityModel.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\DBScripts\scripts.sql" />
     <Content Include="Scripts\DBScripts\DBScripts.sql" />
