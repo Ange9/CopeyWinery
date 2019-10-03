@@ -11,12 +11,26 @@
     @Styles.Render("~/Content/cssjqryUi")
 
 
-    <script type="text/javascript">
-        $(function () {
-            // This will make every element with the class "date-picker" into a DatePicker element
-            $('.date-picker').datepicker();
-        })
+ 
 
+    <script type="text/javascript">
+        
+
+
+        $.datepicker.regional['es'] = {
+            closeText: 'Cerrar', // set a close button text
+            currentText: 'Hoy', // set today text
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'], // set month names
+            monthNamesShort: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'], // set short month names
+            //dayNames: ['Domenica', 'Luned&#236', 'Marted&#236', 'Mercoled&#236', 'Gioved&#236', 'Venerd&#236', 'Sabato'], // set days names
+            //dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'], // set short day names
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Me', 'Ju', 'Vi', 'Sa'], // set more short days names
+            dateFormat: 'dd/mm/yy' // set format date
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        $(".date-picker").datepicker();
     </script>
 
 }
@@ -39,111 +53,117 @@
     <form autocomplete="off">
         <p>
             Nombre: @Html.TextBox("SearchString")
+            Fecha inicial: @Html.Editor("startDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+            Fecha final: @Html.Editor("endDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+            <input type="submit" value="Filtrar" class="btn btn-default" /> <span> </span>
+
+
         </p>
 
+
+        @*<div class="form-group-sm">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Filtrar" class="btn btn-default" /> <span> </span>
+            </div>
+        </div>*@
         <div class="form-horizontal">
-            <div class="form-group form-group-sm">
+            @*<div class="form-group form-group-sm">
                 <div class="col-md-8">
                     Fecha inicial: @Html.Editor("startDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
 
-                    @*Fecha inicial: @Html.TextBox("startDate", "", new { @class = "date-picker" })*@
                 </div>
             </div>
             <div class="form-group form-group-sm">
                 <div class="col-md-8">
                     Fecha final: @Html.Editor("endDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
                 </div>
-            </div>
-            <div class="form-group-sm">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default" /> <span> </span>
-                </div>
-            </div>
+            </div>*@
+
         </div>
-        </form>
+    </form>
 
+}
+
+
+
+
+
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Fecha
+            </th>
+            <th>
+                Cant. Horas
+            </th>
+            <th>
+                Tipo de Hora
+            </th>
+            @*<th>
+                    Cantidad
+                </th>
+                <th>
+                    Unidad
+                </th>*@
+            <th>
+                Actividad
+            </th>
+            <th>
+                Labor
+            </th>
+            @*<th>
+                    Calles
+                </th>*@
+            <th>
+                Ubicacion
+            </th>
+            <th>
+                Colaborador
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Number_hours)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Hour_type)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Activity.Activity_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Labor.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.FirstName)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.Task_Id }) |
+                    @*@Html.ActionLink("Detalles", "Details", new { id = item.Task_Id }) |*@
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.Task_Id })
+                </td>
+            </tr>
         }
+    </tbody>
 
 
 
 
 
-
-
-
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Fecha
-                    </th>
-                    <th>
-                        Cant. Horas
-                    </th>
-                    <th>
-                        Tipo de Hora
-                    </th>
-                    @*<th>
-                            Cantidad
-                        </th>
-                        <th>
-                            Unidad
-                        </th>*@
-                    <th>
-                        Actividad
-                    </th>
-                    <th>
-                        Labor
-                    </th>
-                    @*<th>
-                            Calles
-                        </th>*@
-                    <th>
-                        Ubicacion
-                    </th>
-                    <th>
-                        Colaborador
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Date)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Number_hours)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Hour_type)
-                        </td>
-
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Activity.Activity_name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Labor.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Location.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.User.FirstName)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Editar", "Edit", new { id = item.Task_Id }) |
-                            @*@Html.ActionLink("Detalles", "Details", new { id = item.Task_Id }) |*@
-                            @Html.ActionLink("Eliminar", "Delete", new { id = item.Task_Id })
-                        </td>
-                    </tr>
-                }
-            </tbody>
-
-
-
-
-
-        </table>
+</table>
