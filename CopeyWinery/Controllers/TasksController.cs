@@ -28,11 +28,27 @@ namespace CopeyWinery.Controllers
     {
         private DB_Entities db = new DB_Entities();
 
-        // GET: Tasks
-        [Authorize]
-        public ActionResult Index(bool? deleted, bool? added, bool? updated, bool? addFailed)
+        //public ViewResult Index( string searchString)
+        //{
+
+        //    var tasks = from s in db.Tasks
+        //                   select s;
+        //    if (!String.IsNullOrEmpty(searchString))
+        //    {
+        //        tasks = tasks.Where(s => s.User.Username.Contains(searchString));
+        //    }
+
+
+        //    return View(tasks.ToList());
+        //}
+
+        //GET: Tasks
+       [Authorize]
+        public ActionResult Index(bool? deleted, bool? added, bool? updated, bool? addFailed, string searchString, DateTime? startDate, DateTime? endDate)
         {
-         
+            ViewBag.start = startDate;
+            ViewBag.end = endDate;
+
             if (deleted != null || added != null || updated != null)
             {
                 if (deleted == true)
@@ -52,7 +68,8 @@ namespace CopeyWinery.Controllers
                             ModelState.AddModelError("", "Tarea agregada satisfactoriamente");
 
                         }
-                        else {
+                        else
+                        {
                             ModelState.AddModelError("", "No se ha podido agregar la tarea");
 
                         }
@@ -65,16 +82,30 @@ namespace CopeyWinery.Controllers
                 return RedirectToAction("Index", "Home");
 
             }
+            var tasks = from s in db.Tasks
+                        select s;
+
             if (!User.IsInRole("Administrator"))
             {
-                 var tasks = db.Tasks.Include(t => t.Activity).Include(t => t.Labor).Include(t => t.Location).Include(t => t.User).Where(x=> x.User.Username== User.Identity.Name);
-                return View(tasks);
+                tasks = tasks.Where(s => s.User.FirstName.Contains(searchString))
+                    .Where(x => x.User.Username == User.Identity.Name);
+                return View(tasks.ToList());
 
             }
-            else {
-                 var tasks = db.Tasks.Include(t => t.Activity).Include(t => t.Labor).Include(t => t.Location).Include(t => t.User);
-                return View(tasks);
-
+            else
+            {
+                if (!String.IsNullOrEmpty(searchString))
+                {                
+                    tasks = tasks.Where(s => s.User.FirstName.Contains(searchString));
+                }
+                if (startDate != null) {
+                    tasks = tasks.Where(s => s.Date >= (startDate));
+                }
+                if (endDate != null)
+                {
+                    tasks = tasks.Where(s => s.Date <= (endDate));
+                }
+                return View(tasks.ToList());
             }
 
         }
