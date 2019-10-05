@@ -89,6 +89,9 @@ namespace CopeyWinery.Controllers
             {
                 tasks = tasks.Where(s => s.User.FirstName.Contains(searchString))
                     .Where(x => x.User.Username == User.Identity.Name);
+                foreach (Task task in tasks) {
+                    task.Date.Value.ToString("dd/MM/yyyy");
+                }
                 return View(tasks.ToList());
 
             }
