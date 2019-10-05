@@ -2,9 +2,12 @@
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "patient-satisfaction-survey-page-1", @class = "full-form" }))
 {
-    @Html.ValidationSummary(true)
+    <p></p>
+    @*@Html.ValidationSummary(true)*@
     @Html.AntiForgeryToken()
     @Html.HiddenFor(_ => _.Date)
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
 
     <div class="form-group">
         @*@Html.LabelFor("Cantidad de horas", htmlAttributes: new { @class = "control-label col-md-2" })*@

@@ -4,6 +4,7 @@
     ViewBag.Title = "Index";
 }
 
+<link href="~/fonts/styles.css" rel="stylesheet" type="text/css">
 
 @section Scripts {
 
@@ -11,12 +12,9 @@
     @Styles.Render("~/Content/cssjqryUi")
 
 
- 
+
 
     <script type="text/javascript">
-        
-
-
         $.datepicker.regional['es'] = {
             closeText: 'Cerrar', // set a close button text
             currentText: 'Hoy', // set today text
@@ -55,29 +53,29 @@
             Nombre: @Html.TextBox("SearchString")
             Fecha inicial: @Html.Editor("startDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
             Fecha final: @Html.Editor("endDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
-            <input type="submit" value="Filtrar" class="btn btn-default" /> <span> </span>
+            <input type="submit" value="Filtrar" class="class=" submitBottom"" /> <span> </span>
 
 
         </p>
 
 
         @*<div class="form-group-sm">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Filtrar" class="btn btn-default" /> <span> </span>
-            </div>
-        </div>*@
-        <div class="form-horizontal">
-            @*<div class="form-group form-group-sm">
-                <div class="col-md-8">
-                    Fecha inicial: @Html.Editor("startDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
-
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <div class="col-md-8">
-                    Fecha final: @Html.Editor("endDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Filtrar" class="btn btn-default" /> <span> </span>
                 </div>
             </div>*@
+        <div class="form-horizontal">
+            @*<div class="form-group form-group-sm">
+                    <div class="col-md-8">
+                        Fecha inicial: @Html.Editor("startDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <div class="col-md-8">
+                        Fecha final: @Html.Editor("endDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+                    </div>
+                </div>*@
 
         </div>
     </form>

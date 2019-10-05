@@ -282,7 +282,12 @@ namespace CopeyWinery.Controllers
                             .Select(x=> x.ExtendedAttribute.Name)                          
                             .FirstOrDefault();
             ViewBag.Ext_Attr = ex;
+            if (ex==null)
+            {
+                return RedirectToAction("Add_Location", taskObj);
+            }
             return View(task);
+
         }
 
         [HttpPost]
@@ -294,9 +299,10 @@ namespace CopeyWinery.Controllers
             {
                 ModelState.AddModelError("", "Debe seleccionar un valor");
             }
+
+
             if (ModelState.IsValid)
             {
-
                 TaskObject taskObject = new TaskObject();
                 taskObject.Date = model.Date;
                 taskObject.Number_hours = model.Number_hours;
@@ -305,8 +311,10 @@ namespace CopeyWinery.Controllers
                 taskObject.Labor = model.Id_labor;
                 taskObject.Ext_Attr = model.Ext_Attr_Labor_Value;
                 return RedirectToAction("Add_Location", taskObject);
+                
             }
             return View(model);
+            
         }
 
 
