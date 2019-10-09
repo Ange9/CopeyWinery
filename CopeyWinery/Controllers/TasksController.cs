@@ -46,70 +46,80 @@ namespace CopeyWinery.Controllers
        [Authorize]
         public ActionResult Index(bool? deleted, bool? added, bool? updated, bool? addFailed, string searchString, DateTime? startDate, DateTime? endDate)
         {
-            ViewBag.start = startDate;
-            ViewBag.end = endDate;
-
-            if (deleted != null || added != null || updated != null)
+            try
             {
-                if (deleted == true)
+                ViewBag.start = startDate;
+                ViewBag.end = endDate;
+
+                if (deleted != null || added != null || updated != null)
                 {
-                    ModelState.AddModelError("", "Tarea eliminada satisfactoriamente");
-                }
-                else
-                {
-                    if (updated == true)
+                    if (deleted == true)
                     {
-                        ModelState.AddModelError("", "Tarea editada satisfactoriamente");
+                        ModelState.AddModelError("", "Tarea eliminada satisfactoriamente");
                     }
                     else
                     {
-                        if (added != null)
+                        if (updated == true)
                         {
-                            ModelState.AddModelError("", "Tarea agregada satisfactoriamente");
-
+                            ModelState.AddModelError("", "Tarea editada satisfactoriamente");
                         }
                         else
                         {
-                            ModelState.AddModelError("", "No se ha podido agregar la tarea");
+                            if (added != null)
+                            {
+                                ModelState.AddModelError("", "Tarea agregada satisfactoriamente");
+
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("", "No se ha podido agregar la tarea");
+
+                            }
 
                         }
-
                     }
                 }
-            }
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-
-            }
-            var tasks = from s in db.Tasks
-                        select s;
-
-            if (!User.IsInRole("Administrator"))
-            {
-                tasks = tasks.Where(s => s.User.FirstName.Contains(searchString))
-                    .Where(x => x.User.Username == User.Identity.Name);
-                foreach (Task task in tasks) {
-                    task.Date.Value.ToString("dd/MM/yyyy");
-                }
-                return View(tasks.ToList());
-
-            }
-            else
-            {
-                if (!String.IsNullOrEmpty(searchString))
-                {                
-                    tasks = tasks.Where(s => s.User.FirstName.Contains(searchString));
-                }
-                if (startDate != null) {
-                    tasks = tasks.Where(s => s.Date >= (startDate));
-                }
-                if (endDate != null)
+                if (!User.Identity.IsAuthenticated)
                 {
-                    tasks = tasks.Where(s => s.Date <= (endDate));
+                    return RedirectToAction("Index", "Home");
+
                 }
-                return View(tasks.ToList());
+                var tasks = from s in db.Tasks
+                            select s;
+
+                if (!User.IsInRole("Administrator"))
+                {
+                    tasks = tasks.Where(x => x.User.Username == User.Identity.Name);
+                    foreach (Task task in tasks)
+                    {
+                        task.Date.Value.ToString("dd/MM/yyyy");
+                    }
+                    return View(tasks.ToList());
+
+                }
+                else
+                {
+                    if (!String.IsNullOrEmpty(searchString))
+                    {
+                        tasks = tasks.Where(s => s.User.FirstName.Contains(searchString));
+                    }
+                    if (startDate != null)
+                    {
+                        tasks = tasks.Where(s => s.Date >= (startDate));
+                    }
+                    if (endDate != null)
+                    {
+                        tasks = tasks.Where(s => s.Date <= (endDate));
+                    }
+                    return View(tasks.ToList());
+                }
             }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
+                return RedirectToAction("Index", "Home");
+            }
+
 
         }
 
@@ -473,7 +483,7 @@ namespace CopeyWinery.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Task_Id,Name,Date,Number_hours,Hour_type,UserId,Activity_Id,Id_labor,Id_location,Ext_Attr_Labor_Value")] Task task)
+        public ActionResult Edit([Bind(Include = "Task_Id,Name,Date,Number_hours,Hour_type,UserId,Activity_Id,Id_location")] Task task)
         {
 
             if (task.Date== null || task.Number_hours==null || task.Hour_type==null )
@@ -484,22 +494,67 @@ namespace CopeyWinery.Controllers
             {
                 try
                 {
+                    var id_labor = db.Tasks.Where(x => x.Task_Id == task.Task_Id).Select(x => x.Id_labor).FirstOrDefault();
+                    var ext_attr = db.Tasks.Where(x => x.Task_Id == task.Task_Id).Select(x => x.Labor.Id_ExtAttr).FirstOrDefault();
+                    var ext_Attr_Labor_Value = db.Tasks.Where(x => x.Task_Id == task.Task_Id).Select(x => x.Ext_Attr_Labor_Value).FirstOrDefault();
+
+                    task.Id_labor = id_labor;
+                    task.Ext_Attr_Labor_Value = ext_Attr_Labor_Value;
+
                     db.Entry(task).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index", new { updated = true });
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
 
-                    return View(task);
+                    return RedirectToAction("Index", new { updated = false });
                 }
-                
+
             }
+            List<string> hourTypeOption = new List<string>();
+            if (task.Hour_type == "Ordinaria")
+            {
+                hourTypeOption.Add("Ordinaria");
+                hourTypeOption.Add("Extraordinaria");
+            }
+            else
+            {
+                hourTypeOption.Add("Extraordinaria");
+                hourTypeOption.Add("Ordinaria");
+            }
+
+
+            ViewBag.Hour_type = new SelectList(hourTypeOption);
             ViewBag.Activity_Id = new SelectList(db.Activities, "Activity_Id", "Activity_name", task.Activity_Id);
             ViewBag.Id_labor = new SelectList(db.Labors, "Id_labor", "Name", task.Id_labor);
             ViewBag.Id_location = new SelectList(db.Locations, "Id_location", "Name", task.Id_location);
             ViewBag.UserId = new SelectList(db.User, "UserId", "Username", task.UserId);
+           
+
+            try
+            {
+                var id_labor = db.Tasks.Where(x => x.Task_Id == task.Task_Id).Select(x => x.Id_labor).FirstOrDefault();
+                task.Id_labor = id_labor;
+
+                task.Ext_Attr_Labor_Value = db.Tasks.Where(x => x.Task_Id == task.Task_Id).Select(x => x.Ext_Attr_Labor_Value).FirstOrDefault();
+
+                var ex = db.Labors.Include(e => e.ExtendedAttribute)
+                .Where(x => x.Id_labor == task.Id_labor)
+                .Select(x => x.ExtendedAttribute.Name)
+                .FirstOrDefault();
+                ViewBag.Ext_Attr = ex;
+                
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
+
+                return RedirectToAction("Index", new { updated = false });
+            }
+
+
             return View(task);
         }
 

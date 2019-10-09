@@ -80,6 +80,10 @@ namespace CopeyWinery.Controllers
             {
                 ModelState.AddModelError("", "Debe seleccionar un nombre para la labor ");
             }
+            if (labor.Id_ExtAttr == null)
+            {
+                ModelState.AddModelError("", "Debe seleccionar un valor para el atributo extendido ");
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -114,7 +118,8 @@ namespace CopeyWinery.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Id_ExtAttr = new SelectList(db.ExtendedAttributes, "Id_ExtAttr", "Name");
+            ViewBag.Id_ExtAttr = new SelectList(db.ExtendedAttributes, "Id_ExtAttr", "Name", labor.Id_ExtAttr );
+
 
 
             return View(labor);
@@ -125,7 +130,7 @@ namespace CopeyWinery.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id_labor,Name, Id_ExtAttr")] Labor labor)
+        public ActionResult Edit([Bind(Include = "Id_labor,Name")] Labor labor)
         {
             ViewBag.Id_ExtAttr = new SelectList(db.ExtendedAttributes, "Id_ExtAttr", "Name", labor.Id_ExtAttr);
 
@@ -137,6 +142,8 @@ namespace CopeyWinery.Controllers
             {
                 try
                 {
+                    var id_ExtAttr = db.Labors.Where(x => x.Id_labor == labor.Id_labor).Select(x => x.Id_ExtAttr).FirstOrDefault();
+                    labor.Id_ExtAttr = id_ExtAttr;
                     db.Entry(labor).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index", new { updated = true });

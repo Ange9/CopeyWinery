@@ -1,0 +1,167 @@
+﻿@model IEnumerable<CopeyWinery.Models.Task>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<link href="~/fonts/styles.css" rel="stylesheet" type="text/css">
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/cssjqryUi")
+
+
+
+
+    <script type="text/javascript">
+        $.datepicker.regional['es'] = {
+            closeText: 'Cerrar', // set a close button text
+            currentText: 'Hoy', // set today text
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'], // set month names
+            monthNamesShort: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'], // set short month names
+            //dayNames: ['Domenica', 'Luned&#236', 'Marted&#236', 'Mercoled&#236', 'Gioved&#236', 'Venerd&#236', 'Sabato'], // set days names
+            //dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'], // set short day names
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Me', 'Ju', 'Vi', 'Sa'], // set more short days names
+            dateFormat: 'dd/mm/yy' // set format date
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        $(".date-picker").datepicker();
+
+
+/**/</script>
+
+}
+
+
+
+
+<br>
+
+
+
+    <link href="~/fonts/styles.css" rel="stylesheet" type="text/css">
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-success" })
+
+<div class="form-group">
+    <div class="col-md-offset--9 col-md-10">
+        Nombre: @Html.TextBox("SearchString")
+        Fecha inicial: @Html.Editor("startDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+        Fecha final: @Html.Editor("endDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+        <input type="submit" value="Filtrar" class="class=" submitBottom"" /> 
+
+        @*<input type="submit" value="Continuar" class="submitBottom" />*@
+        <input type="button" value="Crear Tarea" class="submitBottom" onclick="window.location.href='@Url.Action("Create", "Tasks")'" />
+        @if (User.IsInRole("Administrator"))
+        {
+            <input type="button" value="Exportar a Excel" class="submitBottom" onclick="window.location.href='@Url.Action("ExportView", "Tasks")'" />
+
+        }
+
+    </div>
+</div>
+
+    <br>
+
+
+
+    @*<div class="form-group">
+        <div class="col-md-offset-90 col-md-10">
+            <input type="button" value="Crear Tarea" class="submitBottom" onclick="window.location.href='@Url.Action("Create", "Tasks")'" />
+            @if (User.IsInRole("Administrator"))
+            {
+                <input type="button" value="Exportar a Excel" class="submitBottom" onclick="window.location.href='@Url.Action("ExportView", "Tasks")'" />
+
+            }
+
+        </div>
+    </div>*@
+
+
+    <br>
+
+
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Fecha
+                </th>
+                <th>
+                    Cant. Horas
+                </th>
+                <th>
+                    Tipo de Hora
+                </th>
+                @*<th>
+                        Cantidad
+                    </th>
+                    <th>
+                        Unidad
+                    </th>*@
+                <th>
+                    Actividad
+                </th>
+                <th>
+                    Labor
+                </th>
+                @*<th>
+                        Calles
+                    </th>*@
+                <th>
+                    Ubicacion
+                </th>
+                <th>
+                    Colaborador
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Number_hours)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Hour_type)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Activity.Activity_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Labor.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User.FirstName)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit", new { id = item.Task_Id }) |
+                        @*@Html.ActionLink("Detalles", "Details", new { id = item.Task_Id }) |*@
+                        @Html.ActionLink("Eliminar", "Delete", new { id = item.Task_Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+
+
+
+
+    </table>
+}
