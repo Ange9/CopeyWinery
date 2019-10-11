@@ -19,7 +19,6 @@ namespace CopeyWinery.Controllers
         {
             var model = db.User.Include(u => u.Role).ToList();
 
-
             if (deleted != null || added != null || updated != null)
             {
                 if (deleted == true)
@@ -87,7 +86,7 @@ namespace CopeyWinery.Controllers
                     db.SaveChanges();
                     return RedirectToAction("Index", new { added = true });
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
                     return View(user);

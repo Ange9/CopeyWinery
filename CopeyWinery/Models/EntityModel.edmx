@@ -70,7 +70,7 @@
           <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Username" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="Password" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="FirstName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="30" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="LastLoginDate" Type="datetime" />
@@ -289,7 +289,7 @@
           <Property Name="LastLoginDate" Type="DateTime" Precision="3" />
           <Property Name="RoleId" Type="Int32" />
           <NavigationProperty Name="Role" Relationship="Model.FK_Users_Roles" FromRole="User1" ToRole="Role" />
-          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Tasks" Relationship="Model.FK_Task_User" FromRole="User" ToRole="Task" />
           </EntityType>
         <Association Name="FK_Users_Roles">

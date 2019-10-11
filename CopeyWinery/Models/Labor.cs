@@ -27,6 +27,5 @@ namespace CopeyWinery.Models
         public virtual ExtendedAttribute ExtendedAttribute { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Task> Tasks { get; set; }
-
     }
 }
