@@ -80,10 +80,10 @@ namespace CopeyWinery.Controllers
             {
                 ModelState.AddModelError("", "Debe seleccionar un nombre para la labor ");
             }
-            if (labor.Id_ExtAttr == null)
-            {
-                ModelState.AddModelError("", "Debe seleccionar un valor para el atributo extendido ");
-            }
+            //if (labor.Id_ExtAttr == null)
+            //{
+            //    ModelState.AddModelError("", "Debe seleccionar un valor para el atributo extendido ");
+            //}
             if (ModelState.IsValid)
             {
                 try
@@ -113,16 +113,39 @@ namespace CopeyWinery.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Labor labor = db.Labors.Find(id);
-            if (labor == null)
+            try
             {
-                return HttpNotFound();
+                Labor labor = db.Labors.Find(id);
+                if (labor == null)
+                {
+                    return HttpNotFound();
+                }
+                List<string> extAttr = new List<string>();
+
+                if (labor.Id_ExtAttr == null)
+                {
+                    extAttr.Add("--");
+
+                }
+                else {
+                    extAttr.Add(labor.ExtendedAttribute.Name);
+                }
+                ViewBag.Id_ExtAttr = new SelectList(extAttr);
+
+                //ViewBag.Id_ExtAttr = new SelectList(db.ExtendedAttributes, "Id_ExtAttr", "Name", labor.Id_ExtAttr);
+
+
+
+                return View(labor);
             }
-            ViewBag.Id_ExtAttr = new SelectList(db.ExtendedAttributes, "Id_ExtAttr", "Name", labor.Id_ExtAttr );
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
+                return RedirectToAction("Index", new { added = true });
 
-
-
-            return View(labor);
+            }
+           
+ 
         }
 
         // POST: Labors/Edit/5
