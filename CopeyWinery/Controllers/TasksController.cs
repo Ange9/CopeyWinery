@@ -155,7 +155,9 @@ namespace CopeyWinery.Controllers
             {
                 TaskObject taskObject = new TaskObject();
                 taskObject.Date = model.Date;
-                return RedirectToAction("Add_Num_Hours", taskObject);
+                //return RedirectToAction("Add_Num_Hours", taskObject);
+                return RedirectToAction("CreateTask", taskObject);
+
             }
             return View(model);
         }
@@ -377,10 +379,10 @@ namespace CopeyWinery.Controllers
             task.Date = taskObj.Date;
             task.Number_hours = taskObj.Number_hours;
             task.Hour_type = taskObj.Hour_type;
-            task.Activity_Id = taskObj.Activity;
-            task.Id_labor = taskObj.Labor;
-            task.Ext_Attr_Labor_Value = taskObj.Ext_Attr;
-            task.Id_location = taskObj.Location;
+            task.Activity_Id = 1;// taskObj.Activity;
+            task.Id_labor = 1035;//taskObj.Labor;
+            task.Ext_Attr_Labor_Value = 8;//taskObj.Ext_Attr;
+            task.Id_location = 8;//taskObj.Location;
             task.Name = task.Task_Id.ToString();
             try
             {
@@ -389,7 +391,7 @@ namespace CopeyWinery.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index", new { added = true });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
                 return RedirectToAction("Index", new { addFailed = true });

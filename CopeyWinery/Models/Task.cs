@@ -11,11 +11,14 @@ namespace CopeyWinery.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Task
     {
         public int Task_Id { get; set; }
         public string Name { get; set; }
+        [Required(ErrorMessage = "Enter the issued date.")]
+        [DataType(DataType.Date)]
         public Nullable<System.DateTime> Date { get; set; }
         public Nullable<int> Number_hours { get; set; }
         public string Hour_type { get; set; }
