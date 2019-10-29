@@ -138,10 +138,18 @@ namespace CopeyWinery.Controllers
             return View(task);
         }
 
-        public ActionResult Create()
+        public ActionResult Create(TaskObject taskObj)
         {
-            return View(new Task());
+            Task task = new Task();
+            task.Number_hours = taskObj.Number_hours;
+            task.Hour_type = taskObj.Hour_type;
+            task.Activity_Id = taskObj.Activity;
+            task.Id_labor = taskObj.Labor;
+            task.Ext_Attr_Labor_Value = taskObj.Ext_Attr;
+            task.Id_location = taskObj.Location;
+            return View(task);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken()]
@@ -155,7 +163,12 @@ namespace CopeyWinery.Controllers
             {
                 TaskObject taskObject = new TaskObject();
                 taskObject.Date = model.Date;
-                //return RedirectToAction("Add_Num_Hours", taskObject);
+                taskObject.Number_hours = model.Number_hours;
+                taskObject.Hour_type = model.Hour_type;
+                taskObject.Activity = model.Activity_Id;
+                taskObject.Labor = model.Id_labor;
+                taskObject.Ext_Attr = model.Ext_Attr_Labor_Value;
+                taskObject.Location = model.Id_location;
                 return RedirectToAction("CreateTask", taskObject);
 
             }
@@ -165,7 +178,6 @@ namespace CopeyWinery.Controllers
         public ActionResult Add_Num_Hours(TaskObject taskObj)
         {
             Task task = new Task();
-            task.Date = taskObj.Date;
             return View(task);
         }
 
@@ -180,7 +192,6 @@ namespace CopeyWinery.Controllers
             if (ModelState.IsValid)
             {
                 TaskObject taskObject = new TaskObject();
-                taskObject.Date = model.Date;
                 taskObject.Number_hours = model.Number_hours;
                 return RedirectToAction("Add_Hour_type", taskObject);
             }
@@ -190,7 +201,6 @@ namespace CopeyWinery.Controllers
         public ActionResult Add_Hour_type(TaskObject taskObj)
         {
             Task task = new Task();
-            task.Date = taskObj.Date;
             task.Number_hours = taskObj.Number_hours;
             List<string> hourTypeOption = new List<string>();
             hourTypeOption.Add("Ordinaria");
@@ -210,7 +220,6 @@ namespace CopeyWinery.Controllers
             if (ModelState.IsValid)
             {
                 TaskObject taskObject = new TaskObject();
-                taskObject.Date = model.Date;
                 taskObject.Number_hours = model.Number_hours;
                 taskObject.Hour_type= model.Hour_type;
                 return RedirectToAction("Add_Activity", taskObject);
@@ -222,7 +231,6 @@ namespace CopeyWinery.Controllers
         public ActionResult Add_Activity(TaskObject taskObj)
         {
             Task task = new Task();
-            task.Date = taskObj.Date;
             task.Number_hours = taskObj.Number_hours;
             task.Hour_type = taskObj.Hour_type;          
             ViewBag.Activity_Id = new SelectList(db.Activities, "Activity_Id", "Activity_name");
@@ -242,7 +250,6 @@ namespace CopeyWinery.Controllers
             {
               
                 TaskObject taskObject = new TaskObject();
-                taskObject.Date = model.Date;
                 taskObject.Number_hours = model.Number_hours;
                 taskObject.Hour_type = model.Hour_type;
                 taskObject.Activity = model.Activity_Id;
@@ -254,7 +261,6 @@ namespace CopeyWinery.Controllers
         public ActionResult Add_Labor(TaskObject taskObj)
         {
             Task task = new Task();
-            task.Date = taskObj.Date;
             task.Number_hours = taskObj.Number_hours;
             task.Hour_type = taskObj.Hour_type;
             task.Activity_Id = taskObj.Activity;
@@ -275,7 +281,6 @@ namespace CopeyWinery.Controllers
             {
 
                 TaskObject taskObject = new TaskObject();
-                taskObject.Date = model.Date;
                 taskObject.Number_hours = model.Number_hours;
                 taskObject.Hour_type = model.Hour_type;
                 taskObject.Activity = model.Activity_Id;
@@ -287,7 +292,6 @@ namespace CopeyWinery.Controllers
         public ActionResult Add_Ext_Attr(TaskObject taskObj)
         {
             Task task = new Task();
-            task.Date = taskObj.Date;
             task.Number_hours = taskObj.Number_hours;
             task.Hour_type = taskObj.Hour_type;
             task.Activity_Id = taskObj.Activity;
@@ -319,7 +323,6 @@ namespace CopeyWinery.Controllers
             if (ModelState.IsValid)
             {
                 TaskObject taskObject = new TaskObject();
-                taskObject.Date = model.Date;
                 taskObject.Number_hours = model.Number_hours;
                 taskObject.Hour_type = model.Hour_type;
                 taskObject.Activity = model.Activity_Id;
@@ -337,7 +340,6 @@ namespace CopeyWinery.Controllers
         public ActionResult Add_Location(TaskObject taskObj)
         {
             Task task = new Task();
-            task.Date = taskObj.Date;
             task.Number_hours = taskObj.Number_hours;
             task.Hour_type = taskObj.Hour_type;
             task.Activity_Id = taskObj.Activity;
@@ -360,14 +362,13 @@ namespace CopeyWinery.Controllers
             {
 
                 TaskObject taskObject = new TaskObject();
-                taskObject.Date = model.Date;
                 taskObject.Number_hours = model.Number_hours;
                 taskObject.Hour_type = model.Hour_type;
                 taskObject.Activity = model.Activity_Id;
                 taskObject.Labor = model.Id_labor;
                 taskObject.Ext_Attr = model.Ext_Attr_Labor_Value;
                 taskObject.Location = model.Id_location;
-                return RedirectToAction("CreateTask", taskObject);
+                return RedirectToAction("Create", taskObject);
             }
             return View(model);
         }
@@ -379,10 +380,10 @@ namespace CopeyWinery.Controllers
             task.Date = taskObj.Date;
             task.Number_hours = taskObj.Number_hours;
             task.Hour_type = taskObj.Hour_type;
-            task.Activity_Id = 1;// taskObj.Activity;
-            task.Id_labor = 1035;//taskObj.Labor;
-            task.Ext_Attr_Labor_Value = 8;//taskObj.Ext_Attr;
-            task.Id_location = 8;//taskObj.Location;
+            task.Activity_Id = taskObj.Activity;
+            task.Id_labor = taskObj.Labor;
+            task.Ext_Attr_Labor_Value =taskObj.Ext_Attr;
+            task.Id_location = taskObj.Location;
             task.Name = task.Task_Id.ToString();
             try
             {

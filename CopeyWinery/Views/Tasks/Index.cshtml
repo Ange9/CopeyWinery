@@ -25,7 +25,7 @@
 }
 
 <p>
-    <input type="button" value="Crear Tarea" class="addBottom" onclick="window.location.href='@Url.Action("Create", "Tasks")'" />
+    <input type="button" value="Crear Tarea" class="addBottom" onclick="window.location.href='@Url.Action("Add_Num_Hours", "Tasks")'" />
     @if (User.IsInRole("Administrator"))
     {
         <input type="button" value="Exportar a Excel" class="cancelBottom" onclick="window.location.href='@Url.Action("ExportView", "Tasks")'" />
