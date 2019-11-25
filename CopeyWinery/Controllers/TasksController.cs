@@ -8,17 +8,19 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CopeyWinery.Models;
+using PagedList;
+
 
 namespace CopeyWinery.Controllers
 {
     public class TaskObject
     {
         public DateTime? Date { get; set; }
-        public int? Number_hours { get; set; }
+        public String Number_hours { get; set; }
         public string Hour_type { get; set; }
         public int Activity { get; set; }
         public int Labor { get; set; }
-        public int? Ext_Attr { get; set; }
+        public String Ext_Attr { get; set; }
         public int Location { get; set; }
         public int User { get; set; }
 
@@ -27,6 +29,87 @@ namespace CopeyWinery.Controllers
     public class TasksController : Controller
     {
         private DB_Entities db = new DB_Entities();
+
+        // public ActionResult Index(string sortOrder, string currentFilter, string searchString, DateTime? startDate, DateTime? endDate, int? page)
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page, bool? deleted, bool? added, bool? updated, bool? addFailed)
+
+        {
+
+            ViewBag.start = startDate;
+            ViewBag.end = endDate;
+
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+
+            ViewBag.CurrentSort = sortOrder;
+
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+
+            }
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            var tasks = from s in db.Tasks select s ;
+
+            if (!User.IsInRole("Administrator"))
+            {
+                tasks = tasks.Where(x => x.User.Username == User.Identity.Name);
+            }
+            else
+            {
+                //if (!String.IsNullOrEmpty(searchString))
+                //{
+                //    tasks = tasks.Where(s => s.User.FirstName.Contains(searchString));
+                //}
+                //if (startDate != null)
+                //{
+                //    tasks = tasks.Where(s => s.Date >= (startDate));
+                //}
+                //if (endDate != null)
+                //{
+                //    tasks = tasks.Where(s => s.Date <= (endDate));
+                //}
+            }
+
+            foreach (Task task in tasks)
+            {
+                task.Date.Value.ToString("dd/MM/yyyy");
+            }
+
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    tasks = tasks.OrderByDescending(t => t.User.FirstName);
+                    break;
+                case "Date":
+                    tasks = tasks.OrderBy(t => t.Date);
+                    break;
+                case "date_desc":
+                    tasks = tasks.OrderByDescending(t => t.Date);
+                    break;
+                default:
+                    tasks = tasks.OrderByDescending(t => t.Date);
+                    break;
+            }
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(tasks.ToPagedList(pageNumber, pageSize));
+        }
+
 
         //public ViewResult Index( string searchString)
         //{
@@ -43,85 +126,85 @@ namespace CopeyWinery.Controllers
         //}
 
         //GET: Tasks
-       [Authorize]
-        public ActionResult Index(bool? deleted, bool? added, bool? updated, bool? addFailed, string searchString, DateTime? startDate, DateTime? endDate)
-        {
-            try
-            {
-                ViewBag.start = startDate;
-                ViewBag.end = endDate;
+        //[Authorize]
+        // public ActionResult Index(bool? deleted, bool? added, bool? updated, bool? addFailed, string searchString, DateTime? startDate, DateTime? endDate)
+        // {
+        //     try
+        //     {
+        //         ViewBag.start = startDate;
+        //         ViewBag.end = endDate;
 
-                if (deleted != null || added != null || updated != null)
-                {
-                    if (deleted == true)
-                    {
-                        ModelState.AddModelError("", "Tarea eliminada satisfactoriamente");
-                    }
-                    else
-                    {
-                        if (updated == true)
-                        {
-                            ModelState.AddModelError("", "Tarea editada satisfactoriamente");
-                        }
-                        else
-                        {
-                            if (added != null)
-                            {
-                                ModelState.AddModelError("", "Tarea agregada satisfactoriamente");
+        //         if (deleted != null || added != null || updated != null)
+        //         {
+        //             if (deleted == true)
+        //             {
+        //                 ModelState.AddModelError("", "Tarea eliminada satisfactoriamente");
+        //             }
+        //             else
+        //             {
+        //                 if (updated == true)
+        //                 {
+        //                     ModelState.AddModelError("", "Tarea editada satisfactoriamente");
+        //                 }
+        //                 else
+        //                 {
+        //                     if (added != null)
+        //                     {
+        //                         ModelState.AddModelError("", "Tarea agregada satisfactoriamente");
 
-                            }
-                            else
-                            {
-                                ModelState.AddModelError("", "No se ha podido agregar la tarea");
+        //                     }
+        //                     else
+        //                     {
+        //                         ModelState.AddModelError("", "No se ha podido agregar la tarea");
 
-                            }
+        //                     }
 
-                        }
-                    }
-                }
-                if (!User.Identity.IsAuthenticated)
-                {
-                    return RedirectToAction("Index", "Home");
+        //                 }
+        //             }
+        //         }
+        //         if (!User.Identity.IsAuthenticated)
+        //         {
+        //             return RedirectToAction("Index", "Home");
 
-                }
-                var tasks = from s in db.Tasks
-                            select s;
+        //         }
+        //         var tasks = from s in db.Tasks
+        //                     select s;
 
-                if (!User.IsInRole("Administrator"))
-                {
-                    tasks = tasks.Where(x => x.User.Username == User.Identity.Name);
-                    foreach (Task task in tasks)
-                    {
-                        task.Date.Value.ToString("dd/MM/yyyy");
-                    }
-                    return View(tasks.ToList());
+        //         if (!User.IsInRole("Administrator"))
+        //         {
+        //             tasks = tasks.Where(x => x.User.Username == User.Identity.Name);
+        //             foreach (Task task in tasks)
+        //             {
+        //                 task.Date.Value.ToString("dd/MM/yyyy");
+        //             }
+        //             return View(tasks.ToList());
 
-                }
-                else
-                {
-                    if (!String.IsNullOrEmpty(searchString))
-                    {
-                        tasks = tasks.Where(s => s.User.FirstName.Contains(searchString));
-                    }
-                    if (startDate != null)
-                    {
-                        tasks = tasks.Where(s => s.Date >= (startDate));
-                    }
-                    if (endDate != null)
-                    {
-                        tasks = tasks.Where(s => s.Date <= (endDate));
-                    }
-                    return View(tasks.ToList());
-                }
-            }
-            catch (Exception)
-            {
-                ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
-                return RedirectToAction("Index", "Home");
-            }
+        //         }
+        //         else
+        //         {
+        //             if (!String.IsNullOrEmpty(searchString))
+        //             {
+        //                 tasks = tasks.Where(s => s.User.FirstName.Contains(searchString));
+        //             }
+        //             if (startDate != null)
+        //             {
+        //                 tasks = tasks.Where(s => s.Date >= (startDate));
+        //             }
+        //             if (endDate != null)
+        //             {
+        //                 tasks = tasks.Where(s => s.Date <= (endDate));
+        //             }
+        //             return View(tasks.ToList());
+        //         }
+        //     }
+        //     catch (Exception)
+        //     {
+        //         ModelState.AddModelError("", "Algo salio mal, intente nuevamente");
+        //         return RedirectToAction("Index", "Home");
+        //     }
 
 
-        }
+        // }
 
         // GET: Tasks/Details/5
         public ActionResult Details(int? id)

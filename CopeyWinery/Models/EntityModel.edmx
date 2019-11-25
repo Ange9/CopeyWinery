@@ -48,13 +48,13 @@
           <Property Name="Task_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Date" Type="datetime" />
-          <Property Name="Number_hours" Type="int" />
+          <Property Name="Number_hours" Type="varchar" MaxLength="50" />
           <Property Name="Hour_type" Type="varchar" MaxLength="15" />
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="Activity_Id" Type="int" Nullable="false" />
           <Property Name="Id_labor" Type="int" Nullable="false" />
           <Property Name="Id_location" Type="int" Nullable="false" />
-          <Property Name="Ext_Attr_Labor_Value" Type="int" />
+          <Property Name="Ext_Attr_Labor_Value" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="UserActivation">
           <Key>
@@ -319,7 +319,7 @@
           <Property Name="Task_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Date" Type="DateTime" Precision="3" />
-          <Property Name="Number_hours" Type="Int32" />
+          <Property Name="Number_hours" Type="String" />
           <Property Name="Hour_type" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="Activity_Id" Type="Int32" Nullable="false" />
@@ -329,7 +329,7 @@
           <NavigationProperty Name="Location" Relationship="Model.FK_Task_Location" FromRole="Task" ToRole="Location" />
           <NavigationProperty Name="User" Relationship="Model.FK_Task_User" FromRole="Task" ToRole="User" />
           <NavigationProperty Name="Labor" Relationship="Model.FK_Task_Labor" FromRole="Task" ToRole="Labor" />
-          <Property Name="Ext_Attr_Labor_Value" Type="Int32" />
+          <Property Name="Ext_Attr_Labor_Value" Type="String" />
         </EntityType>
         <Association Name="FK_Task_Activity">
           <End Type="Model.Activity" Role="Activity" Multiplicity="1" />

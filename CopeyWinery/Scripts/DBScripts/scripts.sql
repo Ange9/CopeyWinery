@@ -86,7 +86,7 @@ CREATE TABLE [dbo].[Task](
 	[Activity_Id] [int] NOT NULL,
 	[Id_labor] [int] NOT NULL,
 	[Id_location] [int] NOT NULL,
-	[Ext_Attr_Labor_Value] [int] NULL,
+	[Ext_Attr_Labor_Value] [varchar] (50) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[Task_Id] ASC

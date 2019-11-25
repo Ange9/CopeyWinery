@@ -1,4 +1,7 @@
-﻿@model IEnumerable<CopeyWinery.Models.Task>
+﻿@*@model IEnumerable<CopeyWinery.Models.Task>*@
+@model PagedList.IPagedList<CopeyWinery.Models.Task>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Index";
@@ -8,19 +11,33 @@
 
 
 
-@using (Html.BeginForm())
+@*@using (Html.BeginForm())*@
+@using (Html.BeginForm("Index", "Task", FormMethod.Get))
 {
     @Html.ValidationSummary(true, "", new { @class = "text-success" })
 
     <link href="~/fonts/styles.css" rel="stylesheet" type="text/css">
     if (User.IsInRole("Administrator"))
     {
+        @*<p>
+                Filtrar por nombre: @Html.TextBox("SearchString")
+                Fecha inicial: @Html.Editor("startDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+                Fecha final: @Html.Editor("endDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+                <input type="submit" value="Filtrar" class=" cancelBottom" />
+            </p>*@
         <p>
-            Filtrar por nombre: @Html.TextBox("SearchString")
-            Fecha inicial: @Html.Editor("startDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
-            Fecha final: @Html.Editor("endDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+            Nombre: @Html.TextBox("SearchString", ViewBag.CurrentFilterName as string)
+        </p>
+
+        <p>
+            Inicio: @Html.Editor("startDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+        </p>
+
+        <p>
+            Final:@Html.Editor("endDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
             <input type="submit" value="Filtrar" class=" cancelBottom" />
         </p>
+
     }
 }
 
@@ -38,7 +55,8 @@
     <thead>
         <tr>
             <th>
-                Fecha
+                @Html.ActionLink("Fecha", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+
             </th>
             <th>
                 Cant. Horas
@@ -65,7 +83,8 @@
                 Ubicacion
             </th>
             <th>
-                Colaborador
+                @Html.ActionLink("Colaborador", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+
             </th>
             <th></th>
         </tr>
@@ -106,6 +125,11 @@
     </tbody>
 </table>
 
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
+
 @section Scripts {
 
     @Scripts.Render("~/bundles/jqueryui")
@@ -131,6 +155,6 @@
         $(".date-picker").datepicker();
 
 
-    /**/</script>
+                            /**/</script>
 
 }

@@ -11,20 +11,19 @@ namespace CopeyWinery.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Task
     {
         public int Task_Id { get; set; }
         public string Name { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
-        public Nullable<int> Number_hours { get; set; }
+        public string Number_hours { get; set; }
         public string Hour_type { get; set; }
         public int UserId { get; set; }
         public int Activity_Id { get; set; }
         public int Id_labor { get; set; }
         public int Id_location { get; set; }
-        public Nullable<int> Ext_Attr_Labor_Value { get; set; }
+        public string Ext_Attr_Labor_Value { get; set; }
     
         public virtual Activity Activity { get; set; }
         public virtual Location Location { get; set; }
