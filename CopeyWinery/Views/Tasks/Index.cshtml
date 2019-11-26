@@ -25,18 +25,20 @@
                 Fecha final: @Html.Editor("endDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
                 <input type="submit" value="Filtrar" class=" cancelBottom" />
             </p>*@
-        <p>
-            Nombre: @Html.TextBox("SearchString", ViewBag.CurrentFilterName as string)
-        </p>
+    @*<p>
+        Nombre: @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Filtrar" class=" cancelBottom" />
 
-        <p>
+    </p>*@
+
+        @*<p>
             Inicio: @Html.Editor("startDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
-        </p>
+        </p>*@
 
-        <p>
+        @*<p>
             Final:@Html.Editor("endDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
             <input type="submit" value="Filtrar" class=" cancelBottom" />
-        </p>
+        </p>*@
 
     }
 }

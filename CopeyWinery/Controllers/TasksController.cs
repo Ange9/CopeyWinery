@@ -35,8 +35,8 @@ namespace CopeyWinery.Controllers
 
         {
 
-            ViewBag.start = startDate;
-            ViewBag.end = endDate;
+           // ViewBag.start = startDate;
+            //ViewBag.end = endDate;
 
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
@@ -69,10 +69,10 @@ namespace CopeyWinery.Controllers
             }
             else
             {
-                //if (!String.IsNullOrEmpty(searchString))
-                //{
-                //    tasks = tasks.Where(s => s.User.FirstName.Contains(searchString));
-                //}
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    tasks = tasks.Where(s => s.User.FirstName.Contains(searchString));
+                }
                 //if (startDate != null)
                 //{
                 //    tasks = tasks.Where(s => s.Date >= (startDate));
@@ -81,11 +81,6 @@ namespace CopeyWinery.Controllers
                 //{
                 //    tasks = tasks.Where(s => s.Date <= (endDate));
                 //}
-            }
-
-            foreach (Task task in tasks)
-            {
-                task.Date.Value.ToString("dd/MM/yyyy");
             }
 
 
