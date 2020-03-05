@@ -30,25 +30,15 @@ namespace CopeyWinery.Controllers
     {
         private DB_Entities db = new DB_Entities();
 
-        // public ActionResult Index(string sortOrder, string currentFilter, string searchString, DateTime? startDate, DateTime? endDate, int? page)
-        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page, bool? deleted, bool? added, bool? updated, bool? addFailed)
 
+
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-
-           // ViewBag.start = startDate;
-            //ViewBag.end = endDate;
-
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
 
             ViewBag.CurrentSort = sortOrder;
 
-
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-
-            }
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
 
             if (searchString != null)
             {
@@ -61,49 +51,113 @@ namespace CopeyWinery.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            var tasks = from s in db.Tasks select s ;
+            var tasks = from s in db.Tasks select s;
 
-            if (!User.IsInRole("Administrator"))
+            if (!String.IsNullOrEmpty(searchString))
             {
-                tasks = tasks.Where(x => x.User.Username == User.Identity.Name);
+                tasks = tasks.Where(s => s.User.FirstName.Contains(searchString));
             }
-            else
-            {
-                if (!String.IsNullOrEmpty(searchString))
-                {
-                    tasks = tasks.Where(s => s.User.FirstName.Contains(searchString));
-                }
-                //if (startDate != null)
-                //{
-                //    tasks = tasks.Where(s => s.Date >= (startDate));
-                //}
-                //if (endDate != null)
-                //{
-                //    tasks = tasks.Where(s => s.Date <= (endDate));
-                //}
-            }
-
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    tasks = tasks.OrderByDescending(t => t.User.FirstName);
+                    tasks = tasks.OrderByDescending(s => s.User.FirstName);
                     break;
                 case "Date":
-                    tasks = tasks.OrderBy(t => t.Date);
+                    tasks.OrderBy(t => t.Date);
                     break;
                 case "date_desc":
-                    tasks = tasks.OrderByDescending(t => t.Date);
+                    tasks.OrderByDescending(t => t.Date);
                     break;
                 default:
-                    tasks = tasks.OrderByDescending(t => t.Date);
+                    tasks = tasks.OrderBy(s => s.User.FirstName);
                     break;
             }
 
-            int pageSize = 10;
+            int pageSize = 3;
             int pageNumber = (page ?? 1);
             return View(tasks.ToPagedList(pageNumber, pageSize));
+
         }
+
+
+        //// public ActionResult Index(string sortOrder, string currentFilter, string searchString, DateTime? startDate, DateTime? endDate, int? page)
+        //public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page, DateTime? startDate, DateTime? endDate, bool? deleted, bool? added, bool? updated, bool? addFailed)
+
+        //{
+
+        //    ViewBag.start = startDate;
+        //    ViewBag.end = endDate;
+
+        //    ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "name_asc";
+        //    ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+
+        //    ViewBag.CurrentSort = sortOrder;
+
+
+        //    if (!User.Identity.IsAuthenticated)
+        //    {
+        //        return RedirectToAction("Index", "Home");
+
+        //    }
+
+        //    if (searchString != null)
+        //    {
+        //        page = 1;
+        //    }
+        //    else
+        //    {
+        //        searchString = currentFilter;
+        //    }
+
+        //    ViewBag.CurrentFilter = searchString;
+
+        //    var tasks = from s in db.Tasks select s ;
+
+        //    if (!User.IsInRole("Administrator"))
+        //    {
+        //        tasks = tasks.Where(x => x.User.Username == User.Identity.Name);
+        //    }
+        //    else
+        //    {
+        //        if (!String.IsNullOrEmpty(searchString))
+        //        {
+        //            tasks = tasks.Where(s => s.User.FirstName.Contains(searchString));
+        //        }
+        //        if (startDate != null)
+        //        {
+        //            tasks = tasks.Where(s => s.Date >= (startDate));
+        //        }
+        //        if (endDate != null)
+        //        {
+        //            tasks = tasks.Where(s => s.Date <= (endDate));
+        //        }
+        //    }
+
+
+        //    switch (sortOrder)
+        //    {
+        //        case "name_desc":
+        //            tasks = tasks.OrderByDescending(t => t.User.FirstName);
+        //            break;
+        //        case "name_asc":
+        //            tasks = tasks.OrderBy(t => t.User.FirstName);       
+        //            break;
+        //        case "Date":
+        //            tasks = tasks.OrderBy(t => t.Date);
+        //            break;
+        //        case "date_desc":
+        //            tasks = tasks.OrderByDescending(t => t.Date);
+        //            break;
+        //        default:
+        //            tasks = tasks.OrderByDescending(t => t.Date);
+        //            break;
+        //    }
+
+        //    int pageSize = 10;
+        //    int pageNumber = (page ?? 1);
+        //    return View(tasks.ToPagedList(pageNumber, pageSize));
+        //}
 
 
         //public ViewResult Index( string searchString)

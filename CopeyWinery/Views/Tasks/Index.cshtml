@@ -12,6 +12,7 @@
 
 
 @*@using (Html.BeginForm())*@
+
 @using (Html.BeginForm("Index", "Task", FormMethod.Get))
 {
     @Html.ValidationSummary(true, "", new { @class = "text-success" })
@@ -25,20 +26,32 @@
                 Fecha final: @Html.Editor("endDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
                 <input type="submit" value="Filtrar" class=" cancelBottom" />
             </p>*@
-    @*<p>
-        Nombre: @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Filtrar" class=" cancelBottom" />
+        @*<p>
+                Nombre: @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
+                <input type="submit" value="Filtrar" class=" cancelBottom" />
 
-    </p>*@
+            </p>*@
+    <p>
+        @*Find by name: @Html.TextBox("searchString", ViewBag.CurrentFilter as string)*@
+        Find by name: @Html.TextBox("searchString")
+        @*@Html.ActionLink("Fecha", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })*@
+        <input type="submit" value="Search" />
+    </p>
 
         @*<p>
-            Inicio: @Html.Editor("startDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
-        </p>*@
+                Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+                <input type="submit" value="Search" />
+            </p>*@
 
         @*<p>
-            Final:@Html.Editor("endDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
-            <input type="submit" value="Filtrar" class=" cancelBottom" />
-        </p>*@
+                Inicio: @Html.Editor("startDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+            </p>
+
+            <p>
+                Final:@Html.Editor("endDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+                <input type="submit" value="Filtrar" class=" cancelBottom" />
+            </p>*@
+
 
     }
 }
@@ -132,6 +145,7 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
 @Html.PagedListPager(Model, page => Url.Action("Index",
     new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
 
+
 @section Scripts {
 
     @Scripts.Render("~/bundles/jqueryui")
@@ -157,6 +171,6 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
         $(".date-picker").datepicker();
 
 
-                            /**/</script>
+                                                /**/</script>
 
 }
