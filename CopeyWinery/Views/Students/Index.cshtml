@@ -45,18 +45,50 @@
 {
     <p>
         Buscar por Nombre: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
+        @*<input type="submit" value="Search" />*@
     </p>
 
-    @*<p>
-        Buscar por Nombre: @Html.TextBox("SearchString1")
-        <input type="submit" value="Search" />
-    </p>*@
     <p>
-        @Html.DropDownList("StartYear", Enumerable.Range(DateTime.Now.Year - 10, 11).Select(x => new SelectListItem { Text = x.ToString() }), "Año", ViewBag.CurrentStartYearFilter as string)
-        @Html.DropDownList("StartMonth", Enumerable.Range(1, 12).Select(x => new SelectListItem { Text = x.ToString() }), "Mes", ViewBag.CurrentStartMonthFilter as string)
+        @*@Html.DropDownList("Departments", @ViewBag.Departments as List<SelectListItem>, "Select Department", new { @class = "form - control" })*@
+        Desde: @Html.DropDownList("startMonth", new SelectList(ViewBag.Months, "Value", "Text", ViewBag.CurrentStartYearFilter))
+        @Html.DropDownList("startYear", new SelectList(ViewBag.Years, "Value", "Text", ViewBag.CurrentStartMonthFilter))
         <input type="submit" value="Filtrar" class=" cancelBottom" />
     </p>
+
+
+
+
+    @*<p>
+        @Html.DropDownList("searchBy", (SelectList)ViewBag.Stores, new { onchange = "document.location.href = '/Students/index? &store_id=' + this.options[this.selectedIndex].value;" })
+
+                Buscar por Nombre: @Html.TextBox("SearchString1")
+                <input type="submit" value="Search" />
+            </p>*@
+    <p>
+        @*Desde: @Html.DropDownList("StartYear", Enumerable.Range(DateTime.Now.Year - 10, 11).Select(x => new SelectListItem { Text = x.ToString() }), ViewBag.CurrentStartMonthFilter as string)*@
+        @*Desde: @Html.DropDownList("StartYear", Enumerable.Range(DateTime.Now.Year - 10, 11)ViewBag.CurrentStartMonthFilter as string)*@
+        @*@Html.DropDownList("StartMonth", Enumerable.Range(1, 12).Select(x => new SelectListItem { Text = x.ToString() }), "Mes", ViewBag.CurrentStartMonthFilter as string)*@
+        @*<input type="submit" value="Filtrar" class=" cancelBottom" />*@
+    </p>
+
+
+
+    @*<p>
+        Hasta: @Html.DropDownList("EndYear", Enumerable.Range(DateTime.Now.Year - 10, 11).Select(x => new SelectListItem { Text = x.ToString() }), "Año", ViewBag.CurrentEndYearFilter as string)
+        @Html.DropDownList("EndMonth", Enumerable.Range(1, 12).Select(x => new SelectListItem { Text = x.ToString() }), "Mes", ViewBag.CurrentEndMonthFilter as string)
+        <input type="submit" value="Filtrar" class=" cancelBottom" />
+
+        <div class="hidden">
+            @Html.TextBox("ClearSearch", ViewBag.ClearFilter as String)
+
+        </div>
+        <input type="submit" value="Limpiar Filtros" />
+
+
+
+    </p>*@
+
+
     @*<p>
             Inicio: @Html.Editor("StartDate", ViewBag.CurrentStartDateFilter new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
             Inicio: @Html.Editor("StartDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
@@ -73,10 +105,10 @@
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Fecha", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter, CurrentStartYearFilter = ViewBag.CurrentStartYearFilter , CurrentStartMonthFilter = ViewBag.CurrentStartMonthFilter })
+            @Html.ActionLink("Fecha", "Index", new { sortOrder = ViewBag.DateSortParm })
         </th>
         <th>
-            @Html.ActionLink("Colaborador", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter, CurrentStartYearFilter = ViewBag.CurrentStartYearFilter, CurrentStartMonthFilter = ViewBag.CurrentStartMonthFilter })
+            @Html.ActionLink("Colaborador", "Index", new { sortOrder = ViewBag.NameSortParm })
         </th>
         <th></th>
     </tr>
@@ -103,10 +135,22 @@
 </table>
 
 <br />
+
+
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
         @Html.PagedListPager(Model, page => Url.Action("Index",
-            //new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, startDate = ViewBag.start, endDate = ViewBag.end }))
-           new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, CurrentStartYearFilter = ViewBag.CurrentStartYearFilter, CurrentStartMonthFilter = ViewBag.CurrentStartMonthFilter }))
+           new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter,
+               currentStartYearFilter = ViewBag.CurrentStartYearFilter,
+               currentStartMonthFilter = ViewBag.CurrentStartMonthFilter
+               //currentStoreId = ViewBag.CurrentStoreId
+           }))
+
+
+        @*//new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter,
+            //    currentStartYearFilter = ViewBag.CurrentStartYearFilter, currentStartMonthFilter = ViewBag.CurrentStartMonthFilter,
+            //    currentEndYearFilter = ViewBag.CurrentEndYearFilter,
+            //    currentEndMonthFilter = ViewBag.CurrentEndMonthFilter
+            //}))*@
 
 
