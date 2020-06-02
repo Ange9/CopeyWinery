@@ -122,21 +122,20 @@ namespace CopeyWinery.Controllers
             {
                 tasks = tasks.Where(s => s.User.FirstName.Contains(searchString));
             }
-            if (startYear != null)
-            {
-                int startYearInt= Convert.ToInt32(startYear);
-                tasks = tasks
-                    .Where(s => s.Date.Value.Year >= startYearInt).ToList();
-
-
-                tasks = (from x in tasks
-                         .Where(x.)
-
-            }
-            //if (startMonth != null)
+            //if (startYear != null)
             //{
-            //    tasks = tasks.Where(s => s.Date.Value.Month >= Int32.Parse(startMonth));
+            //    int startYearInt= Convert.ToInt32(startYear);
+            //    tasks = tasks
+            //        .Where(s => s.Date.Value.Year >= startYearInt).ToList();
+
+
+            //    tasks = from x in tasks
+
             //}
+            if (startMonth != null)
+            {
+                tasks = tasks.Where(s => s.Date.Value.Month >= Int32.Parse(startMonth));
+            }
 
             //if (endYear != null)
             //{

@@ -32,8 +32,17 @@ namespace CopeyWinery.Controllers
 
 
 
-        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page,
+        int? startDay, int? startMonth, int? startYear, int? endDay, int? endMonth, int? endYear)
         {
+
+            ViewBag.StartDay = startDay;
+            ViewBag.StartMonth = startMonth;
+            ViewBag.StartYear = startYear;
+
+            ViewBag.EndDay = endDay;
+            ViewBag.EndMonth = endMonth;
+            ViewBag.EndYear = endYear;
 
             ViewBag.CurrentSort = sortOrder;
 
@@ -49,6 +58,7 @@ namespace CopeyWinery.Controllers
                 searchString = currentFilter;
             }
 
+
             ViewBag.CurrentFilter = searchString;
 
             var tasks = from s in db.Tasks select s;
@@ -58,23 +68,34 @@ namespace CopeyWinery.Controllers
                 tasks = tasks.Where(s => s.User.FirstName.Contains(searchString));
             }
 
+            if (startDay.HasValue && startMonth.HasValue  && startYear.HasValue)
+            {
+                tasks = tasks
+                    .Where(x => x.Date.Value.Day >= startDay && x.Date.Value.Month >= startMonth && x.Date.Value.Year >= startYear);
+            }
+            if (endDay.HasValue && endMonth.HasValue && endYear.HasValue)
+            {
+                tasks = tasks
+                    .Where(x => x.Date.Value.Day <= endDay && x.Date.Value.Month <= endMonth && x.Date.Value.Year <= endYear);
+            }
+
             switch (sortOrder)
             {
                 case "name_desc":
                     tasks = tasks.OrderByDescending(s => s.User.FirstName);
                     break;
                 case "Date":
-                    tasks.OrderBy(t => t.Date);
+                    tasks = tasks.OrderBy(t => t.Date);
                     break;
                 case "date_desc":
-                    tasks.OrderByDescending(t => t.Date);
+                    tasks = tasks.OrderByDescending(t => t.Date);
                     break;
                 default:
-                    tasks = tasks.OrderBy(s => s.User.FirstName);
+                    tasks = tasks.OrderBy(t => t.Date);
                     break;
             }
 
-            int pageSize = 3;
+            int pageSize = 10;
             int pageNumber = (page ?? 1);
             return View(tasks.ToPagedList(pageNumber, pageSize));
 
@@ -569,11 +590,26 @@ namespace CopeyWinery.Controllers
             return View(task);
         }
 
-        public ActionResult ExportView()
+        public ActionResult ExportView(int? startDay, int? startMonth, int? startYear, int? endDay, int? endMonth, int? endYear)
         {
             Response.AddHeader("content-disposition", "attachment;filename=Report1.xls");
             Response.AddHeader("Content-Type", "application/vnd.ms-excel");
-            return View(db.Tasks.AsEnumerable());
+
+            var tasks = db.Tasks.AsEnumerable();
+            if (startDay.HasValue && startMonth.HasValue && startYear.HasValue)
+            {
+                tasks = tasks
+                    .Where(x => x.Date.Value.Day >= startDay && x.Date.Value.Month >= startMonth && x.Date.Value.Year >= startYear);
+            }
+            if (endDay.HasValue && endMonth.HasValue && endYear.HasValue)
+            {
+                tasks = tasks
+                    .Where(x => x.Date.Value.Day <= endDay && x.Date.Value.Month <= endMonth && x.Date.Value.Year <= endYear);
+            }
+
+            tasks = tasks.OrderBy(t => t.Date);
+
+            return View(tasks);
         }
         // GET: Tasks1/Edit/5
         public ActionResult Edit(int? id)
