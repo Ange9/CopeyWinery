@@ -24,10 +24,7 @@
 
         <div class="form-horizontal">
             <div class="form-group row">
-                <div class="col-xs-1">
-                    <label for="ex1">Desde</label>
-                    @Html.DropDownList("StartDay", Enumerable.Range(1, 31).Select(x => new SelectListItem { Text = x.ToString() }), "Dia", new { @class = "form-control" })
-                </div>
+
                 <div class="col-xs-2">
                     <label for="ex1"></label>
                     @Html.DropDownList("StartMonth", Enumerable.Range(1, 12).Select(x => new SelectListItem { Text = x.ToString() }), "Mes", new { @class = "form-control" })
@@ -36,6 +33,10 @@
                     <label for="ex1"></label>
                     @Html.DropDownList("StartYear", Enumerable.Range(DateTime.Now.Year - 10, DateTime.Now.Year).Select(x => new SelectListItem { Text = x.ToString() }), "Año", new { @class = "form-control" })
                 </div>
+
+                <p>
+                    @Html.Hidden("SearchString", ViewBag.CurrentFilter as string)
+                </p>
             </div>
 
       
@@ -47,20 +48,7 @@
         </div>
 
         <div class="form-horizontal">
-            <div class="form-group row">
-                <div class="col-xs-1">
-                    <label for="ex1">Hasta</label>
-                    @Html.DropDownList("EndDay", Enumerable.Range(1, 31).Select(x => new SelectListItem { Text = x.ToString() }), "Dia", new { @class = "form-control" })
-                </div>
-                <div class="col-xs-2">
-                    <label for="ex1"></label>
-                    @Html.DropDownList("EndMonth", Enumerable.Range(1, 12).Select(x => new SelectListItem { Text = x.ToString() }), "Mes", new { @class = "form-control" })
-                </div>
-                <div class="col-xs-2">
-                    <label for="ex1"></label>
-                    @Html.DropDownList("EndYear", Enumerable.Range(DateTime.Now.Year-10, DateTime.Now.Year).Select(x => new SelectListItem { Text = x.ToString() }), "Año", new { @class = "form-control" })
-                </div>
-            </div>
+
 
             <div class="form-group">
                 <div class="col-md-offset--9 col-md-10">
@@ -77,12 +65,8 @@
             @if (User.IsInRole("Administrator"))
             {
                 @Html.ActionLink("Exportar", "ExportView", new {
-               startDay = ViewBag.StartDay,
                startMonth = ViewBag.StartMonth,
-               startYear = ViewBag.StartYear,
-               endDay = ViewBag.EndDay,
-               endMonth = ViewBag.EndMonth,
-               endYear = ViewBag.EndYear
+               startYear = ViewBag.StartYear            
            }) 
 
 @*< input type = "button" value = "Exportar a Excel" class="cancelBottom" onclick="window.location.href='@Url.Action("ExportView", "Tasks")?valor='ViewBag.StartDay" />*@
@@ -95,7 +79,7 @@
     <thead>
         <tr>
             <th>
-                @Html.ActionLink("Fecha", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+                @Html.ActionLink("Fecha", "Index", new { sortOrder = ViewBag.DateSortParm })
 
             </th>
             <th>
@@ -123,7 +107,7 @@
                 Ubicacion
             </th>
             <th>
-                @Html.ActionLink("Colaborador", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+                @Html.ActionLink("Colaborador", "Index", new { sortOrder = ViewBag.NameSortParm })
 
             </th>
             <th></th>
@@ -134,7 +118,8 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Date)
+                    @*@Html.DisplayFor(modelItem => item.Date.GetValueOrDefault().ToShortDateString())*@
+                    @Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.Date))
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Number_hours)
@@ -168,9 +153,9 @@
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
         @Html.PagedListPager(Model, page => Url.Action("Index",
-            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter,
-                startDay = ViewBag.StartDay, startMonth = ViewBag.StartMonth ,startYear = ViewBag.StartYear,
-                endDay = ViewBag.EndDay,endMonth = ViewBag.EndMonth,endYear = ViewBag.EndYear }))
+            new { page, sortOrder = ViewBag.CurrentSort,
+                currentFilter = ViewBag.CurrentFilter,
+                startMonth = ViewBag.StartMonth ,startYear = ViewBag.StartYear}))
 
 
 

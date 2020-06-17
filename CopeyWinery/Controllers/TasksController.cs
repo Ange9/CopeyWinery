@@ -33,71 +33,85 @@ namespace CopeyWinery.Controllers
 
 
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page,
-        int? startDay, int? startMonth, int? startYear, int? endDay, int? endMonth, int? endYear)
+         bool? deleted, bool? added, bool? updated, bool? addFailed, int startMonth = 0, int startYear = 0)
         {
+            if (deleted != null || added != null || updated != null)
+            {
+                if (deleted == true)
+                {
+                    ModelState.AddModelError("", "Tarea eliminada satisfactoriamente");
+                }
+                else
+                {
+                    if (updated == true)
+                    {
+                        ModelState.AddModelError("", "Tarea editada satisfactoriamente");
+                    }
+                    else
+                    {
+                        if (added != null)
+                        {
+                            ModelState.AddModelError("", "Tarea agregada satisfactoriamente");
 
-            ViewBag.StartDay = startDay;
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "No se ha podido agregar la tarea");
+
+                        }
+
+                    }
+                }
+            }
+
             ViewBag.StartMonth = startMonth;
             ViewBag.StartYear = startYear;
-
-            ViewBag.EndDay = endDay;
-            ViewBag.EndMonth = endMonth;
-            ViewBag.EndYear = endYear;
 
             ViewBag.CurrentSort = sortOrder;
 
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
 
-            if (searchString != null)
+            if (!User.Identity.IsAuthenticated)
             {
-                page = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
+                return RedirectToAction("Index", "Home");
 
+            }
 
             ViewBag.CurrentFilter = searchString;
-
-            var tasks = from s in db.Tasks select s;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                tasks = tasks.Where(s => s.User.FirstName.Contains(searchString));
+            if (currentFilter != startMonth.ToString()) {
+                ViewBag.CurrentFilter = startMonth.ToString();
+                page = 1;
             }
-
-            if (startDay.HasValue && startMonth.HasValue  && startYear.HasValue)
+            if (!User.IsInRole("Administrator"))
             {
-                tasks = tasks
-                    .Where(x => x.Date.Value.Day >= startDay && x.Date.Value.Month >= startMonth && x.Date.Value.Year >= startYear);
-            }
-            if (endDay.HasValue && endMonth.HasValue && endYear.HasValue)
-            {
-                tasks = tasks
-                    .Where(x => x.Date.Value.Day <= endDay && x.Date.Value.Month <= endMonth && x.Date.Value.Year <= endYear);
-            }
+                var tasks = db.Tasks.Where(x => x.User.Username == User.Identity.Name).AsEnumerable().OrderBy(t => t.Date);
 
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    tasks = tasks.OrderByDescending(s => s.User.FirstName);
-                    break;
-                case "Date":
-                    tasks = tasks.OrderBy(t => t.Date);
-                    break;
-                case "date_desc":
-                    tasks = tasks.OrderByDescending(t => t.Date);
-                    break;
-                default:
-                    tasks = tasks.OrderBy(t => t.Date);
-                    break;
+                int pageSize = 2;
+                int pageNumber = (page ?? 1);
+                return View(tasks.ToPagedList(pageNumber, pageSize));
+               
             }
+            if (startMonth != 0 && startYear != 0)
+            {
 
-            int pageSize = 10;
-            int pageNumber = (page ?? 1);
-            return View(tasks.ToPagedList(pageNumber, pageSize));
+                var tasks = db.Tasks
+                    .Where(x => x.Date.Value.Month == startMonth && x.Date.Value.Year == startYear)
+                    .OrderBy(x=> x.Date);
+
+                int pageSize = 10;
+                int pageNumber = (page ?? 1);
+                return View(tasks.ToPagedList(pageNumber, pageSize));
+            }
+            else {
+                var tasks = db.Tasks
+                   .Where(x => x.Date.Value.Month == DateTime.Now.Month && x.Date.Value.Year == DateTime.Now.Year)
+                   .OrderBy(x => x.Date); ;
+
+                int pageSize = 10;
+                int pageNumber = (page ?? 1);
+                return View(tasks.ToPagedList(pageNumber, pageSize));
+            }
 
         }
 
