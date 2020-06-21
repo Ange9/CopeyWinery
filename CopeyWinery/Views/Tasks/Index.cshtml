@@ -18,10 +18,6 @@
 
     if (User.IsInRole("Administrator"))
     {
-
-
-
-
         <div class="form-horizontal">
             <div class="form-group row">
 
@@ -31,48 +27,39 @@
                 </div>
                 <div class="col-xs-2">
                     <label for="ex1"></label>
-                    @Html.DropDownList("StartYear", Enumerable.Range(DateTime.Now.Year - 10, DateTime.Now.Year).Select(x => new SelectListItem { Text = x.ToString() }), "Año", new { @class = "form-control" })
+                    @Html.DropDownList("StartYear", Enumerable.Range(DateTime.Now.Year - 2, DateTime.Now.Year).Select(x => new SelectListItem { Text = x.ToString() }), "Año", new { @class = "form-control" })
                 </div>
-
                 <p>
                     @Html.Hidden("SearchString", ViewBag.CurrentFilter as string)
                 </p>
             </div>
 
-      
-
-
-            @*<link href="~/fonts/styles.css" rel="stylesheet" type="text/css">*@
-
-          
         </div>
 
-        <div class="form-horizontal">
+
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-md-offset--9 col-md-10">
+                        @*<input type="submit" value="Exportar a Excel" class="submitBottom"
+            onclick="window.location.href =
+         '@Html.Raw(@Url.Action("ExportView", "Tasks"))'
+        " />*@
+                        <input type="submit" value="Filtrar" class="submitBottom" />
+                        @Html.ActionLink("Export to Excel", "ExportView")
+
+                        <input type="button" value="Crear Tarea" class="addBottom" onclick="window.location.href='@Url.Action("Add_Num_Hours", "Tasks")'" />
 
 
-            <div class="form-group">
-                <div class="col-md-offset--9 col-md-10">
-                    <input type="submit" value="Filtrar" class="submitBottom" />
+                    </div>
+
                 </div>
+
             </div>
 
-        </div>
+        }
     }
-}
 
-        <p>
-            <input type="button" value="Crear Tarea" class="addBottom" onclick="window.location.href='@Url.Action("Add_Num_Hours", "Tasks")'" />
-            @if (User.IsInRole("Administrator"))
-            {
-                @Html.ActionLink("Exportar", "ExportView", new {
-               startMonth = ViewBag.StartMonth,
-               startYear = ViewBag.StartYear            
-           }) 
 
-@*< input type = "button" value = "Exportar a Excel" class="cancelBottom" onclick="window.location.href='@Url.Action("ExportView", "Tasks")?valor='ViewBag.StartDay" />*@
-
-}
-        </p>
 
 
 <table class="table">

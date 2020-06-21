@@ -3,10 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.SqlServer;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using CopeyWinery.Models;
 using PagedList;
 
@@ -99,6 +104,7 @@ namespace CopeyWinery.Controllers
                     .Where(x => x.Date.Value.Month == startMonth && x.Date.Value.Year == startYear)
                     .OrderBy(x=> x.Date);
 
+                Session["tasks"] = tasks.ToList();
                 int pageSize = 10;
                 int pageNumber = (page ?? 1);
                 return View(tasks.ToPagedList(pageNumber, pageSize));
@@ -107,6 +113,7 @@ namespace CopeyWinery.Controllers
                 var tasks = db.Tasks
                    .Where(x => x.Date.Value.Month == DateTime.Now.Month && x.Date.Value.Year == DateTime.Now.Year)
                    .OrderBy(x => x.Date); ;
+                Session["tasks"] = tasks.ToList();
 
                 int pageSize = 10;
                 int pageNumber = (page ?? 1);
@@ -603,28 +610,52 @@ namespace CopeyWinery.Controllers
             ViewBag.Ext_Attr = ex;
             return View(task);
         }
-
-        public ActionResult ExportView(int? startDay, int? startMonth, int? startYear, int? endDay, int? endMonth, int? endYear)
+    
+        public ActionResult ExportView()
         {
+            var taskList = (List<Task>)Session["tasks"];
+
+
+
+                 var query = from s in taskList
+                             join act in db.Activities on s.Activity_Id equals act.Activity_Id
+                             join lab in db.Labors on s.Id_labor equals lab.Id_labor
+                             join ext in db.ExtendedAttributes on lab.Id_ExtAttr equals ext.Id_ExtAttr
+                             join usr in db.User on s.UserId equals usr.UserId
+                             join loc in db.Locations on s.Id_location equals loc.Id_location
+                             select new {Fecha = s.Date.Value.ToString("dd/MM/yyyy"), Actividad = act.Activity_name, Labor= lab.Name,
+                                 Atributo_Extendido = ext.Name,Valor_Atributo_Extendido = s.Ext_Attr_Labor_Value, Ubicacion = loc.Name,
+                                 Cant_Horas = s.Number_hours, Tipo = s.Hour_type,  Colaborador = usr.FirstName};
+
+
+
+
+
+            GridView grid = new GridView();
+            grid.DataSource = query;
+
+            grid.DataBind();
+
+            Response.ClearContent();
+            Response.Buffer = true;
+            //Response.AddHeader("content-disposition", "attachment; filename=Employees.xls");
+            //Response.ContentType = "application/ms-excel";
             Response.AddHeader("content-disposition", "attachment;filename=Report1.xls");
             Response.AddHeader("Content-Type", "application/vnd.ms-excel");
 
-            var tasks = db.Tasks.AsEnumerable();
-            if (startDay.HasValue && startMonth.HasValue && startYear.HasValue)
-            {
-                tasks = tasks
-                    .Where(x => x.Date.Value.Day >= startDay && x.Date.Value.Month >= startMonth && x.Date.Value.Year >= startYear);
-            }
-            if (endDay.HasValue && endMonth.HasValue && endYear.HasValue)
-            {
-                tasks = tasks
-                    .Where(x => x.Date.Value.Day <= endDay && x.Date.Value.Month <= endMonth && x.Date.Value.Year <= endYear);
-            }
+            Response.Charset = "";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
 
-            tasks = tasks.OrderBy(t => t.Date);
+            grid.RenderControl(htw);
 
-            return View(tasks);
-        }
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+
+            return RedirectToAction("Index");
+        
+    }
         // GET: Tasks1/Edit/5
         public ActionResult Edit(int? id)
         {
