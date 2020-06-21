@@ -1,0 +1,156 @@
+﻿@*@model IEnumerable<CopeyWinery.Models.Task>*@
+
+@model PagedList.IPagedList<CopeyWinery.Models.Task>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/cssjqryUi")
+    @*<script src="i18n/datepicker-fr.js"></script>*@
+
+    <script type="text/javascript">
+        $.datepicker.regional['en'] = {
+            closeText: 'Cerrar', // set a close button text
+            currentText: 'Hoy', // set today text
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'], // set month names
+            monthNamesShort: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'], // set short month names
+            //dayNames: ['Domenica', 'Luned&#236', 'Marted&#236', 'Mercoled&#236', 'Gioved&#236', 'Venerd&#236', 'Sabato'], // set days names
+            //dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'], // set short day names
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Me', 'Ju', 'Vi', 'Sa'], // set more short days names
+            //dateFormat: 'mm/dd/yy' // set format date
+            dateFormat: 'mm-dd-yy'
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['en']);
+
+        $(".date-picker").datepicker();
+    </script>
+
+}
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+
+
+@using (Html.BeginForm("Index", "Students", FormMethod.Get))
+
+{
+    <p>
+        Buscar por Nombre: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        @*<input type="submit" value="Search" />*@
+    </p>
+
+    <p>
+        @*@Html.DropDownList("Departments", @ViewBag.Departments as List<SelectListItem>, "Select Department", new { @class = "form - control" })*@
+        Desde: @Html.DropDownList("startMonth", new SelectList(ViewBag.Months, "Value", "Text", ViewBag.CurrentStartYearFilter))
+        @Html.DropDownList("startYear", new SelectList(ViewBag.Years, "Value", "Text", ViewBag.CurrentStartMonthFilter))
+        <input type="submit" value="Filtrar" class=" cancelBottom" />
+    </p>
+
+
+
+
+    @*<p>
+        @Html.DropDownList("searchBy", (SelectList)ViewBag.Stores, new { onchange = "document.location.href = '/Students/index? &store_id=' + this.options[this.selectedIndex].value;" })
+
+                Buscar por Nombre: @Html.TextBox("SearchString1")
+                <input type="submit" value="Search" />
+            </p>*@
+    <p>
+        @*Desde: @Html.DropDownList("StartYear", Enumerable.Range(DateTime.Now.Year - 10, 11).Select(x => new SelectListItem { Text = x.ToString() }), ViewBag.CurrentStartMonthFilter as string)*@
+        @*Desde: @Html.DropDownList("StartYear", Enumerable.Range(DateTime.Now.Year - 10, 11)ViewBag.CurrentStartMonthFilter as string)*@
+        @*@Html.DropDownList("StartMonth", Enumerable.Range(1, 12).Select(x => new SelectListItem { Text = x.ToString() }), "Mes", ViewBag.CurrentStartMonthFilter as string)*@
+        @*<input type="submit" value="Filtrar" class=" cancelBottom" />*@
+    </p>
+
+
+
+    @*<p>
+        Hasta: @Html.DropDownList("EndYear", Enumerable.Range(DateTime.Now.Year - 10, 11).Select(x => new SelectListItem { Text = x.ToString() }), "Año", ViewBag.CurrentEndYearFilter as string)
+        @Html.DropDownList("EndMonth", Enumerable.Range(1, 12).Select(x => new SelectListItem { Text = x.ToString() }), "Mes", ViewBag.CurrentEndMonthFilter as string)
+        <input type="submit" value="Filtrar" class=" cancelBottom" />
+
+        <div class="hidden">
+            @Html.TextBox("ClearSearch", ViewBag.ClearFilter as String)
+
+        </div>
+        <input type="submit" value="Limpiar Filtros" />
+
+
+
+    </p>*@
+
+
+    @*<p>
+            Inicio: @Html.Editor("StartDate", ViewBag.CurrentStartDateFilter new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+            Inicio: @Html.Editor("StartDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+
+        </p>
+
+        <p>
+            Final:@Html.Editor("endDate", ViewBag.CurrentEndDateFilter, new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+            Inicio: @Html.TextBox("EndDate", ViewBag.CurrentEndDateFilter as string, new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
+
+            <input type="submit" value="Filtrar" class=" cancelBottom" />
+        </p>*@
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Fecha", "Index", new { sortOrder = ViewBag.DateSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Colaborador", "Index", new { sortOrder = ViewBag.NameSortParm })
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.FirstName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+    }
+
+</table>
+
+<br />
+
+
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+           new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter,
+               currentStartYearFilter = ViewBag.CurrentStartYearFilter,
+               currentStartMonthFilter = ViewBag.CurrentStartMonthFilter
+               //currentStoreId = ViewBag.CurrentStoreId
+           }))
+
+
+        @*//new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter,
+            //    currentStartYearFilter = ViewBag.CurrentStartYearFilter, currentStartMonthFilter = ViewBag.CurrentStartMonthFilter,
+            //    currentEndYearFilter = ViewBag.CurrentEndYearFilter,
+            //    currentEndMonthFilter = ViewBag.CurrentEndMonthFilter
+            //}))*@
+
+

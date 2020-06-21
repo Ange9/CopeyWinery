@@ -1,0 +1,133 @@
+﻿@model IEnumerable<CopeyWinery.Models.Task>
+
+@{
+                /**/
+
+                ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/cssjqryUi")
+    <script src="i18n/datepicker-fr.js"></script>
+
+    <script type="text/javascript">
+        $.datepicker.regional['es'] = {
+            closeText: 'Cerrar', // set a close button text
+            currentText: 'Hoy', // set today text
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'], // set month names
+            monthNamesShort: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'], // set short month names
+            //dayNames: ['Domenica', 'Luned&#236', 'Marted&#236', 'Mercoled&#236', 'Gioved&#236', 'Venerd&#236', 'Sabato'], // set days names
+            //dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'], // set short day names
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Me', 'Ju', 'Vi', 'Sa'], // set more short days names
+            dateFormat: 'dd/mm/yy' // set format date
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        $(".date-picker").datepicker();
+    </script>
+
+}
+
+@using (Html.BeginForm())
+{
+    <link href="~/fonts/styles.css" rel="stylesheet" type="text/css">
+
+    <div class="form-horizontal">
+        <div class="form-group form-group-sm">
+            <div class="col-md-8">
+                @Html.TextBox("start", null, new { @class = "date-picker", @readonly = "true" })
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <div class="col-md-8">
+                @Html.TextBox("end", null, new { @class = "date-picker", @readonly = "true" })
+            </div>
+        </div>
+        <div class="form-group-sm">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" /> <span> </span>
+            </div>
+        </div>
+    </div>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Number_hours)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Hour_type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Ext_Attr_Labor_Value)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Activity.Activity_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Location.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.Username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Labor.Name)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Number_hours)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hour_type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ext_Attr_Labor_Value)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Activity.Activity_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Labor.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Task_Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Task_Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Task_Id })
+            </td>
+        </tr>
+    }
+
+</table>

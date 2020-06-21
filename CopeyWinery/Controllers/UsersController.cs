@@ -17,7 +17,7 @@ namespace CopeyWinery.Controllers
         // GET: Users
         public ActionResult Index(bool? deleted, bool? added, bool? updated)
         {
-            var model = db.User.Include(u => u.Role).ToList();
+            var model = db.User.Include(u => u.Role).OrderBy(u => u.FirstName).ToList();
 
             if (deleted != null || added != null || updated != null)
             {

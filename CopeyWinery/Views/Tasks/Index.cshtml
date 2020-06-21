@@ -1,63 +1,82 @@
-﻿@*@model IEnumerable<CopeyWinery.Models.Task>*@
-@model PagedList.IPagedList<CopeyWinery.Models.Task>
+﻿@model PagedList.IPagedList<CopeyWinery.Models.Task>
 @using PagedList.Mvc;
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "Index";
+                /**/
+
+                ViewBag.Title = "Index";
 }
 
 <h2>Administracion de Tareas</h2>
 
 
 
-@*@using (Html.BeginForm())*@
-@using (Html.BeginForm("Index", "Task", FormMethod.Get))
+@using (Html.BeginForm())
 {
     @Html.ValidationSummary(true, "", new { @class = "text-success" })
 
     <link href="~/fonts/styles.css" rel="stylesheet" type="text/css">
+
     if (User.IsInRole("Administrator"))
     {
-        @*<p>
-                Filtrar por nombre: @Html.TextBox("SearchString")
-                Fecha inicial: @Html.Editor("startDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
-                Fecha final: @Html.Editor("endDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
-                <input type="submit" value="Filtrar" class=" cancelBottom" />
-            </p>*@
-    @*<p>
-        Nombre: @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Filtrar" class=" cancelBottom" />
+        <div class="form-horizontal">
+            <div class="form-group row">
 
-    </p>*@
+                <div class="col-xs-2">
+                    <label for="ex1"></label>
+                    @Html.DropDownList("StartMonth", Enumerable.Range(1, 12).Select(x => new SelectListItem { Text = x.ToString() }), "Mes", new { @class = "form-control" })
+                </div>
+                <div class="col-xs-2">
+                    <label for="ex1"></label>
+                    @Html.DropDownList("StartYear", Enumerable.Range(DateTime.Now.Year - 2, DateTime.Now.Year).Select(x => new SelectListItem { Text = x.ToString() }), "Año", new { @class = "form-control" })
+                </div>
+                <p>
+                    @Html.Hidden("SearchString", ViewBag.CurrentFilter as string)
+                </p>
+            </div>
 
-        @*<p>
-            Inicio: @Html.Editor("startDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
-        </p>*@
+        </div>
 
-        @*<p>
-            Final:@Html.Editor("endDate", new { htmlAttributes = new { @class = "date-picker", @readonly = "true" } })
-            <input type="submit" value="Filtrar" class=" cancelBottom" />
-        </p>*@
+
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-offset--9 col-md-10">
+                    <input type="submit" value="Filtrar" class="submitBottom" />
+                    <input type="button" value="Crear Tarea" class="addBottom" onclick="window.location.href='@Url.Action("Add_Num_Hours", "Tasks")'" />
+                    @Html.ActionLink("Exportar a Excel", "ExportView")
+
+                </div>
+
+            </div>
+
+        </div>
 
     }
+    else
+    {
+
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-offset--9 col-md-10">
+                    <input type="button" value="Crear Tarea" class="addBottom" onclick="window.location.href='@Url.Action("Add_Num_Hours", "Tasks")'" />
+
+                </div>
+
+            </div>
+
+        </div>
+}
 }
 
-<p>
-    <input type="button" value="Crear Tarea" class="addBottom" onclick="window.location.href='@Url.Action("Add_Num_Hours", "Tasks")'" />
-    @if (User.IsInRole("Administrator"))
-    {
-        <input type="button" value="Exportar a Excel" class="cancelBottom" onclick="window.location.href='@Url.Action("ExportView", "Tasks")'" />
 
-    }
-</p>
 
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.ActionLink("Fecha", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+               Fecha
 
             </th>
             <th>
@@ -85,7 +104,7 @@
                 Ubicacion
             </th>
             <th>
-                @Html.ActionLink("Colaborador", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+                Colaborador
 
             </th>
             <th></th>
@@ -96,7 +115,8 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Date)
+                    @*@Html.DisplayFor(modelItem => item.Date.GetValueOrDefault().ToShortDateString())*@
+                    @Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.Date))
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Number_hours)
@@ -127,36 +147,12 @@
     </tbody>
 </table>
 
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
-
-@section Scripts {
-
-    @Scripts.Render("~/bundles/jqueryui")
-    @Styles.Render("~/Content/cssjqryUi")
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+            new { page, sortOrder = ViewBag.CurrentSort,
+                currentFilter = ViewBag.CurrentFilter,
+                startMonth = ViewBag.StartMonth ,startYear = ViewBag.StartYear}))
 
 
 
-
-    <script type="text/javascript">
-        $.datepicker.regional['es'] = {
-            closeText: 'Cerrar', // set a close button text
-            currentText: 'Hoy', // set today text
-            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'], // set month names
-            monthNamesShort: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'], // set short month names
-            //dayNames: ['Domenica', 'Luned&#236', 'Marted&#236', 'Mercoled&#236', 'Gioved&#236', 'Venerd&#236', 'Sabato'], // set days names
-            //dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vie', 'Sab'], // set short day names
-            dayNamesMin: ['Do', 'Lu', 'Ma', 'Me', 'Ju', 'Vi', 'Sa'], // set more short days names
-            dateFormat: 'dd/mm/yy' // set format date
-        };
-
-        $.datepicker.setDefaults($.datepicker.regional['es']);
-
-        $(".date-picker").datepicker();
-
-
-                            /**/</script>
-
-}

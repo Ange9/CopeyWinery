@@ -3,10 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.SqlServer;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using CopeyWinery.Models;
 using PagedList;
 
@@ -30,19 +35,47 @@ namespace CopeyWinery.Controllers
     {
         private DB_Entities db = new DB_Entities();
 
-        // public ActionResult Index(string sortOrder, string currentFilter, string searchString, DateTime? startDate, DateTime? endDate, int? page)
-        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page, bool? deleted, bool? added, bool? updated, bool? addFailed)
 
+
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page,
+         bool? deleted, bool? added, bool? updated, bool? addFailed, int startMonth = 0, int startYear = 0)
         {
+            if (deleted != null || added != null || updated != null)
+            {
+                if (deleted == true)
+                {
+                    ModelState.AddModelError("", "Tarea eliminada satisfactoriamente");
+                }
+                else
+                {
+                    if (updated == true)
+                    {
+                        ModelState.AddModelError("", "Tarea editada satisfactoriamente");
+                    }
+                    else
+                    {
+                        if (added != null)
+                        {
+                            ModelState.AddModelError("", "Tarea agregada satisfactoriamente");
 
-           // ViewBag.start = startDate;
-            //ViewBag.end = endDate;
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "No se ha podido agregar la tarea");
 
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+                        }
+
+                    }
+                }
+            }
+
+            ViewBag.StartMonth = startMonth;
+            ViewBag.StartYear = startYear;
 
             ViewBag.CurrentSort = sortOrder;
 
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
 
             if (!User.Identity.IsAuthenticated)
             {
@@ -50,60 +83,123 @@ namespace CopeyWinery.Controllers
 
             }
 
-            if (searchString != null)
-            {
+            ViewBag.CurrentFilter = searchString;
+            if (currentFilter != startMonth.ToString()) {
+                ViewBag.CurrentFilter = startMonth.ToString();
                 page = 1;
             }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            ViewBag.CurrentFilter = searchString;
-
-            var tasks = from s in db.Tasks select s ;
-
             if (!User.IsInRole("Administrator"))
             {
-                tasks = tasks.Where(x => x.User.Username == User.Identity.Name);
+                var tasks = db.Tasks.Where(x => x.User.Username == User.Identity.Name).AsEnumerable().OrderBy(t => t.Date);
+
+                int pageSize = 2;
+                int pageNumber = (page ?? 1);
+                return View(tasks.ToPagedList(pageNumber, pageSize));
+               
             }
-            else
+            if (startMonth != 0 && startYear != 0)
             {
-                if (!String.IsNullOrEmpty(searchString))
-                {
-                    tasks = tasks.Where(s => s.User.FirstName.Contains(searchString));
-                }
-                //if (startDate != null)
-                //{
-                //    tasks = tasks.Where(s => s.Date >= (startDate));
-                //}
-                //if (endDate != null)
-                //{
-                //    tasks = tasks.Where(s => s.Date <= (endDate));
-                //}
+
+                var tasks = db.Tasks
+                    .Where(x => x.Date.Value.Month == startMonth && x.Date.Value.Year == startYear)
+                    .OrderBy(x=> x.Date);
+
+                Session["tasks"] = tasks.ToList();
+                int pageSize = 10;
+                int pageNumber = (page ?? 1);
+                return View(tasks.ToPagedList(pageNumber, pageSize));
+            }
+            else {
+                var tasks = db.Tasks
+                   .Where(x => x.Date.Value.Month == DateTime.Now.Month && x.Date.Value.Year == DateTime.Now.Year)
+                   .OrderBy(x => x.Date); ;
+                Session["tasks"] = tasks.ToList();
+
+                int pageSize = 10;
+                int pageNumber = (page ?? 1);
+                return View(tasks.ToPagedList(pageNumber, pageSize));
             }
 
-
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    tasks = tasks.OrderByDescending(t => t.User.FirstName);
-                    break;
-                case "Date":
-                    tasks = tasks.OrderBy(t => t.Date);
-                    break;
-                case "date_desc":
-                    tasks = tasks.OrderByDescending(t => t.Date);
-                    break;
-                default:
-                    tasks = tasks.OrderByDescending(t => t.Date);
-                    break;
-            }
-
-            int pageSize = 10;
-            int pageNumber = (page ?? 1);
-            return View(tasks.ToPagedList(pageNumber, pageSize));
         }
+
+
+        //// public ActionResult Index(string sortOrder, string currentFilter, string searchString, DateTime? startDate, DateTime? endDate, int? page)
+        //public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page, DateTime? startDate, DateTime? endDate, bool? deleted, bool? added, bool? updated, bool? addFailed)
+
+        //{
+
+        //    ViewBag.start = startDate;
+        //    ViewBag.end = endDate;
+
+        //    ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "name_asc";
+        //    ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+
+        //    ViewBag.CurrentSort = sortOrder;
+
+
+        //    if (!User.Identity.IsAuthenticated)
+        //    {
+        //        return RedirectToAction("Index", "Home");
+
+        //    }
+
+        //    if (searchString != null)
+        //    {
+        //        page = 1;
+        //    }
+        //    else
+        //    {
+        //        searchString = currentFilter;
+        //    }
+
+        //    ViewBag.CurrentFilter = searchString;
+
+        //    var tasks = from s in db.Tasks select s ;
+
+        //    if (!User.IsInRole("Administrator"))
+        //    {
+        //        tasks = tasks.Where(x => x.User.Username == User.Identity.Name);
+        //    }
+        //    else
+        //    {
+        //        if (!String.IsNullOrEmpty(searchString))
+        //        {
+        //            tasks = tasks.Where(s => s.User.FirstName.Contains(searchString));
+        //        }
+        //        if (startDate != null)
+        //        {
+        //            tasks = tasks.Where(s => s.Date >= (startDate));
+        //        }
+        //        if (endDate != null)
+        //        {
+        //            tasks = tasks.Where(s => s.Date <= (endDate));
+        //        }
+        //    }
+
+
+        //    switch (sortOrder)
+        //    {
+        //        case "name_desc":
+        //            tasks = tasks.OrderByDescending(t => t.User.FirstName);
+        //            break;
+        //        case "name_asc":
+        //            tasks = tasks.OrderBy(t => t.User.FirstName);       
+        //            break;
+        //        case "Date":
+        //            tasks = tasks.OrderBy(t => t.Date);
+        //            break;
+        //        case "date_desc":
+        //            tasks = tasks.OrderByDescending(t => t.Date);
+        //            break;
+        //        default:
+        //            tasks = tasks.OrderByDescending(t => t.Date);
+        //            break;
+        //    }
+
+        //    int pageSize = 10;
+        //    int pageNumber = (page ?? 1);
+        //    return View(tasks.ToPagedList(pageNumber, pageSize));
+        //}
 
 
         //public ViewResult Index( string searchString)
@@ -514,13 +610,52 @@ namespace CopeyWinery.Controllers
             ViewBag.Ext_Attr = ex;
             return View(task);
         }
-
+    
         public ActionResult ExportView()
         {
+            var taskList = (List<Task>)Session["tasks"];
+
+
+
+                 var query = from s in taskList
+                             join act in db.Activities on s.Activity_Id equals act.Activity_Id
+                             join lab in db.Labors on s.Id_labor equals lab.Id_labor
+                             join ext in db.ExtendedAttributes on lab.Id_ExtAttr equals ext.Id_ExtAttr
+                             join usr in db.User on s.UserId equals usr.UserId
+                             join loc in db.Locations on s.Id_location equals loc.Id_location
+                             select new {Fecha = s.Date.Value.ToString("dd/MM/yyyy"), Actividad = act.Activity_name, Labor= lab.Name,
+                                 Atributo_Extendido = ext.Name,Valor_Atributo_Extendido = s.Ext_Attr_Labor_Value, Ubicacion = loc.Name,
+                                 Cant_Horas = s.Number_hours, Tipo = s.Hour_type,  Colaborador = usr.FirstName};
+
+
+
+
+
+            GridView grid = new GridView();
+            grid.DataSource = query;
+
+            grid.DataBind();
+
+            Response.ClearContent();
+            Response.Buffer = true;
+            //Response.AddHeader("content-disposition", "attachment; filename=Employees.xls");
+            //Response.ContentType = "application/ms-excel";
             Response.AddHeader("content-disposition", "attachment;filename=Report1.xls");
             Response.AddHeader("Content-Type", "application/vnd.ms-excel");
-            return View(db.Tasks.AsEnumerable());
-        }
+
+            Response.Charset = "";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+
+            grid.RenderControl(htw);
+
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+
+            return RedirectToAction("Index");
+        
+    }
         // GET: Tasks1/Edit/5
         public ActionResult Edit(int? id)
         {

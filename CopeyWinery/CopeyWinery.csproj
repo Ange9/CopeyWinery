@@ -152,7 +152,10 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LaborsController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
+    <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Controllers\Tasks1Controller.cs" />
+    <Compile Include="Controllers\Tasks2Controller.cs" />
+    <Compile Include="Controllers\TasksController1.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -360,6 +363,12 @@
     <Content Include="Views\ExtendedAttributes\Edit.cshtml" />
     <Content Include="Views\ExtendedAttributes\Index.cshtml" />
     <Content Include="Views\Tasks\Add_Ext_Attr.cshtml" />
+    <Content Include="Views\Students\Index.cshtml" />
+    <Content Include="Views\Tasks2\Create.cshtml" />
+    <Content Include="Views\Tasks2\Delete.cshtml" />
+    <Content Include="Views\Tasks2\Details.cshtml" />
+    <Content Include="Views\Tasks2\Edit.cshtml" />
+    <Content Include="Views\Tasks2\Index.cshtml" />
     <None Include="Views\Tasks\CreateBCK.cshtml" />
     <Content Include="Views\Tasks\Delete.cshtml" />
     <Content Include="Views\Tasks\Details.cshtml" />
