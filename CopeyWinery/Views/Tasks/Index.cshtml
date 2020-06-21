@@ -3,7 +3,9 @@
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "Index";
+                /**/
+
+                ViewBag.Title = "Index";
 }
 
 <h2>Administracion de Tareas</h2>
@@ -37,27 +39,35 @@
         </div>
 
 
-            <div class="form-horizontal">
-                <div class="form-group">
-                    <div class="col-md-offset--9 col-md-10">
-                        @*<input type="submit" value="Exportar a Excel" class="submitBottom"
-            onclick="window.location.href =
-         '@Html.Raw(@Url.Action("ExportView", "Tasks"))'
-        " />*@
-                        <input type="submit" value="Filtrar" class="submitBottom" />
-                        @Html.ActionLink("Export to Excel", "ExportView")
-
-                        <input type="button" value="Crear Tarea" class="addBottom" onclick="window.location.href='@Url.Action("Add_Num_Hours", "Tasks")'" />
-
-
-                    </div>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-offset--9 col-md-10">
+                    <input type="submit" value="Filtrar" class="submitBottom" />
+                    <input type="button" value="Crear Tarea" class="addBottom" onclick="window.location.href='@Url.Action("Add_Num_Hours", "Tasks")'" />
+                    @Html.ActionLink("Exportar a Excel", "ExportView")
 
                 </div>
 
             </div>
 
-        }
+        </div>
+
     }
+    else
+    {
+
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-offset--9 col-md-10">
+                    <input type="button" value="Crear Tarea" class="addBottom" onclick="window.location.href='@Url.Action("Add_Num_Hours", "Tasks")'" />
+
+                </div>
+
+            </div>
+
+        </div>
+}
+}
 
 
 
@@ -66,7 +76,7 @@
     <thead>
         <tr>
             <th>
-                @Html.ActionLink("Fecha", "Index", new { sortOrder = ViewBag.DateSortParm })
+               Fecha
 
             </th>
             <th>
@@ -94,7 +104,7 @@
                 Ubicacion
             </th>
             <th>
-                @Html.ActionLink("Colaborador", "Index", new { sortOrder = ViewBag.NameSortParm })
+                Colaborador
 
             </th>
             <th></th>
