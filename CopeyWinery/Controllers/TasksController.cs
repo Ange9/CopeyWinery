@@ -627,9 +627,22 @@ namespace CopeyWinery.Controllers
                                  Atributo_Extendido = ext.Name,Valor_Atributo_Extendido = s.Ext_Attr_Labor_Value, Ubicacion = loc.Name,
                                  Cant_Horas = s.Number_hours, Tipo = s.Hour_type,  Colaborador = usr.FirstName};
 
+            Dictionary<int, string> months = new Dictionary<int, string>();
+            months.Add(1, "Enero");
+            months.Add(2, "Febrero");
+            months.Add(3, "Marzo");
+            months.Add(4, "Abril");
+            months.Add(5, "Mayo");
+            months.Add(6, "Junio");
+            months.Add(7, "Julio");
+            months.Add(8, "Agosto");
+            months.Add(9, "Setiembre");
+            months.Add(10, "Octubre");
+            months.Add(11, "Noviembre");
+            months.Add(12, "Diciembre");
 
-
-
+            int month = taskList.Select(x => x.Date.Value.Month).FirstOrDefault();
+            int year = taskList.Select(x => x.Date.Value.Year).FirstOrDefault();
 
             GridView grid = new GridView();
             grid.DataSource = query;
@@ -640,7 +653,7 @@ namespace CopeyWinery.Controllers
             Response.Buffer = true;
             //Response.AddHeader("content-disposition", "attachment; filename=Employees.xls");
             //Response.ContentType = "application/ms-excel";
-            Response.AddHeader("content-disposition", "attachment;filename=Report1.xls");
+            Response.AddHeader("content-disposition", "attachment;filename="+ months[month]+ "-"+year+ ".xls");
             Response.AddHeader("Content-Type", "application/vnd.ms-excel");
 
             Response.Charset = "";
