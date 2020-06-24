@@ -83,10 +83,19 @@ namespace CopeyWinery.Controllers
 
             }
 
+            
             ViewBag.CurrentFilter = searchString;
             if (currentFilter != startMonth.ToString() && startMonth!=0) {
                 ViewBag.CurrentFilter = startMonth.ToString();
-                page = 1;
+                if (!Session["currentMonth"].Equals(startMonth.ToString()))
+                {
+                    page = 1;
+                }                
+            }
+
+            if (!Session["currentMonth"].Equals(startMonth.ToString()))
+            {
+                Session["currentMonth"] = startMonth.ToString();
             }
             if (!User.IsInRole("Administrator"))
             {
