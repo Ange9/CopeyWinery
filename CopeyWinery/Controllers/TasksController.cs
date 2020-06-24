@@ -84,15 +84,15 @@ namespace CopeyWinery.Controllers
             }
 
             ViewBag.CurrentFilter = searchString;
-            if (currentFilter != startMonth.ToString()) {
+            if (currentFilter != startMonth.ToString() && startMonth!=0) {
                 ViewBag.CurrentFilter = startMonth.ToString();
                 page = 1;
             }
             if (!User.IsInRole("Administrator"))
             {
-                var tasks = db.Tasks.Where(x => x.User.Username == User.Identity.Name).AsEnumerable().OrderBy(t => t.Date);
+                var tasks = db.Tasks.Where(x => x.User.Username == User.Identity.Name).AsEnumerable().OrderByDescending(t => t.Date);
 
-                int pageSize = 2;
+                int pageSize = 10;
                 int pageNumber = (page ?? 1);
                 return View(tasks.ToPagedList(pageNumber, pageSize));
                
@@ -102,7 +102,7 @@ namespace CopeyWinery.Controllers
 
                 var tasks = db.Tasks
                     .Where(x => x.Date.Value.Month == startMonth && x.Date.Value.Year == startYear)
-                    .OrderBy(x=> x.Date);
+                    .OrderByDescending(x=> x.Date);
 
                 Session["tasks"] = tasks.ToList();
                 int pageSize = 10;
@@ -112,7 +112,7 @@ namespace CopeyWinery.Controllers
             else {
                 var tasks = db.Tasks
                    .Where(x => x.Date.Value.Month == DateTime.Now.Month && x.Date.Value.Year == DateTime.Now.Year)
-                   .OrderBy(x => x.Date); ;
+                   .OrderByDescending(x => x.Date); ;
                 Session["tasks"] = tasks.ToList();
 
                 int pageSize = 10;
