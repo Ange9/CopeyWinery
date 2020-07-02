@@ -87,16 +87,22 @@ namespace CopeyWinery.Controllers
             ViewBag.CurrentFilter = searchString;
             if (currentFilter != startMonth.ToString() && startMonth!=0) {
                 ViewBag.CurrentFilter = startMonth.ToString();
-                if (!Session["currentMonth"].Equals(startMonth.ToString()))
+                if (Session["currentMonth"] != null && !Session["currentMonth"].Equals(startMonth.ToString()))
                 {
                     page = 1;
-                }                
+                }  
             }
-
-            if (!Session["currentMonth"].Equals(startMonth.ToString()))
+            if (Session["currentMonth"] != null)
             {
+                if (!Session["currentMonth"].Equals(startMonth.ToString()))
+                {
+                    Session["currentMonth"] = startMonth.ToString();
+                }
+            }
+            else {
                 Session["currentMonth"] = startMonth.ToString();
             }
+        
             if (!User.IsInRole("Administrator"))
             {
                 var tasks = db.Tasks.Where(x => x.User.Username == User.Identity.Name).AsEnumerable().OrderByDescending(t => t.Date);
@@ -628,13 +634,15 @@ namespace CopeyWinery.Controllers
 
                  var query = from s in taskList
                              join act in db.Activities on s.Activity_Id equals act.Activity_Id
-                             join lab in db.Labors on s.Id_labor equals lab.Id_labor
-                             join ext in db.ExtendedAttributes on lab.Id_ExtAttr equals ext.Id_ExtAttr
+                             join lab in db.Labors on s.Id_labor equals lab.Id_labor                            
                              join usr in db.User on s.UserId equals usr.UserId
                              join loc in db.Locations on s.Id_location equals loc.Id_location
+                             join ext in db.ExtendedAttributes on lab.Id_ExtAttr equals ext.Id_ExtAttr into ex
+                             from subpet in ex.DefaultIfEmpty()
                              select new {Fecha = s.Date.Value.ToString("dd/MM/yyyy"), Actividad = act.Activity_name, Labor= lab.Name,
-                                 Atributo_Extendido = ext.Name,Valor_Atributo_Extendido = s.Ext_Attr_Labor_Value, Ubicacion = loc.Name,
-                                 Cant_Horas = s.Number_hours, Tipo = s.Hour_type,  Colaborador = usr.FirstName};
+                             Atributo_Extendido = subpet?.Name ?? String.Empty, 
+                             Valor_Atributo_Extendido = s?.Ext_Attr_Labor_Value ?? String.Empty, Ubicacion = loc.Name,
+                             Cant_Horas = s.Number_hours, Tipo = s.Hour_type,  Colaborador = usr.FirstName};
 
             Dictionary<int, string> months = new Dictionary<int, string>();
             months.Add(1, "Enero");
